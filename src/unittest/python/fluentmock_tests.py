@@ -119,4 +119,3 @@ class WhenTests(TestCase):
         error_message = 'The object "{object}" is not a instance of "{class_name}"'.format(object=str(actual),
                                                                                            class_name=Class.__name__)
         self.assertTrue(isinstance(actual, Class), error_message)
-
