@@ -1,4 +1,4 @@
-# fluentmock [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
+# *fluentmock* [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
 
 A fluent interface facade for Michael Foord's Mock.
 
@@ -7,7 +7,6 @@ import somemodule
 
 when(somemodule).functionname().then_return(3)
 ```
-
 ## License
 
 fluentmock is licensed under the
