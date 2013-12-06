@@ -22,17 +22,21 @@ import targetpackage
 
 class WhenTests(TestCase):
 
+    def assert_is_a_instance_of(self, actual, Class):
+        error_message = 'The object "{object}" is not a instance of "{class_name}"'.format(object=str(actual), class_name=Class.__name__)
+        self.assertTrue(isinstance(actual, Class), error_message)
+
     def test_should_return_wrapper_when_patching_module(self):
 
         actual = when(targetpackage).targetfunction
 
-        self.assertIsInstance(actual, MockWrapper)
+        self.assert_is_a_instance_of(actual, MockWrapper)
 
     def test_should_return_answer_when_calling_patched_function(self):
 
         actual = when(targetpackage).targetfunction()
 
-        self.assertIsInstance(actual, Answer)
+        self.assert_is_a_instance_of(actual, Answer)
 
     def test_should_return_None_when_no_answer_is_configured(self):
 
@@ -71,7 +75,7 @@ class WhenTests(TestCase):
 
         actual = when(targetpackage).targetfunction().then_return(1)
 
-        self.assertIsInstance(actual, Answer)
+        self.assert_is_a_instance_of(actual, Answer)
 
     def test_should_return_two_as_second_answer_when_two_answers_are_configured(self):
 
