@@ -22,6 +22,17 @@ import targetpackage
 
 class WhenTests(TestCase):
 
+    def test_should_raise_exception_when_target_does_not_have_attribute(self):
+
+        raised_exception = False
+
+        try:
+            when(targetpackage).spameggs
+        except FluentMockException:
+            raised_exception = True
+
+        self.assertTrue(raised_exception, "Did not raise exception when invalid attribute name was given.")
+
     def test_should_return_wrapper_when_patching_module(self):
 
         actual = when(targetpackage).targetfunction

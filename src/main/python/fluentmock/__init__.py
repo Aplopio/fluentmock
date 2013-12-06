@@ -58,10 +58,16 @@ class StubEntry(object):
 class MockWrapper(object):
 
     def __init__(self, target):
-        self._target = __import__(target.__name__)
+        self._target_name = target.__name__
+        self._target = __import__(self._target_name)
         self._answers = []
 
     def __getattr__(self, name):
+        if not hasattr(self._target, name):
+            raise FluentMockException('The target "{target_name}" has no attribute called "{attribute_name}".'
+                                      .format(target_name=self._target_name,
+                                              attribute_name=name))
+
         original = getattr(self._target, name)
         _stubs.append(StubEntry(self._target, name, original))
         mock = MagicMock()
