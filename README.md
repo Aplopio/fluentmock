@@ -3,9 +3,22 @@
 A fluent interface facade for Michael Foord's Mock.
 
 ```python
-import somemodule
+from unittest import TestCase
+from fluentmock import when, unstub
 
-when(somemodule).functionname().then_return(3)
+import targetpackage
+
+
+class ExampleTest(TestCase):
+
+    def test_should_return_configured_value_three_when_called(self):
+        when(targetpackage).targetfunction().then_return(3)
+
+        actual = targetpackage.targetfunction()
+
+        self.assertEqual(3, actual)
+
+        unstub()
 ```
 ## License
 
