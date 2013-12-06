@@ -22,10 +22,6 @@ import targetpackage
 
 class WhenTests(TestCase):
 
-    def assert_is_a_instance_of(self, actual, Class):
-        error_message = 'The object "{object}" is not a instance of "{class_name}"'.format(object=str(actual), class_name=Class.__name__)
-        self.assertTrue(isinstance(actual, Class), error_message)
-
     def test_should_return_wrapper_when_patching_module(self):
 
         actual = when(targetpackage).targetfunction
@@ -118,3 +114,9 @@ class WhenTests(TestCase):
         actual_value = targetpackage.targetfunction()
 
         self.assertEqual(4, actual_value)
+
+    def assert_is_a_instance_of(self, actual, Class):
+        error_message = 'The object "{object}" is not a instance of "{class_name}"'.format(object=str(actual),
+                                                                                           class_name=Class.__name__)
+        self.assertTrue(isinstance(actual, Class), error_message)
+
