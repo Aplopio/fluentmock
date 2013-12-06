@@ -22,6 +22,9 @@ import targetpackage
 
 class WhenTests(TestCase):
 
+    def tearDown(self):
+        unstub()
+
     def test_should_raise_exception_when_target_does_not_have_attribute(self):
 
         raised_exception = False
@@ -142,7 +145,7 @@ class UnstubTests(TestCase):
 
     def test_should_unstub_stubbed_function(self):
 
-        when(targetpackage).stub_test_1()
+        when(targetpackage).stub_test_1().then_return('stubbed!')
 
         unstub()
 
@@ -150,8 +153,8 @@ class UnstubTests(TestCase):
 
     def test_should_unstub_multiple_stubbed_function(self):
 
-        when(targetpackage).stub_test_1()
-        when(targetpackage).stub_test_2()
+        when(targetpackage).stub_test_1().then_return('stubbed call! 1')
+        when(targetpackage).stub_test_2().then_return('stubbed call! 2')
 
         unstub()
 
