@@ -80,10 +80,10 @@ class MockWrapper(object):
         self._answers.append(answer)
         return answer
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self):
         return self.new_answer()
 
-    def _side_effect(self, *args, **kwargs):
+    def _side_effect(self):
         if not self._answers:
             raise FluentMockException("No answers configured. Did you forget to add the brackets for the call?")
         if len(self._answers) > 1:
