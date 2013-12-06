@@ -13,6 +13,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+import sys
+
 
 def targetfunction():
-    print "WARNING! Actual function has been called."
+    sys.stdout.write("WARNING! Actual function has been called.\n")
