@@ -142,8 +142,18 @@ class UnstubTests(TestCase):
 
     def test_should_unstub_stubbed_function(self):
 
-        when(targetpackage).stub_test()
+        when(targetpackage).stub_test_1()
 
         unstub()
 
-        self.assertEqual('not stubbed', targetpackage.stub_test())
+        self.assertEqual('not stubbed 1', targetpackage.stub_test_1())
+
+    def test_should_unstub_multiple_stubbed_function(self):
+
+        when(targetpackage).stub_test_1()
+        when(targetpackage).stub_test_2()
+
+        unstub()
+
+        self.assertEqual('not stubbed 1', targetpackage.stub_test_1())
+        self.assertEqual('not stubbed 2', targetpackage.stub_test_2())

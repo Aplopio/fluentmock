@@ -20,5 +20,9 @@ def targetfunction():
     sys.stdout.write("WARNING! Actual function has been called.\n")
 
 
-def stub_test():
-    return 'not stubbed'
+def stub_test_1():
+    return 'not stubbed 1'
+
+
+def stub_test_2():
+    return 'not stubbed 2'

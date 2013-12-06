@@ -105,4 +105,5 @@ def when(target):
 
 
 def unstub():
-    _stubs[0].unstub()
+    for stub in _stubs:
+        stub.unstub()
