@@ -41,19 +41,32 @@ class Answer(object):
     def __repr__(self):
         return "Answer(value=%s)" % self.value
 
+_stubs = []
+
+
+class StubEntry(object):
+
+    def __init__(self, target, attribute, original):
+        self._target = target
+        self._attribute = attribute
+        self._original = original
+
+    def unstub(self):
+        setattr(self._target, self._attribute, self._original)
+
 
 class MockWrapper(object):
 
-    def __init__(self, target_module):
-        self._target_module = __import__(target_module.__name__)
-        self._mocks = {}
+    def __init__(self, target):
+        self._target = __import__(target.__name__)
         self._answers = []
 
     def __getattr__(self, name):
+        original = getattr(self._target, name)
+        _stubs.append(StubEntry(self._target, name, original))
         mock = MagicMock()
         mock.side_effect = self._side_effect
-        setattr(self._target_module, name, mock)
-        self._mocks[name] = mock
+        setattr(self._target, name, mock)
         return self
 
     def new_answer(self):
@@ -65,6 +78,8 @@ class MockWrapper(object):
         return self.new_answer()
 
     def _side_effect(self, *args, **kwargs):
+        if not self._answers:
+            raise FluentMockException("No answers configured. Did you forget to add the brackets for the call?")
         if len(self._answers) > 1:
             answer = self._answers.pop(0)
         else:
@@ -75,5 +90,13 @@ class MockWrapper(object):
         return "MockWrapper(answers=" + str(self._answers) + ")"
 
 
+class FluentMockException(Exception):
+    pass
+
+
 def when(target):
     return MockWrapper(target)
+
+
+def unstub():
+    _stubs[0].unstub()

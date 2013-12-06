@@ -15,7 +15,7 @@
 
 from unittest import TestCase
 
-from fluentmock import MockWrapper, Answer, when
+from fluentmock import FluentMockException, MockWrapper, Answer, when, unstub
 
 import targetpackage
 
@@ -27,6 +27,12 @@ class WhenTests(TestCase):
         actual = when(targetpackage).targetfunction
 
         self.assert_is_a_instance_of(actual, MockWrapper)
+
+    def test_should_raise_exception_when_no_answer_configured(self):
+
+        when(targetpackage).targetfunction
+
+        self.assertRaises(FluentMockException, targetpackage.targetfunction)
 
     def test_should_return_answer_when_calling_patched_function(self):
 
@@ -119,3 +125,14 @@ class WhenTests(TestCase):
         error_message = 'The object "{object}" is not a instance of "{class_name}"'.format(object=str(actual),
                                                                                            class_name=Class.__name__)
         self.assertTrue(isinstance(actual, Class), error_message)
+
+
+class UnstubTests(TestCase):
+
+    def test_should_unstub_stubbed_function(self):
+
+        when(targetpackage).stub_test()
+
+        unstub()
+
+        self.assertEqual('not stubbed', targetpackage.stub_test())

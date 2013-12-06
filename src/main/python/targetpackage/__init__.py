@@ -18,3 +18,7 @@ import sys
 
 def targetfunction():
     sys.stdout.write("WARNING! Actual function has been called.\n")
+
+
+def stub_test():
+    return 'not stubbed'
