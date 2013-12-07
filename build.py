@@ -39,6 +39,7 @@ default_task = ['analyze', 'publish']
 
 @init
 def set_properties(project):
+    project.build_depends_on('PyHamcrest')
     project.build_depends_on('coverage')
     project.build_depends_on('mock')
     project.build_depends_on('wheel')
