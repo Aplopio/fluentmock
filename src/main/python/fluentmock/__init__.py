@@ -178,5 +178,9 @@ def unstub():
     _stubs = []
 
 
+def get_stubs():
+    return _stubs
+
+
 def verify(target):
     return Verifier(target)

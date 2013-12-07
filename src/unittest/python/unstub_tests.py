@@ -15,9 +15,7 @@
 
 from unittest import TestCase
 
-import fluentmock
-
-from fluentmock import when, unstub
+from fluentmock import when, unstub, get_stubs
 
 import targetpackage
 
@@ -49,4 +47,4 @@ class UnstubTests(TestCase):
 
         unstub()
 
-        self.assertEqual([], fluentmock._stubs)
+        self.assertEqual([], get_stubs())
