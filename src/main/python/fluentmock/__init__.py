@@ -29,6 +29,11 @@ MESSAGE_NO_CALLS = """
 Expected: call {target_name}.{attribute_name}()
      Got: no stubbed function has been called.
 """
+MESSAGE_EXPECTED_BUT_WAS = """
+Expected: {expected}
+ but was: {actual}
+"""
+
 
 _configurators = {}
 _stubs = []
@@ -88,19 +93,22 @@ class StubEntry(object):
 
 
 class CallEntry(object):
-    def __init__(self, target, attribute):
+    def __init__(self, target, attribute, argument=None):
         self._target = target
         self._target_name = target.__name__
         self._attribute_name = attribute
+        self._argument = argument
 
-    def verify(self, target, attribute_name):
-        if self._target == target and self._attribute_name == attribute_name:
+    def verify(self, target, attribute_name, argument):
+        if self._target == target and self._attribute_name == attribute_name and self._argument == argument:
             return True
         return False
 
     def __repr__(self):
-        return 'call {target_name}.{attribute_name}()'.format(target_name=self._target_name,
-                                                              attribute_name=self._attribute_name)
+        argument = self._argument if self._argument else ""
+        return 'call {target_name}.{attribute_name}({argument})'.format(target_name=self._target_name,
+                                                                        attribute_name=self._attribute_name,
+                                                                        argument=argument)
 
 
 class Mock(object):
@@ -112,7 +120,7 @@ class Mock(object):
         self._answers = []
 
     def __call__(self, *arguments):
-        _calls.append(CallEntry(self._target, self._attribute_name))
+        _calls.append(CallEntry(self._target, self._attribute_name, arguments[0] if len(arguments) > 0 else None))
 
         if not self._answers:
             return None
@@ -183,13 +191,18 @@ class Verifier(object):
 
         return self
 
-    def __call__(self):
+    def __call__(self, argument=None):
         if not _calls:
             raise AssertionError(self.format_message(MESSAGE_NO_CALLS))
 
         for call in _calls:
-            if call.verify(self._target, self._attribute_name):
+            if call.verify(self._target, self._attribute_name, argument):
                 return
+
+        for call in _calls:
+            if call._target == self._target and self._attribute_name == call._attribute_name:
+                expected_call_entry = CallEntry(self._target, self._attribute_name, argument)
+                raise AssertionError(MESSAGE_EXPECTED_BUT_WAS.format(expected=expected_call_entry, actual=call))
 
         raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY))
 

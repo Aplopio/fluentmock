@@ -52,7 +52,7 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(None))
 
-    def test_should_return_zero_when_answer_zero_is_given(self):
+    def should_return_zero_when_answer_zero_is_given(self):
 
         when(targetpackage).targetfunction().then_return(0)
 
@@ -150,7 +150,7 @@ class WhenTests(UnitTests):
         assert_that(targetpackage.targetfunction(1, 'spam'), equal_to(1))
         assert_that(targetpackage.targetfunction(0), equal_to(None))
 
-    def test_should_return_specific_values_when_arguments_fit(self):
+    def should_return_specific_values_when_arguments_fit(self):
 
         when(targetpackage).targetfunction(2).then_return(2)
         when(targetpackage).targetfunction(1, 'spam').then_return(1)
