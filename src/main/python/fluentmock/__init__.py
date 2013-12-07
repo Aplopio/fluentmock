@@ -141,7 +141,9 @@ class Verifier(object):
 
     def __call__(self):
         if not _calls:
-            raise AssertionError("There were no calls to any stubbed function.")
+            raise AssertionError("""Expected: call {target_name}.{attribute_name}()
+     Got: no stubbed function has been called.
+""".format(target_name=self._target_name, attribute_name=self._attribute_name))
 
         for call in _calls:
             if call.verify(self._target, self._attribute_name):
