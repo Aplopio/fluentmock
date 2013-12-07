@@ -169,10 +169,13 @@ def when(target):
 
 
 def unstub():
-    global _calls
-    _calls = []
+    global _calls, _stubs
+
     for stub in _stubs:
         stub.unstub()
+
+    _calls = []
+    _stubs = []
 
 
 def verify(target):

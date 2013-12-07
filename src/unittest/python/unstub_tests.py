@@ -15,6 +15,8 @@
 
 from unittest import TestCase
 
+import fluentmock
+
 from fluentmock import when, unstub
 
 import targetpackage
@@ -39,3 +41,12 @@ class UnstubTests(TestCase):
 
         self.assertEqual('not stubbed 1', targetpackage.stub_test_1())
         self.assertEqual('not stubbed 2', targetpackage.stub_test_2())
+
+    def test_should_reset_list_of_stubs(self):
+
+        when(targetpackage).stub_test_1().then_return('stubbed call! 1')
+        when(targetpackage).stub_test_2().then_return('stubbed call! 2')
+
+        unstub()
+
+        self.assertEqual([], fluentmock._stubs)
