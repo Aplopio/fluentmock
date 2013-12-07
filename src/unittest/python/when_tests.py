@@ -149,3 +149,14 @@ class WhenTests(UnitTests):
 
         assert_that(targetpackage.targetfunction(1, 'spam'), equal_to(1))
         assert_that(targetpackage.targetfunction(0), equal_to(None))
+
+    def test_should_return_specific_values_when_arguments_fit(self):
+
+        when(targetpackage).targetfunction(2).then_return(2)
+        when(targetpackage).targetfunction(1, 'spam').then_return(1)
+        when(targetpackage).targetfunction(3, 'foo', True).then_return('bar')
+
+        assert_that(targetpackage.targetfunction(1, 'spam'), equal_to(1))
+        assert_that(targetpackage.targetfunction(3, 'foo', True), equal_to('bar'))
+        assert_that(targetpackage.targetfunction(2), equal_to(2))
+        assert_that(targetpackage.targetfunction(0), equal_to(None))
