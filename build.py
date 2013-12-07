@@ -40,14 +40,12 @@ default_task = ['analyze', 'publish']
 @init
 def set_properties(project):
     project.build_depends_on('PyHamcrest')
-    project.build_depends_on('coverage')
     project.build_depends_on('wheel')
 
     project.set_property('dir_source_integrationtest_python', 'src/unittest')
     project.set_property("unittest_test_method_prefix", 'should')
 
     project.set_property('coverage_break_build', True)
-    project.get_property("coverage_exceptions").append('targetpackage')
 
     project.set_property('copy_resources_target', '$dir_dist')
     project.get_property('copy_resources_glob').append('LICENSE.txt')
