@@ -4,7 +4,8 @@ A mocking framework with a fluent interface.
 
 ```python
 from unittest import TestCase
-from fluentmock import when, unstub
+
+from fluentmock import when, unstub, verify
 
 import targetpackage
 
@@ -14,9 +15,9 @@ class ExampleTest(TestCase):
     def test_should_return_configured_value_three_when_called(self):
         when(targetpackage).targetfunction().then_return(3)
 
-        actual = targetpackage.targetfunction()
+        self.assertEqual(3, targetpackage.targetfunction())
 
-        self.assertEqual(3, actual)
+        verify(targetpackage).targetfunction()
 
         unstub()
 ```
