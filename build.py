@@ -45,6 +45,7 @@ def set_properties(project):
     project.build_depends_on('wheel')
 
     project.set_property('dir_source_integrationtest_python', 'src/unittest')
+    project.set_property("unittest_test_method_prefix", 'should')
 
     project.set_property('coverage_break_build', True)
     project.get_property("coverage_exceptions").append('targetpackage')

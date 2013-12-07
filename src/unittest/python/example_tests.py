@@ -23,7 +23,7 @@ import targetpackage
 
 class ExampleTest(TestCase):
 
-    def test_should_return_configured_value_three_when_called(self):
+    def should_return_configured_value_three_when_called(self):
 
         when(targetpackage).targetfunction().then_return(3)
 
