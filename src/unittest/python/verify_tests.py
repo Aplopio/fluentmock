@@ -123,7 +123,7 @@ Expected: call targetpackage.targetfunction(1)
 
         verify(targetpackage).targetfunction(1, 2)
 
-    def test_should_raise_error_when_function_stubbed_and_not_called_with_expected_arguments(self):
+    def should_raise_error_when_function_stubbed_and_not_called_with_expected_arguments(self):
 
         when(targetpackage).targetfunction(1, 2).then_return('123')
 
@@ -137,6 +137,26 @@ Expected: call targetpackage.targetfunction(1)
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2)
  but was: call targetpackage.targetfunction(2, 1)
+"""))
+
+        assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+
+    def should_raise_error_when_function_not_called_with_expected_arguments_but_in_many_other_ways(self):
+
+        when(targetpackage).targetfunction(1, 2).then_return('123')
+
+        targetpackage.targetfunction('abc', 123, True)
+        targetpackage.targetfunction('spam', 2, 1, 'eggs', False)
+
+        raised_error = False
+        try:
+            verify(targetpackage).targetfunction(1, 2)
+        except AssertionError as error:
+            raised_error = True
+            assert_that(str(error), equal_to("""
+Expected: call targetpackage.targetfunction(1, 2)
+ but was: call targetpackage.targetfunction('abc', 123, True)
+          call targetpackage.targetfunction('spam', 2, 1, 'eggs', False)
 """))
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")

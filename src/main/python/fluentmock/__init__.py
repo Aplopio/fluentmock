@@ -105,7 +105,13 @@ class CallEntry(object):
         return False
 
     def __repr__(self):
-        arguments_as_strings = [str(i) for i in self._arguments]
+        arguments_as_strings = []
+        for argument in self._arguments:
+            if type(argument) == str:
+                arguments_as_strings.append("'{argument}'".format(argument=argument))
+            else:
+                arguments_as_strings.append(str(argument))
+
         arguments = ", ".join(arguments_as_strings)
         return 'call {target_name}.{attribute_name}({arguments})'.format(target_name=self._target_name,
                                                                          attribute_name=self._attribute_name,
@@ -200,10 +206,20 @@ class Verifier(object):
             if call.verify(self._target, self._attribute_name, arguments):
                 return
 
+        found_calls = []
+
         for call in _calls:
-            if call._target == self._target and self._attribute_name == call._attribute_name:
-                expected_call_entry = CallEntry(self._target, self._attribute_name, arguments)
-                raise AssertionError(MESSAGE_EXPECTED_BUT_WAS.format(expected=expected_call_entry, actual=call))
+            if call._target == self._target and call._attribute_name == self._attribute_name:
+                found_calls.append(call)
+
+        number_of_found_calls = len(found_calls)
+        if number_of_found_calls > 0:
+            expected_call_entry = CallEntry(self._target, self._attribute_name, arguments)
+            error_message = MESSAGE_EXPECTED_BUT_WAS.format(expected=expected_call_entry, actual=found_calls[0])
+            if number_of_found_calls > 1:
+                for call in found_calls[1:]:
+                    error_message += '          {call}\n'.format(call=call)
+            raise AssertionError(error_message)
 
         raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY))
 
