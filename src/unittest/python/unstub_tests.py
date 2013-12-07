@@ -15,18 +15,27 @@
 
 from unittest import TestCase
 
-from fluentmock import when, unstub, verify
+from fluentmock import when, unstub
 
 import targetpackage
 
 
-class ExampleTest(TestCase):
+class UnstubTests(TestCase):
 
-    def test_should_return_configured_value_three_when_called(self):
-        when(targetpackage).targetfunction().then_return(3)
+    def test_should_unstub_stubbed_function(self):
 
-        self.assertEqual(3, targetpackage.targetfunction())
-
-        verify(targetpackage).targetfunction()
+        when(targetpackage).stub_test_1().then_return('stubbed!')
 
         unstub()
+
+        self.assertEqual('not stubbed 1', targetpackage.stub_test_1())
+
+    def test_should_unstub_multiple_stubbed_function(self):
+
+        when(targetpackage).stub_test_1().then_return('stubbed call! 1')
+        when(targetpackage).stub_test_2().then_return('stubbed call! 2')
+
+        unstub()
+
+        self.assertEqual('not stubbed 1', targetpackage.stub_test_1())
+        self.assertEqual('not stubbed 2', targetpackage.stub_test_2())

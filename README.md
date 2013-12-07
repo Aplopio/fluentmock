@@ -1,6 +1,6 @@
 # *fluentmock* [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
 
-A fluent interface facade for Michael Foord's Mock.
+A mocking framework with a fluent interface.
 
 ```python
 from unittest import TestCase

@@ -18,30 +18,21 @@ __version__ = '${version}'
 
 
 from logging import getLogger
-from mock import MagicMock
 
 LOGGER = getLogger(__name__)
 
 
+_stubs = []
+_calls = []
+
+
 class Answer(object):
 
-    def __init__(self, parent):
-        self.value = None
-        self._parent = parent
-        self._already_configured_answer = False
-
-    def then_return(self, value):
-        if not self._already_configured_answer:
-            self._already_configured_answer = True
-            self.value = value
-            return self
-        else:
-            return self._parent.new_answer().then_return(value)
+    def __init__(self, parent, value):
+        self.value = value
 
     def __repr__(self):
         return "Answer(value=%s)" % self.value
-
-_stubs = []
 
 
 class StubEntry(object):
@@ -55,12 +46,69 @@ class StubEntry(object):
         setattr(self._target, self._attribute, self._original)
 
 
-class MockWrapper(object):
+class CallEntry(object):
+    def __init__(self, target, attribute):
+        self._target = target
+        self._target_name = target.__name__
+        self._attribute_name = attribute
+
+    def verify(self, target, attribute_name):
+        if self._target == target and self._attribute_name == attribute_name:
+            return True
+        return False
+
+    def __repr__(self):
+        return 'call {target_name}.{attribute_name}()'.format(target_name=self._target_name,
+                                                              attribute_name=self._attribute_name)
+
+
+class Mock(object):
+
+    def __init__(self, target, attribute_name):
+        self._target_name = target.__name__
+        self._target = __import__(self._target_name)
+        self._attribute_name = attribute_name
+        self._answers = []
+
+    def __call__(self):
+        _calls.append(CallEntry(self._target, self._attribute_name))
+
+        if not self._answers:
+            return None
+
+        if len(self._answers) > 1:
+            answer = self._answers.pop(0)
+        else:
+            answer = self._answers[0]
+
+        return answer.value
+
+    def append_new_answer(self, answer):
+        self._answers.append(answer)
+
+    def __str__(self):
+        return "SideEffect(" + str(self._answers) + ")"
+
+
+class MockConfigurator(object):
+
+    def __init__(self, side_effect):
+        self._mock = side_effect
+
+    def __call__(self):
+        return self
+
+    def then_return(self, value):
+        answer = Answer(self._mock, value)
+        self._mock.append_new_answer(answer)
+        return self
+
+
+class Mocker(object):
 
     def __init__(self, target):
         self._target_name = target.__name__
         self._target = __import__(self._target_name)
-        self._answers = []
 
     def __getattr__(self, name):
         if not hasattr(self._target, name):
@@ -70,30 +118,37 @@ class MockWrapper(object):
 
         original = getattr(self._target, name)
         _stubs.append(StubEntry(self._target, name, original))
-        mock = MagicMock()
-        mock.side_effect = self._side_effect
+
+        mock = Mock(self._target, name)
+        mock_configurator = MockConfigurator(mock)
         setattr(self._target, name, mock)
+        return mock_configurator
+
+
+class Verifier(object):
+
+    def __init__(self, target):
+        self._target_name = target.__name__
+        self._target = target
+
+    def __getattr__(self, name):
+        self._attribute_name = name
+        if not hasattr(self._target, name):
+            raise FluentMockException('The target "{target_name}" has no attribute called "{attribute_name}".'
+                                      .format(target_name=self._target_name,
+                                              attribute_name=name))
         return self
 
-    def new_answer(self):
-        answer = Answer(self)
-        self._answers.append(answer)
-        return answer
-
     def __call__(self):
-        return self.new_answer()
+        if not _calls:
+            raise AssertionError("There were no calls to any stubbed function.")
 
-    def _side_effect(self):
-        if not self._answers:
-            raise FluentMockException("No answers configured. Did you forget to add the brackets for the call?")
-        if len(self._answers) > 1:
-            answer = self._answers.pop(0)
-        else:
-            answer = self._answers[0]
-        return answer.value
+        for call in _calls:
+            if call.verify(self._target, self._attribute_name):
+                return
 
-    def __repr__(self):
-        return "MockWrapper(answers=" + str(self._answers) + ")"
+        raise AssertionError('Could not verify {target_name}.{attribute_name}()'
+                             .format(target_name=self._target_name, attribute_name=self._attribute_name))
 
 
 class FluentMockException(Exception):
@@ -101,9 +156,15 @@ class FluentMockException(Exception):
 
 
 def when(target):
-    return MockWrapper(target)
+    return Mocker(target)
 
 
 def unstub():
+    global _calls
+    _calls = []
     for stub in _stubs:
         stub.unstub()
+
+
+def verify(target):
+    return Verifier(target)
