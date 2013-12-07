@@ -93,22 +93,23 @@ class StubEntry(object):
 
 
 class CallEntry(object):
-    def __init__(self, target, attribute, argument=None):
+    def __init__(self, target, attribute, arguments):
         self._target = target
         self._target_name = target.__name__
         self._attribute_name = attribute
-        self._argument = argument
+        self._arguments = arguments
 
-    def verify(self, target, attribute_name, argument):
-        if self._target == target and self._attribute_name == attribute_name and self._argument == argument:
+    def verify(self, target, attribute_name, arguments):
+        if self._target == target and self._attribute_name == attribute_name and self._arguments == arguments:
             return True
         return False
 
     def __repr__(self):
-        argument = self._argument if self._argument else ""
-        return 'call {target_name}.{attribute_name}({argument})'.format(target_name=self._target_name,
-                                                                        attribute_name=self._attribute_name,
-                                                                        argument=argument)
+        arguments_as_strings = [str(i) for i in self._arguments]
+        arguments = ", ".join(arguments_as_strings)
+        return 'call {target_name}.{attribute_name}({arguments})'.format(target_name=self._target_name,
+                                                                         attribute_name=self._attribute_name,
+                                                                         arguments=arguments)
 
 
 class Mock(object):
@@ -120,7 +121,7 @@ class Mock(object):
         self._answers = []
 
     def __call__(self, *arguments):
-        _calls.append(CallEntry(self._target, self._attribute_name, arguments[0] if len(arguments) > 0 else None))
+        _calls.append(CallEntry(self._target, self._attribute_name, arguments))
 
         if not self._answers:
             return None
@@ -191,17 +192,17 @@ class Verifier(object):
 
         return self
 
-    def __call__(self, argument=None):
+    def __call__(self, *arguments):
         if not _calls:
             raise AssertionError(self.format_message(MESSAGE_NO_CALLS))
 
         for call in _calls:
-            if call.verify(self._target, self._attribute_name, argument):
+            if call.verify(self._target, self._attribute_name, arguments):
                 return
 
         for call in _calls:
             if call._target == self._target and self._attribute_name == call._attribute_name:
-                expected_call_entry = CallEntry(self._target, self._attribute_name, argument)
+                expected_call_entry = CallEntry(self._target, self._attribute_name, arguments)
                 raise AssertionError(MESSAGE_EXPECTED_BUT_WAS.format(expected=expected_call_entry, actual=call))
 
         raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY))
