@@ -13,6 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+from hamcrest import assert_that, equal_to, instance_of
 from fluentmock import FluentMockException, MockConfigurator, UnitTests, when
 
 import targetpackage
@@ -29,19 +30,19 @@ class WhenTests(UnitTests):
         except FluentMockException:
             raised_exception = True
 
-        self.assertTrue(raised_exception, "Did not raise exception when invalid attribute name was given.")
+        assert_that(raised_exception, "Did not raise exception when invalid attribute name was given.")
 
     def should_return_wrapper_when_patching_module(self):
 
         actual = when(targetpackage).targetfunction
 
-        self.assert_is_a_instance_of(actual, MockConfigurator)
+        assert_that(actual, instance_of(MockConfigurator))
 
     def should_return_answer_when_calling_patched_function(self):
 
         actual = when(targetpackage).targetfunction()
 
-        self.assert_is_a_instance_of(actual, MockConfigurator)
+        assert_that(actual, instance_of(MockConfigurator))
 
     def should_return_None_when_no_answer_is_configured(self):
 
@@ -49,7 +50,7 @@ class WhenTests(UnitTests):
 
         actual_value = targetpackage.targetfunction()
 
-        self.assertEqual(None, actual_value)
+        assert_that(actual_value, equal_to(None))
 
     def should_return_zero_when_answer_zero_is_given(self):
 
@@ -57,7 +58,7 @@ class WhenTests(UnitTests):
 
         actual_value = targetpackage.targetfunction()
 
-        self.assertEqual(0, actual_value)
+        assert_that(actual_value, equal_to(0))
 
     def should_return_zero_again_when_answer_zero_is_given(self):
 
@@ -66,7 +67,7 @@ class WhenTests(UnitTests):
         targetpackage.targetfunction()
         actual_value = targetpackage.targetfunction()
 
-        self.assertEqual(0, actual_value)
+        assert_that(actual_value, equal_to(0))
 
     def should_return_one_as_first_answer_when_two_answers_are_configured(self):
 
@@ -74,13 +75,13 @@ class WhenTests(UnitTests):
 
         actual_value = targetpackage.targetfunction()
 
-        self.assertEqual(1, actual_value)
+        assert_that(actual_value, equal_to(1))
 
     def should_return_wrapper_when_call_definition(self):
 
         actual = when(targetpackage).targetfunction().then_return(1)
 
-        self.assert_is_a_instance_of(actual, MockConfigurator)
+        assert_that(actual, instance_of(MockConfigurator))
 
     def should_return_two_as_second_answer_when_two_answers_are_configured(self):
 
@@ -89,7 +90,7 @@ class WhenTests(UnitTests):
         targetpackage.targetfunction()
         actual_value = targetpackage.targetfunction()
 
-        self.assertEqual(2, actual_value)
+        assert_that(actual_value, equal_to(2))
 
     def should_return_three_as_third_answer_when_three_answers_are_configured(self):
 
@@ -99,7 +100,7 @@ class WhenTests(UnitTests):
         targetpackage.targetfunction()
         actual_value = targetpackage.targetfunction()
 
-        self.assertEqual(3, actual_value)
+        assert_that(actual_value, equal_to(3))
 
     def should_return_four_as_fourth_answer_when_four_answers_are_configured(self):
 
@@ -110,7 +111,7 @@ class WhenTests(UnitTests):
         targetpackage.targetfunction()
         actual_value = targetpackage.targetfunction()
 
-        self.assertEqual(4, actual_value)
+        assert_that(actual_value, equal_to(4))
 
     def should_return_four_as_fifth_answer_when_four_answers_are_configured(self):
 
@@ -122,9 +123,4 @@ class WhenTests(UnitTests):
         targetpackage.targetfunction()
         actual_value = targetpackage.targetfunction()
 
-        self.assertEqual(4, actual_value)
-
-    def assert_is_a_instance_of(self, actual, Class):
-        error_message = 'The object "{object}" is not a instance of "{class_name}"'.format(object=str(actual),
-                                                                                           class_name=Class.__name__)
-        self.assertTrue(isinstance(actual, Class), error_message)
+        assert_that(actual_value, equal_to(4))

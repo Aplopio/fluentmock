@@ -15,6 +15,7 @@
 
 from unittest import TestCase
 
+from hamcrest import assert_that, equal_to
 from fluentmock import when, unstub, get_stubs
 
 import targetpackage
@@ -28,7 +29,7 @@ class UnstubTests(TestCase):
 
         unstub()
 
-        self.assertEqual('not stubbed 1', targetpackage.stub_test_1())
+        assert_that(targetpackage.stub_test_1(), equal_to('not stubbed 1'))
 
     def should_unstub_multiple_stubbed_function(self):
 
@@ -37,8 +38,8 @@ class UnstubTests(TestCase):
 
         unstub()
 
-        self.assertEqual('not stubbed 1', targetpackage.stub_test_1())
-        self.assertEqual('not stubbed 2', targetpackage.stub_test_2())
+        assert_that('not stubbed 1', equal_to(targetpackage.stub_test_1()))
+        assert_that('not stubbed 2', equal_to(targetpackage.stub_test_2()))
 
     def should_reset_list_of_stubs(self):
 
@@ -47,4 +48,4 @@ class UnstubTests(TestCase):
 
         unstub()
 
-        self.assertEqual([], get_stubs())
+        assert_that([], equal_to(get_stubs()))
