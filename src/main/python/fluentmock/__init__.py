@@ -18,6 +18,7 @@ __version__ = '${version}'
 
 
 from logging import getLogger
+from unittest import TestCase
 
 LOGGER = getLogger(__name__)
 
@@ -31,6 +32,24 @@ MESSAGE_NO_CALLS = """Expected: call {target_name}.{attribute_name}()
 
 _stubs = []
 _calls = []
+
+
+class UnitTests(TestCase):
+
+    def setUp(self):
+        self.set_up()
+
+    def tearDown(self):
+        self.tear_down()
+        unstub()
+
+    def set_up(self):
+        """ Override this method to set up your unit test environment """
+        pass
+
+    def tear_down(self):
+        """ Override this method to tear down your unit test environment """
+        pass
 
 
 class Answer(object):

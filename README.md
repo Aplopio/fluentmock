@@ -6,15 +6,13 @@
 A mocking framework with a fluent interface.
 
 ```python
-from unittest import TestCase
-
 from hamcrest import assert_that, equal_to
-from fluentmock import when, unstub, verify
+from fluentmock import UnitTests, when, verify
 
 import targetpackage
 
 
-class ExampleTest(TestCase):
+class Example(UnitTests):
 
     def should_return_configured_value_three_when_called(self):
 
@@ -23,8 +21,6 @@ class ExampleTest(TestCase):
         assert_that(targetpackage.targetfunction(), equal_to(3))
 
         verify(targetpackage).targetfunction()
-
-        unstub()
 ```
 ## License
 
