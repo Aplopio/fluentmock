@@ -14,7 +14,7 @@
 #   limitations under the License.
 
 from hamcrest import assert_that, equal_to, instance_of
-from fluentmock import FluentMockException, MockConfigurator, UnitTests, when
+from fluentmock import Answer, FluentMockException, MockConfigurator, UnitTests, when
 
 import targetpackage
 
@@ -42,7 +42,7 @@ class WhenTests(UnitTests):
 
         actual = when(targetpackage).targetfunction()
 
-        assert_that(actual, instance_of(MockConfigurator))
+        assert_that(actual, instance_of(Answer))
 
     def should_return_None_when_no_answer_is_configured(self):
 
@@ -52,7 +52,7 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(None))
 
-    def should_return_zero_when_answer_zero_is_given(self):
+    def test_should_return_zero_when_answer_zero_is_given(self):
 
         when(targetpackage).targetfunction().then_return(0)
 
@@ -81,7 +81,7 @@ class WhenTests(UnitTests):
 
         actual = when(targetpackage).targetfunction().then_return(1)
 
-        assert_that(actual, instance_of(MockConfigurator))
+        assert_that(actual, instance_of(Answer))
 
     def should_return_two_as_second_answer_when_two_answers_are_configured(self):
 
@@ -124,3 +124,28 @@ class WhenTests(UnitTests):
         actual_value = targetpackage.targetfunction()
 
         assert_that(actual_value, equal_to(4))
+
+    def should_return_specific_value_when_argument_fits(self):
+
+        when(targetpackage).targetfunction(1).then_return(1)
+
+        assert_that(targetpackage.targetfunction(1), equal_to(1))
+        assert_that(targetpackage.targetfunction(0), equal_to(None))
+
+    def should_return_specific_value_when_argument_fits_and_several_configurations_are_given(self):
+
+        when(targetpackage).targetfunction(1).then_return(1)
+        when(targetpackage).targetfunction(2).then_return(2)
+        when(targetpackage).targetfunction(3).then_return(3)
+
+        assert_that(targetpackage.targetfunction(3), equal_to(3))
+        assert_that(targetpackage.targetfunction(2), equal_to(2))
+        assert_that(targetpackage.targetfunction(1), equal_to(1))
+        assert_that(targetpackage.targetfunction(0), equal_to(None))
+
+    def should_return_specific_value_when_arguments_fit(self):
+
+        when(targetpackage).targetfunction(1, 'spam').then_return(1)
+
+        assert_that(targetpackage.targetfunction(1, 'spam'), equal_to(1))
+        assert_that(targetpackage.targetfunction(0), equal_to(None))

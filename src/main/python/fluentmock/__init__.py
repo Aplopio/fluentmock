@@ -25,11 +25,12 @@ LOGGER = getLogger(__name__)
 
 MESSAGE_COULD_NOT_VERIFY = 'Could not verify {target_name}.{attribute_name}()'
 MESSAGE_INVALID_ATTRIBUTE = 'The target "{target_name}" has no attribute called "{attribute_name}".'
-MESSAGE_NO_CALLS = """Expected: call {target_name}.{attribute_name}()
+MESSAGE_NO_CALLS = """
+Expected: call {target_name}.{attribute_name}()
      Got: no stubbed function has been called.
 """
 
-
+_configurators = {}
 _stubs = []
 _calls = []
 
@@ -54,11 +55,25 @@ class UnitTests(TestCase):
 
 class Answer(object):
 
-    def __init__(self, parent, value):
-        self.value = value
+    def __init__(self, arguments):
+        self.arguments = arguments
+        self._values = []
+
+    def next(self):
+        if len(self._values) == 0:
+            return None
+
+        if len(self._values) > 1:
+            return self._values.pop(0)
+
+        return self._values[0]
+
+    def then_return(self, value):
+        self._values.append(value)
+        return self
 
     def __repr__(self):
-        return "Answer(value=%s)" % self.value
+        return "Answer(argument={argument}, values={values})".format(argument=self.arguments, values=self._values)
 
 
 class StubEntry(object):
@@ -96,18 +111,17 @@ class Mock(object):
         self._attribute_name = attribute_name
         self._answers = []
 
-    def __call__(self):
+    def __call__(self, *arguments):
         _calls.append(CallEntry(self._target, self._attribute_name))
 
         if not self._answers:
             return None
 
-        if len(self._answers) > 1:
-            answer = self._answers.pop(0)
-        else:
-            answer = self._answers[0]
+        for answer in self._answers:
+            if answer.arguments == arguments:
+                return answer.next()
 
-        return answer.value
+        return None
 
     def append_new_answer(self, answer):
         self._answers.append(answer)
@@ -118,16 +132,16 @@ class Mock(object):
 
 class MockConfigurator(object):
 
-    def __init__(self, side_effect):
-        self._mock = side_effect
+    def __init__(self, mock):
+        self._mock = mock
+        self._arguments = None
+        self._answer = None
 
-    def __call__(self):
-        return self
-
-    def then_return(self, value):
-        answer = Answer(self._mock, value)
-        self._mock.append_new_answer(answer)
-        return self
+    def __call__(self, *arguments):
+        self._arguments = arguments
+        self._answer = Answer(self._arguments)
+        self._mock.append_new_answer(self._answer)
+        return self._answer
 
 
 class Mocker(object):
@@ -144,10 +158,14 @@ class Mocker(object):
         original = getattr(self._target, name)
         _stubs.append(StubEntry(self._target, name, original))
 
-        mock = Mock(self._target, name)
-        mock_configurator = MockConfigurator(mock)
-        setattr(self._target, name, mock)
-        return mock_configurator
+        key = (self._target, name)
+        if not key in _configurators:
+            mock = Mock(self._target, name)
+            mock_configurator = MockConfigurator(mock)
+            setattr(self._target, name, mock)
+            _configurators[key] = mock_configurator
+
+        return _configurators[key]
 
 
 class Verifier(object):
@@ -188,13 +206,14 @@ def when(target):
 
 
 def unstub():
-    global _calls, _stubs
+    global _calls, _stubs, _configurators
 
     for stub in _stubs:
         stub.unstub()
 
     _calls = []
     _stubs = []
+    _configurators = {}
 
 
 def get_stubs():
