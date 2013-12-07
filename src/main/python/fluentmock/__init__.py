@@ -94,7 +94,7 @@ class Mock(object):
         self._answers.append(answer)
 
     def __str__(self):
-        return "SideEffect(" + str(self._answers) + ")"
+        return "Mock(" + str(self._answers) + ")"
 
 
 class MockConfigurator(object):
@@ -119,9 +119,8 @@ class Mocker(object):
 
     def __getattr__(self, name):
         if not hasattr(self._target, name):
-            raise FluentMockException('The target "{target_name}" has no attribute called "{attribute_name}".'
-                                      .format(target_name=self._target_name,
-                                              attribute_name=name))
+            raise FluentMockException(MESSAGE_INVALID_ATTRIBUTE.format(target_name=self._target_name,
+                                                                       attribute_name=name))
 
         original = getattr(self._target, name)
         _stubs.append(StubEntry(self._target, name, original))
