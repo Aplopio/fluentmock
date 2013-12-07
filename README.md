@@ -1,4 +1,7 @@
-# *fluentmock* [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
+# *fluentmock*
+[![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
+[![PyPi version](https://pypip.in/v/fluentmock/badge.png)](https://crate.io/packages/fluentmock/)
+[![PyPi downloads](https://pypip.in/d/fluentmock/badge.png)](https://crate.io/packages/fluentmock/)
 
 A mocking framework with a fluent interface.
 
@@ -24,4 +27,4 @@ class ExampleTest(TestCase):
 ## License
 
 fluentmock is licensed under the
-[Apache License, Version 2.0](https://raw.github.com/aelgru/committer/master/src/main/python/committer/LICENSE.txt)
+[Apache License, Version 2.0](https://raw.github.com/aelgru/fluentmock/master/src/main/python/fluentmock/LICENSE.txt)
