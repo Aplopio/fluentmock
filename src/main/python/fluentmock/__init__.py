@@ -22,6 +22,13 @@ from logging import getLogger
 LOGGER = getLogger(__name__)
 
 
+MESSAGE_COULD_NOT_VERIFY = 'Could not verify {target_name}.{attribute_name}()'
+MESSAGE_INVALID_ATTRIBUTE = 'The target "{target_name}" has no attribute called "{attribute_name}".'
+MESSAGE_NO_CALLS = """Expected: call {target_name}.{attribute_name}()
+     Got: no stubbed function has been called.
+"""
+
+
 _stubs = []
 _calls = []
 
@@ -130,27 +137,28 @@ class Verifier(object):
     def __init__(self, target):
         self._target_name = target.__name__
         self._target = target
+        self._attribute_name = None
 
     def __getattr__(self, name):
         self._attribute_name = name
+
         if not hasattr(self._target, name):
-            raise FluentMockException('The target "{target_name}" has no attribute called "{attribute_name}".'
-                                      .format(target_name=self._target_name,
-                                              attribute_name=name))
+            raise FluentMockException(self.format_message(MESSAGE_INVALID_ATTRIBUTE))
+
         return self
 
     def __call__(self):
         if not _calls:
-            raise AssertionError("""Expected: call {target_name}.{attribute_name}()
-     Got: no stubbed function has been called.
-""".format(target_name=self._target_name, attribute_name=self._attribute_name))
+            raise AssertionError(self.format_message(MESSAGE_NO_CALLS))
 
         for call in _calls:
             if call.verify(self._target, self._attribute_name):
                 return
 
-        raise AssertionError('Could not verify {target_name}.{attribute_name}()'
-                             .format(target_name=self._target_name, attribute_name=self._attribute_name))
+        raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY))
+
+    def format_message(self, message):
+        return message.format(target_name=self._target_name, attribute_name=self._attribute_name)
 
 
 class FluentMockException(Exception):
