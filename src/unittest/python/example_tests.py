@@ -19,7 +19,7 @@ from fluentmock import UnitTests, when, verify
 import targetpackage
 
 
-class Example(UnitTests):
+class ExampleTest(UnitTests):
 
     def should_return_configured_value_three_when_called(self):
 

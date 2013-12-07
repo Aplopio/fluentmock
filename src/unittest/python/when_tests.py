@@ -13,17 +13,12 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from unittest import TestCase
-
-from fluentmock import FluentMockException, MockConfigurator, when, unstub
+from fluentmock import FluentMockException, MockConfigurator, UnitTests, when
 
 import targetpackage
 
 
-class WhenTests(TestCase):
-
-    def tearDown(self):
-        unstub()
+class WhenTests(UnitTests):
 
     def should_raise_exception_when_target_does_not_have_attribute(self):
 
