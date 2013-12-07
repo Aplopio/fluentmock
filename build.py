@@ -62,7 +62,6 @@ def set_properties(project):
     project.get_property('distutils_commands').append('bdist_wheel')
     project.set_property('distutils_classifiers', [
         'Development Status :: 1 - Planning',
-        'Environment :: Console',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
@@ -75,5 +74,4 @@ def set_properties(project):
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Topic :: Software Development :: Testing',
-        'Topic :: Software Development :: Quality Assurance',
-        'Topic :: Utilities'])
+        'Topic :: Software Development :: Quality Assurance'])
