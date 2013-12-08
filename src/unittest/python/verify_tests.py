@@ -184,3 +184,13 @@ Expected: call targetpackage.targetfunction(1, 2)
 """))
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+
+    def should_verify_a_call_to_a_object_with_multiple_arguments(self):
+
+        test_object = targetpackage.TheClass()
+
+        when(test_object).some_method(1, 2).then_return('123')
+
+        test_object.some_method(1, 2)
+
+        verify(test_object).some_method(1, 2)

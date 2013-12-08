@@ -192,11 +192,10 @@ class Mocker(Targetting):
         return _configurators[key]
 
 
-class Verifier(object):
+class Verifier(Targetting):
 
     def __init__(self, target):
-        self._target_name = target.__name__
-        self._target = target
+        Targetting.__init__(self, target)
         self._attribute_name = None
 
     def __getattr__(self, name):
