@@ -160,3 +160,11 @@ class WhenTests(UnitTests):
         assert_that(targetpackage.targetfunction(3, 'foo', True), equal_to('bar'))
         assert_that(targetpackage.targetfunction(2), equal_to(2))
         assert_that(targetpackage.targetfunction(0), equal_to(None))
+
+    def test_should_stub_away_method_from_object(self):
+
+        test_object = targetpackage.TheClass()
+
+        when(test_object).some_method(1).then_return(0)
+
+        assert_that(test_object.some_method(1), equal_to(0))

@@ -19,6 +19,7 @@ __version__ = '${version}'
 
 from logging import getLogger
 from unittest import TestCase
+from types import ModuleType
 
 LOGGER = getLogger(__name__)
 
@@ -58,6 +59,17 @@ class UnitTests(TestCase):
         pass
 
 
+class Targetting(object):
+
+    def __init__(self, target):
+        if not isinstance(target, ModuleType):
+            self._target_name = type(target).__name__
+            self._target = target
+        else:
+            self._target_name = target.__name__
+            self._target = __import__(self._target_name)
+
+
 class Answer(object):
 
     def __init__(self, arguments):
@@ -92,10 +104,9 @@ class StubEntry(object):
         setattr(self._target, self._attribute, self._original)
 
 
-class CallEntry(object):
+class CallEntry(Targetting):
     def __init__(self, target, attribute, arguments):
-        self._target = target
-        self._target_name = target.__name__
+        Targetting.__init__(self, target)
         self._attribute_name = attribute
         self._arguments = arguments
 
@@ -118,11 +129,10 @@ class CallEntry(object):
                                                                          arguments=arguments)
 
 
-class Mock(object):
+class Mock(Targetting):
 
     def __init__(self, target, attribute_name):
-        self._target_name = target.__name__
-        self._target = __import__(self._target_name)
+        Targetting.__init__(self, target)
         self._attribute_name = attribute_name
         self._answers = []
 
@@ -159,11 +169,10 @@ class MockConfigurator(object):
         return self._answer
 
 
-class Mocker(object):
+class Mocker(Targetting):
 
     def __init__(self, target):
-        self._target_name = target.__name__
-        self._target = __import__(self._target_name)
+        Targetting.__init__(self, target)
 
     def __getattr__(self, name):
         if not hasattr(self._target, name):

@@ -26,3 +26,9 @@ def stub_test_1():
 
 def stub_test_2():
     return 'not stubbed 2'
+
+
+class TheClass(object):
+
+    def some_method(self):
+        sys.stdout.write("WARNING! Actual method has been called.\n")
