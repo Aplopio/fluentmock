@@ -32,7 +32,7 @@ description = 'Please visit {0} for more information!'.format(url)
 authors = [Author('Michael Gruber', 'aelgru@gmail.com')]
 license = 'Apache License, Version 2.0'
 summary = 'Mocking framework with a fluent interface.'
-version = '0.0.7'
+version = '0.0.8'
 
 default_task = ['analyze', 'publish']
 
