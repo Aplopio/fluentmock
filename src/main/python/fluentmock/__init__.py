@@ -62,12 +62,12 @@ class UnitTests(TestCase):
 class FluentTargeting(object):
 
     def __init__(self, target):
-        if not isinstance(target, ModuleType):
-            self._target_name = type(target).__name__
-            self._target = target
-        else:
+        if isinstance(target, ModuleType):
             self._target_name = target.__name__
             self._target = __import__(self._target_name)
+        else:
+            self._target_name = type(target).__name__
+            self._target = target
 
 
 class FluentAnswer(object):
