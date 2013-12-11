@@ -93,10 +93,10 @@ class FluentAnswer(object):
         return "Answer(argument={argument}, values={values})".format(argument=self.arguments, values=self._values)
 
 
-class FluentStubEntry(object):
+class FluentStubEntry(FluentTargeting):
 
     def __init__(self, target, attribute_name, original):
-        self._target = target
+        FluentTargeting.__init__(self, target)
         self._attribute_name = attribute_name
         self._original = original
 
