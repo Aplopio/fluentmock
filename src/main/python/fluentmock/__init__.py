@@ -95,13 +95,16 @@ class FluentAnswer(object):
 
 class FluentStubEntry(object):
 
-    def __init__(self, target, attribute, original):
+    def __init__(self, target, attribute_name, original):
         self._target = target
-        self._attribute = attribute
+        self._attribute_name = attribute_name
         self._original = original
 
+    def stub_away_with(self, fluent_mock):
+        setattr(self._target, self._attribute_name, fluent_mock)
+
     def unstub(self):
-        setattr(self._target, self._attribute, self._original)
+        setattr(self._target, self._attribute_name, self._original)
 
 
 class FluentCallEntry(FluentTargeting):
@@ -180,13 +183,14 @@ class FluentWhen(FluentTargeting):
                                                                        attribute_name=name))
 
         original = getattr(self._target, name)
-        _stubs.append(FluentStubEntry(self._target, name, original))
+        stub_entry = FluentStubEntry(self._target, name, original)
+        _stubs.append(stub_entry)
 
         key = (self._target, name)
         if not key in _configurators:
             fluent_mock = FluentMock(self._target, name)
             mock_configurator = FluentMockConfigurator(fluent_mock)
-            setattr(self._target, name, fluent_mock)
+            stub_entry.stub_away_with(fluent_mock)
             _configurators[key] = mock_configurator
 
         return _configurators[key]
