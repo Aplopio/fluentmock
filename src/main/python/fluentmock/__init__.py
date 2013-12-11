@@ -183,10 +183,6 @@ class FluentWhen(FluentTargeting):
         FluentTargeting.__init__(self, target)
 
     def __getattr__(self, name):
-        if not hasattr(self._target, name):
-            raise FluentMockException(MESSAGE_INVALID_ATTRIBUTE.format(target_name=self._target_name,
-                                                                       attribute_name=name))
-
         original = getattr(self._target, name)
         stub_entry = FluentStubEntry(self._target, name, original)
         _stubs.append(stub_entry)

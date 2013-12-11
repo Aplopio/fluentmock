@@ -14,23 +14,12 @@
 #   limitations under the License.
 
 from hamcrest import assert_that, equal_to, instance_of
-from fluentmock import FluentAnswer, FluentMockException, FluentMockConfigurator, UnitTests, when
+from fluentmock import FluentAnswer, FluentMockConfigurator, UnitTests, when
 
 import targetpackage
 
 
 class WhenTests(UnitTests):
-
-    def should_raise_exception_when_target_does_not_have_attribute(self):
-
-        raised_exception = False
-
-        try:
-            when(targetpackage).spameggs
-        except FluentMockException:
-            raised_exception = True
-
-        assert_that(raised_exception, "Did not raise exception when invalid attribute name was given.")
 
     def should_return_wrapper_when_patching_module(self):
 
