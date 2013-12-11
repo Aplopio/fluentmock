@@ -17,6 +17,7 @@ __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
 
+from mock import patch
 from logging import getLogger
 from unittest import TestCase
 from types import ModuleType
@@ -66,7 +67,8 @@ class FluentTargeting(object):
             self._target_name = target.__name__
             self._target = __import__(self._target_name)
         else:
-            self._target_name = type(target).__name__
+            target_type = type(target)
+            self._target_name = target_type.__module__ + '.' + target_type.__name__
             self._target = target
 
 
@@ -99,9 +101,12 @@ class FluentStubEntry(FluentTargeting):
         FluentTargeting.__init__(self, target)
         self._attribute_name = attribute_name
         self._original = original
+        self._patch = None
 
     def stub_away_with(self, fluent_mock):
-        setattr(self._target, self._attribute_name, fluent_mock)
+        full_qualified_target_name = self._target_name + '.' + self._attribute_name
+        self._patch = patch(full_qualified_target_name).__enter__()
+        self._patch.side_effect = fluent_mock
 
     def unstub(self):
         setattr(self._target, self._attribute_name, self._original)

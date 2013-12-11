@@ -3,7 +3,7 @@
 [![PyPi version](https://pypip.in/v/fluentmock/badge.png)](https://crate.io/packages/fluentmock/)
 [![PyPi downloads](https://pypip.in/d/fluentmock/badge.png)](https://crate.io/packages/fluentmock/)
 
-Mocking framework with a fluent interface.
+Fluent interface for mock.
 
 ```python
 from hamcrest import assert_that, equal_to
