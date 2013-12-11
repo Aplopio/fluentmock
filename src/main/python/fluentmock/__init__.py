@@ -59,7 +59,7 @@ class UnitTests(TestCase):
         pass
 
 
-class Targetting(object):
+class FluentTargeting(object):
 
     def __init__(self, target):
         if not isinstance(target, ModuleType):
@@ -70,7 +70,7 @@ class Targetting(object):
             self._target = __import__(self._target_name)
 
 
-class Answer(object):
+class FluentAnswer(object):
 
     def __init__(self, arguments):
         self.arguments = arguments
@@ -93,7 +93,7 @@ class Answer(object):
         return "Answer(argument={argument}, values={values})".format(argument=self.arguments, values=self._values)
 
 
-class StubEntry(object):
+class FluentStubEntry(object):
 
     def __init__(self, target, attribute, original):
         self._target = target
@@ -104,9 +104,9 @@ class StubEntry(object):
         setattr(self._target, self._attribute, self._original)
 
 
-class CallEntry(Targetting):
+class FluentCallEntry(FluentTargeting):
     def __init__(self, target, attribute, arguments):
-        Targetting.__init__(self, target)
+        FluentTargeting.__init__(self, target)
         self._attribute_name = attribute
         self._arguments = arguments
 
@@ -129,15 +129,15 @@ class CallEntry(Targetting):
                                                                          arguments=arguments)
 
 
-class Mock(Targetting):
+class FluentMock(FluentTargeting):
 
     def __init__(self, target, attribute_name):
-        Targetting.__init__(self, target)
+        FluentTargeting.__init__(self, target)
         self._attribute_name = attribute_name
         self._answers = []
 
     def __call__(self, *arguments):
-        _calls.append(CallEntry(self._target, self._attribute_name, arguments))
+        _calls.append(FluentCallEntry(self._target, self._attribute_name, arguments))
 
         if not self._answers:
             return None
@@ -155,7 +155,7 @@ class Mock(Targetting):
         return "Mock(" + str(self._answers) + ")"
 
 
-class MockConfigurator(object):
+class FluentMockConfigurator(object):
 
     def __init__(self, mock):
         self._mock = mock
@@ -164,15 +164,15 @@ class MockConfigurator(object):
 
     def __call__(self, *arguments):
         self._arguments = arguments
-        self._answer = Answer(self._arguments)
+        self._answer = FluentAnswer(self._arguments)
         self._mock.append_new_answer(self._answer)
         return self._answer
 
 
-class Mocker(Targetting):
+class FluentWhen(FluentTargeting):
 
     def __init__(self, target):
-        Targetting.__init__(self, target)
+        FluentTargeting.__init__(self, target)
 
     def __getattr__(self, name):
         if not hasattr(self._target, name):
@@ -180,22 +180,22 @@ class Mocker(Targetting):
                                                                        attribute_name=name))
 
         original = getattr(self._target, name)
-        _stubs.append(StubEntry(self._target, name, original))
+        _stubs.append(FluentStubEntry(self._target, name, original))
 
         key = (self._target, name)
         if not key in _configurators:
-            mock = Mock(self._target, name)
-            mock_configurator = MockConfigurator(mock)
-            setattr(self._target, name, mock)
+            fluent_mock = FluentMock(self._target, name)
+            mock_configurator = FluentMockConfigurator(fluent_mock)
+            setattr(self._target, name, fluent_mock)
             _configurators[key] = mock_configurator
 
         return _configurators[key]
 
 
-class Verifier(Targetting):
+class Verifier(FluentTargeting):
 
     def __init__(self, target):
-        Targetting.__init__(self, target)
+        FluentTargeting.__init__(self, target)
         self._attribute_name = None
 
     def __getattr__(self, name):
@@ -222,7 +222,7 @@ class Verifier(Targetting):
 
         number_of_found_calls = len(found_calls)
         if number_of_found_calls > 0:
-            expected_call_entry = CallEntry(self._target, self._attribute_name, arguments)
+            expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments)
             error_message = MESSAGE_EXPECTED_BUT_WAS.format(expected=expected_call_entry, actual=found_calls[0])
             if number_of_found_calls > 1:
                 for call in found_calls[1:]:
@@ -240,7 +240,7 @@ class FluentMockException(Exception):
 
 
 def when(target):
-    return Mocker(target)
+    return FluentWhen(target)
 
 
 def unstub():

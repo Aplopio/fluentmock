@@ -14,7 +14,7 @@
 #   limitations under the License.
 
 from hamcrest import assert_that, equal_to, instance_of
-from fluentmock import Answer, FluentMockException, MockConfigurator, UnitTests, when
+from fluentmock import FluentAnswer, FluentMockException, FluentMockConfigurator, UnitTests, when
 
 import targetpackage
 
@@ -36,13 +36,13 @@ class WhenTests(UnitTests):
 
         actual = when(targetpackage).targetfunction
 
-        assert_that(actual, instance_of(MockConfigurator))
+        assert_that(actual, instance_of(FluentMockConfigurator))
 
     def should_return_answer_when_calling_patched_function(self):
 
         actual = when(targetpackage).targetfunction()
 
-        assert_that(actual, instance_of(Answer))
+        assert_that(actual, instance_of(FluentAnswer))
 
     def should_return_None_when_no_answer_is_configured(self):
 
@@ -81,7 +81,7 @@ class WhenTests(UnitTests):
 
         actual = when(targetpackage).targetfunction().then_return(1)
 
-        assert_that(actual, instance_of(Answer))
+        assert_that(actual, instance_of(FluentAnswer))
 
     def should_return_two_as_second_answer_when_two_answers_are_configured(self):
 
