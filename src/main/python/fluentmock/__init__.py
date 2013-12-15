@@ -102,14 +102,18 @@ class FluentStubEntry(FluentTargeting):
         self._attribute_name = attribute_name
         self._original = original
         self._patch = None
+        self._mock = None
+        self._full_qualified_target_name = None
 
     def stub_away_with(self, fluent_mock):
-        full_qualified_target_name = self._target_name + '.' + self._attribute_name
-        self._patch = patch(full_qualified_target_name).__enter__()
-        self._patch.side_effect = fluent_mock
+        self._full_qualified_target_name = self._target_name + '.' + self._attribute_name
+        self._patch = patch(self._full_qualified_target_name)
+        self._mock = self._patch.__enter__()
+        self._mock.side_effect = fluent_mock
 
     def unstub(self):
-        setattr(self._target, self._attribute_name, self._original)
+        if self._patch:
+            self._patch.__exit__()
 
 
 class FluentCallEntry(FluentTargeting):
