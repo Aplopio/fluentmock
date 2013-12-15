@@ -50,6 +50,7 @@ def set_properties(project):
 
     project.set_property('copy_resources_target', '$dir_dist')
     project.get_property('copy_resources_glob').append('LICENSE.txt')
+    project.get_property('copy_resources_glob').append('setup.cfg')
 
     project.include_file('fluentmock', 'LICENSE.txt')
 
