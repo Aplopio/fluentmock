@@ -38,8 +38,8 @@ class UnstubTests(TestCase):
 
         unstub()
 
-        assert_that('not stubbed 1', equal_to(targetpackage.stub_test_1()))
-        assert_that('not stubbed 2', equal_to(targetpackage.stub_test_2()))
+        assert_that(targetpackage.stub_test_1(), equal_to('not stubbed 1'))
+        assert_that(targetpackage.stub_test_2(), equal_to('not stubbed 2'))
 
     def should_reset_list_of_stubs(self):
 
@@ -48,4 +48,4 @@ class UnstubTests(TestCase):
 
         unstub()
 
-        assert_that([], equal_to(get_stubs()))
+        assert_that(get_stubs(), equal_to([]))
