@@ -1,7 +1,6 @@
 # *fluentmock*
 [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
-[![PyPi version](https://pypip.in/v/fluentmock/badge.png)](https://crate.io/packages/fluentmock/)
-[![PyPi downloads](https://pypip.in/d/fluentmock/badge.png)](https://crate.io/packages/fluentmock/)
+[![PyPI version](https://badge.fury.io/py/fluentmock.png)](http://badge.fury.io/py/fluentmock)
 
 Fluent interface for mock.
 
