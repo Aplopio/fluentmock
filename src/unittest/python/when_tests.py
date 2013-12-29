@@ -21,19 +21,19 @@ import targetpackage
 
 class WhenTests(UnitTests):
 
-    def should_return_wrapper_when_patching_module(self):
+    def test_should_return_wrapper_when_patching_module(self):
 
         actual = when(targetpackage).targetfunction
 
         assert_that(actual, instance_of(FluentMockConfigurator))
 
-    def should_return_answer_when_calling_patched_function(self):
+    def test_should_return_answer_when_calling_patched_function(self):
 
         actual = when(targetpackage).targetfunction()
 
         assert_that(actual, instance_of(FluentAnswer))
 
-    def should_return_None_when_no_answer_is_configured(self):
+    def test_should_return_None_when_no_answer_is_configured(self):
 
         when(targetpackage).targetfunction()
 
@@ -41,7 +41,7 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(None))
 
-    def should_return_zero_when_answer_zero_is_given(self):
+    def test_should_return_zero_when_answer_zero_is_given(self):
 
         when(targetpackage).targetfunction().then_return(0)
 
@@ -49,7 +49,7 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(0))
 
-    def should_return_zero_again_when_answer_zero_is_given(self):
+    def test_should_return_zero_again_when_answer_zero_is_given(self):
 
         when(targetpackage).targetfunction().then_return(0)
 
@@ -58,7 +58,7 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(0))
 
-    def should_return_one_as_first_answer_when_two_answers_are_configured(self):
+    def test_should_return_one_as_first_answer_when_two_answers_are_configured(self):
 
         when(targetpackage).targetfunction().then_return(1).then_return(2)
 
@@ -66,13 +66,13 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(1))
 
-    def should_return_wrapper_when_call_definition(self):
+    def test_should_return_wrapper_when_call_definition(self):
 
         actual = when(targetpackage).targetfunction().then_return(1)
 
         assert_that(actual, instance_of(FluentAnswer))
 
-    def should_return_two_as_second_answer_when_two_answers_are_configured(self):
+    def test_should_return_two_as_second_answer_when_two_answers_are_configured(self):
 
         when(targetpackage).targetfunction().then_return(1).then_return(2)
 
@@ -81,7 +81,7 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(2))
 
-    def should_return_three_as_third_answer_when_three_answers_are_configured(self):
+    def test_should_return_three_as_third_answer_when_three_answers_are_configured(self):
 
         when(targetpackage).targetfunction().then_return(1).then_return(2).then_return(3)
 
@@ -91,7 +91,7 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(3))
 
-    def should_return_four_as_fourth_answer_when_four_answers_are_configured(self):
+    def test_should_return_four_as_fourth_answer_when_four_answers_are_configured(self):
 
         when(targetpackage).targetfunction().then_return(1).then_return(2).then_return(3).then_return(4)
 
@@ -102,7 +102,7 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(4))
 
-    def should_return_four_as_fifth_answer_when_four_answers_are_configured(self):
+    def test_should_return_four_as_fifth_answer_when_four_answers_are_configured(self):
 
         when(targetpackage).targetfunction().then_return(1).then_return(2).then_return(3).then_return(4)
 
@@ -114,14 +114,14 @@ class WhenTests(UnitTests):
 
         assert_that(actual_value, equal_to(4))
 
-    def should_return_specific_value_when_argument_fits(self):
+    def test_should_return_specific_value_when_argument_fits(self):
 
         when(targetpackage).targetfunction(1).then_return(1)
 
         assert_that(targetpackage.targetfunction(1), equal_to(1))
         assert_that(targetpackage.targetfunction(0), equal_to(None))
 
-    def should_return_specific_value_when_argument_fits_and_several_configurations_are_given(self):
+    def test_should_return_specific_value_when_argument_fits_and_several_configurations_are_given(self):
 
         when(targetpackage).targetfunction(1).then_return(1)
         when(targetpackage).targetfunction(2).then_return(2)
@@ -132,14 +132,14 @@ class WhenTests(UnitTests):
         assert_that(targetpackage.targetfunction(1), equal_to(1))
         assert_that(targetpackage.targetfunction(0), equal_to(None))
 
-    def should_return_specific_value_when_arguments_fit(self):
+    def test_should_return_specific_value_when_arguments_fit(self):
 
         when(targetpackage).targetfunction(1, 'spam').then_return(1)
 
         assert_that(targetpackage.targetfunction(1, 'spam'), equal_to(1))
         assert_that(targetpackage.targetfunction(0), equal_to(None))
 
-    def should_return_specific_values_when_arguments_fit(self):
+    def test_should_return_specific_values_when_arguments_fit(self):
 
         when(targetpackage).targetfunction(2).then_return(2)
         when(targetpackage).targetfunction(1, 'spam').then_return(1)
@@ -150,7 +150,7 @@ class WhenTests(UnitTests):
         assert_that(targetpackage.targetfunction(2), equal_to(2))
         assert_that(targetpackage.targetfunction(0), equal_to(None))
 
-    def should_stub_away_method_from_object(self):
+    def test_should_stub_away_method_from_object(self):
 
         test_object = targetpackage.TheClass()
 

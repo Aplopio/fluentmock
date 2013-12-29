@@ -23,7 +23,7 @@ import targetpackage
 
 class UnstubTests(TestCase):
 
-    def should_unstub_stubbed_function(self):
+    def test_should_unstub_stubbed_function(self):
 
         when(targetpackage).stub_test_1().then_return('stubbed!')
 
@@ -31,7 +31,7 @@ class UnstubTests(TestCase):
 
         assert_that(targetpackage.stub_test_1(), equal_to('not stubbed 1'))
 
-    def should_unstub_multiple_stubbed_function(self):
+    def test_should_unstub_multiple_stubbed_function(self):
 
         when(targetpackage).stub_test_1().then_return('stubbed call! 1')
         when(targetpackage).stub_test_2().then_return('stubbed call! 2')
@@ -41,7 +41,7 @@ class UnstubTests(TestCase):
         assert_that(targetpackage.stub_test_1(), equal_to('not stubbed 1'))
         assert_that(targetpackage.stub_test_2(), equal_to('not stubbed 2'))
 
-    def should_reset_list_of_stubs(self):
+    def test_should_reset_list_of_stubs(self):
 
         when(targetpackage).stub_test_1().then_return('stubbed call! 1')
         when(targetpackage).stub_test_2().then_return('stubbed call! 2')

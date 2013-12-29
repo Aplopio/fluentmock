@@ -21,7 +21,7 @@ import targetpackage
 
 class VerifyTests(UnitTests):
 
-    def should_verify_a_simple_call(self):
+    def test_should_verify_a_simple_call(self):
 
         when(targetpackage).targetfunction().then_return('123')
 
@@ -29,7 +29,7 @@ class VerifyTests(UnitTests):
 
         verify(targetpackage).targetfunction()
 
-    def should_raise_exception_when_target_does_not_have_attribute(self):
+    def test_should_raise_exception_when_target_does_not_have_attribute(self):
 
         when(targetpackage).targetfunction().then_return('123')
 
@@ -43,7 +43,7 @@ class VerifyTests(UnitTests):
 
         assert_that(raised_exception, "Did not raise exception even though target does not have attribute.")
 
-    def should_not_verify_a_simple_call(self):
+    def test_should_not_verify_a_simple_call(self):
 
         when(targetpackage).targetfunction().then_return('123')
 
@@ -56,7 +56,7 @@ class VerifyTests(UnitTests):
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
-    def should_raise_error_when_two_functions_stubbed_and_only_one_called(self):
+    def test_should_raise_error_when_two_functions_stubbed_and_only_one_called(self):
 
         when(targetpackage).targetfunction().then_return('123')
         when(targetpackage).stub_test_1().then_return('123')
@@ -74,7 +74,7 @@ class VerifyTests(UnitTests):
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
-    def should_raise_error_with_a_detailed_message_when_function_stubbed_and_not_called(self):
+    def test_should_raise_error_with_a_detailed_message_when_function_stubbed_and_not_called(self):
 
         when(targetpackage).targetfunction().then_return('123')
 
@@ -89,7 +89,7 @@ Expected: call targetpackage.targetfunction()
 """))
         assert_that(raised_error, "Did not raise error even though function has never been called.")
 
-    def should_verify_a_simple_call_with_a_argument(self):
+    def test_should_verify_a_simple_call_with_a_argument(self):
 
         when(targetpackage).targetfunction(1).then_return('123')
 
@@ -97,7 +97,7 @@ Expected: call targetpackage.targetfunction()
 
         verify(targetpackage).targetfunction(1)
 
-    def should_raise_error_when_function_stubbed_and_not_called_with_expected_argument(self):
+    def test_should_raise_error_when_function_stubbed_and_not_called_with_expected_argument(self):
 
         when(targetpackage).targetfunction(1).then_return('123')
 
@@ -115,7 +115,7 @@ Expected: call targetpackage.targetfunction(1)
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
 
-    def should_verify_a_call_with_multiple_arguments(self):
+    def test_should_verify_a_call_with_multiple_arguments(self):
 
         when(targetpackage).targetfunction(1, 2).then_return('123')
 
@@ -123,7 +123,7 @@ Expected: call targetpackage.targetfunction(1)
 
         verify(targetpackage).targetfunction(1, 2)
 
-    def should_raise_error_when_function_stubbed_and_not_called_with_expected_arguments(self):
+    def test_should_raise_error_when_function_stubbed_and_not_called_with_expected_arguments(self):
 
         when(targetpackage).targetfunction(1, 2).then_return('123')
 
@@ -141,7 +141,7 @@ Expected: call targetpackage.targetfunction(1, 2)
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
 
-    def should_raise_error_when_function_not_called_with_expected_arguments_but_in_other_ways(self):
+    def test_should_raise_error_when_function_not_called_with_expected_arguments_but_in_other_ways(self):
 
         when(targetpackage).targetfunction(1, 2).then_return('123')
 
@@ -161,7 +161,7 @@ Expected: call targetpackage.targetfunction(1, 2)
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
 
-    def should_raise_error_when_function_not_called_with_expected_arguments_but_in_many_other_ways(self):
+    def test_should_raise_error_when_function_not_called_with_expected_arguments_but_in_many_other_ways(self):
 
         when(targetpackage).targetfunction(1, 2).then_return('123')
 
@@ -185,7 +185,7 @@ Expected: call targetpackage.targetfunction(1, 2)
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
 
-    def should_verify_a_call_to_a_object_with_multiple_arguments(self):
+    def test_should_verify_a_call_to_a_object_with_multiple_arguments(self):
 
         test_object = targetpackage.TheClass()
 
