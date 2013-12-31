@@ -1,7 +1,6 @@
 # *fluentmock*
 [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
-[![PyPi version](https://pypip.in/v/fluentmock/badge.png)](https://crate.io/packages/fluentmock/)
-[![PyPi downloads](https://pypip.in/d/fluentmock/badge.png)](https://crate.io/packages/fluentmock/)
+[![PyPI version](https://badge.fury.io/py/fluentmock.png)](http://badge.fury.io/py/fluentmock)
 
 Fluent interface for mock.
 
@@ -26,3 +25,5 @@ class ExampleTest(UnitTests):
 
 fluentmock is licensed under the
 [Apache License, Version 2.0](https://raw.github.com/aelgru/fluentmock/master/src/main/python/fluentmock/LICENSE.txt)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/aelgru/fluentmock/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
