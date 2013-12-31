@@ -20,11 +20,11 @@ def targetfunction():
     sys.stdout.write("WARNING! Actual function has been called.\n")
 
 
-def stub_test_1():
+def patch_test_1():
     return 'not patched 1'
 
 
-def stub_test_2():
+def patch_test_2():
     return 'not patched 2'
 
 

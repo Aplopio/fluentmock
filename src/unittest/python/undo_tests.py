@@ -25,26 +25,26 @@ class UnstubTests(TestCase):
 
     def test_should_undo_patching_of_function(self):
 
-        when(targetpackage).stub_test_1().then_return('patched!')
+        when(targetpackage).patch_test_1().then_return('patched!')
 
         undo_patches()
 
-        assert_that(targetpackage.stub_test_1(), equal_to('not patched 1'))
+        assert_that(targetpackage.patch_test_1(), equal_to('not patched 1'))
 
     def test_should_undo_patching_of__multiple_functions(self):
 
-        when(targetpackage).stub_test_1().then_return('patched call! 1')
-        when(targetpackage).stub_test_2().then_return('patched call! 2')
+        when(targetpackage).patch_test_1().then_return('patched call! 1')
+        when(targetpackage).patch_test_2().then_return('patched call! 2')
 
         undo_patches()
 
-        assert_that(targetpackage.stub_test_1(), equal_to('not patched 1'))
-        assert_that(targetpackage.stub_test_2(), equal_to('not patched 2'))
+        assert_that(targetpackage.patch_test_1(), equal_to('not patched 1'))
+        assert_that(targetpackage.patch_test_2(), equal_to('not patched 2'))
 
     def test_should_reset_list_of_patches(self):
 
-        when(targetpackage).stub_test_1().then_return('patched call! 1')
-        when(targetpackage).stub_test_2().then_return('patched call! 2')
+        when(targetpackage).patch_test_1().then_return('patched call! 1')
+        when(targetpackage).patch_test_2().then_return('patched call! 2')
 
         undo_patches()
 

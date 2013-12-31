@@ -59,7 +59,7 @@ class VerifyTests(UnitTests):
     def test_should_raise_error_when_two_functions_patched_and_only_one_called(self):
 
         when(targetpackage).targetfunction().then_return('123')
-        when(targetpackage).stub_test_1().then_return('123')
+        when(targetpackage).patch_test_1().then_return('123')
 
         targetpackage.targetfunction()
 
@@ -68,7 +68,7 @@ class VerifyTests(UnitTests):
         verify(targetpackage).targetfunction()
 
         try:
-            verify(targetpackage).stub_test_1()
+            verify(targetpackage).patch_test_1()
         except AssertionError:
             raised_error = True
 

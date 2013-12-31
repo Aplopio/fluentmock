@@ -186,8 +186,16 @@ class FluentWhen(FluentTargeting):
     def __init__(self, target):
         FluentTargeting.__init__(self, target)
 
+    def _get_original_attribute(self, name):
+
+        if not hasattr(self._target, name):
+            error_message = MESSAGE_INVALID_ATTRIBUTE.format(target_name=self._target_name, attribute_name=name)
+            raise FluentMockException(error_message)
+
+        return getattr(self._target, name)
+
     def __getattr__(self, name):
-        original = getattr(self._target, name)
+        original = self._get_original_attribute(name)
         patch_entry = FluentPatchEntry(self._target, name, original)
         _patches.append(patch_entry)
 
