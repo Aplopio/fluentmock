@@ -38,7 +38,7 @@ Expected: {expected}
 
 
 _configurators = {}
-_stubs = []
+_patches = []
 _calls = []
 
 
@@ -49,7 +49,7 @@ class UnitTests(TestCase):
 
     def tearDown(self):
         self.tear_down()
-        unstub()
+        undo_patches()
 
     def set_up(self):
         """ Override this method to set up your unit test environment """
@@ -95,7 +95,7 @@ class FluentAnswer(object):
         return "Answer(arguments={arguments}, values={values})".format(arguments=self.arguments, values=self._values)
 
 
-class FluentStubEntry(FluentTargeting):
+class FluentPatchEntry(FluentTargeting):
 
     def __init__(self, target, attribute_name, original):
         FluentTargeting.__init__(self, target)
@@ -105,13 +105,13 @@ class FluentStubEntry(FluentTargeting):
         self._mock = None
         self._full_qualified_target_name = None
 
-    def stub_away_with(self, fluent_mock):
+    def patch_away_with(self, fluent_mock):
         self._full_qualified_target_name = self._target_name + '.' + self._attribute_name
         self._patch = patch(self._full_qualified_target_name)
         self._mock = self._patch.__enter__()
         self._mock.side_effect = fluent_mock
 
-    def unstub(self):
+    def undo(self):
         if self._patch:
             self._patch.__exit__()
 
@@ -188,14 +188,14 @@ class FluentWhen(FluentTargeting):
 
     def __getattr__(self, name):
         original = getattr(self._target, name)
-        stub_entry = FluentStubEntry(self._target, name, original)
-        _stubs.append(stub_entry)
+        patch_entry = FluentPatchEntry(self._target, name, original)
+        _patches.append(patch_entry)
 
         key = (self._target, name)
         if not key in _configurators:
             fluent_mock = FluentMock(self._target, name)
             mock_configurator = FluentMockConfigurator(fluent_mock)
-            stub_entry.stub_away_with(fluent_mock)
+            patch_entry.patch_away_with(fluent_mock)
             _configurators[key] = mock_configurator
 
         return _configurators[key]
@@ -252,19 +252,19 @@ def when(target):
     return FluentWhen(target)
 
 
-def unstub():
-    global _calls, _stubs, _configurators
+def undo_patches():
+    global _calls, _patches, _configurators
 
-    for stub in _stubs:
-        stub.unstub()
+    for _patch in _patches:
+        _patch.undo()
 
     _calls = []
-    _stubs = []
+    _patches = []
     _configurators = {}
 
 
-def get_stubs():
-    return _stubs
+def get_patches():
+    return _patches
 
 
 def verify(target):

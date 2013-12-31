@@ -16,7 +16,7 @@
 from unittest import TestCase
 
 from hamcrest import assert_that, equal_to
-from fluentmock import when, unstub, get_stubs
+from fluentmock import when, undo_patches, get_patches
 
 import targetpackage
 
@@ -27,7 +27,7 @@ class UnstubTests(TestCase):
 
         when(targetpackage).stub_test_1().then_return('stubbed!')
 
-        unstub()
+        undo_patches()
 
         assert_that(targetpackage.stub_test_1(), equal_to('not stubbed 1'))
 
@@ -36,7 +36,7 @@ class UnstubTests(TestCase):
         when(targetpackage).stub_test_1().then_return('stubbed call! 1')
         when(targetpackage).stub_test_2().then_return('stubbed call! 2')
 
-        unstub()
+        undo_patches()
 
         assert_that(targetpackage.stub_test_1(), equal_to('not stubbed 1'))
         assert_that(targetpackage.stub_test_2(), equal_to('not stubbed 2'))
@@ -46,6 +46,6 @@ class UnstubTests(TestCase):
         when(targetpackage).stub_test_1().then_return('stubbed call! 1')
         when(targetpackage).stub_test_2().then_return('stubbed call! 2')
 
-        unstub()
+        undo_patches()
 
-        assert_that(get_stubs(), equal_to([]))
+        assert_that(get_patches(), equal_to([]))
