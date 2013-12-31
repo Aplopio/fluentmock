@@ -92,7 +92,7 @@ class FluentAnswer(object):
         return self
 
     def __repr__(self):
-        return "Answer(argument={argument}, values={values})".format(argument=self.arguments, values=self._values)
+        return "Answer(arguments={arguments}, values={values})".format(arguments=self.arguments, values=self._values)
 
 
 class FluentStubEntry(FluentTargeting):
