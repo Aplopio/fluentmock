@@ -38,8 +38,9 @@ class VerifyTests(UnitTests):
         raised_exception = False
         try:
             verify(targetpackage).spameggs
-        except FluentMockException:
+        except FluentMockException as exception:
             raised_exception = True
+            self.assertEqual('The target "targetpackage" has no attribute called "spameggs".', str(exception))
 
         assert_that(raised_exception, "Did not raise exception even though target does not have attribute.")
 
@@ -51,8 +52,12 @@ class VerifyTests(UnitTests):
 
         try:
             verify(targetpackage).targetfunction()
-        except AssertionError:
+        except AssertionError as error:
             raised_error = True
+            self.assertEqual("""
+Expected: call targetpackage.targetfunction()
+     Got: no patched function has been called.
+""", str(error))
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
@@ -69,8 +74,9 @@ class VerifyTests(UnitTests):
 
         try:
             verify(targetpackage).patch_test_1()
-        except AssertionError:
+        except AssertionError as error:
             raised_error = True
+            self.assertEqual('Could not verify targetpackage.patch_test_1()', str(error))
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
