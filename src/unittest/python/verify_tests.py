@@ -56,7 +56,7 @@ class VerifyTests(UnitTests):
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
-    def test_should_raise_error_when_two_functions_stubbed_and_only_one_called(self):
+    def test_should_raise_error_when_two_functions_patched_and_only_one_called(self):
 
         when(targetpackage).targetfunction().then_return('123')
         when(targetpackage).stub_test_1().then_return('123')
@@ -74,7 +74,7 @@ class VerifyTests(UnitTests):
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
-    def test_should_raise_error_with_a_detailed_message_when_function_stubbed_and_not_called(self):
+    def test_should_raise_error_with_a_detailed_message_when_function_patched_and_not_called(self):
 
         when(targetpackage).targetfunction().then_return('123')
 
@@ -85,7 +85,7 @@ class VerifyTests(UnitTests):
             raised_error = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction()
-     Got: no stubbed function has been called.
+     Got: no patched function has been called.
 """))
         assert_that(raised_error, "Did not raise error even though function has never been called.")
 
@@ -97,7 +97,7 @@ Expected: call targetpackage.targetfunction()
 
         verify(targetpackage).targetfunction(1)
 
-    def test_should_raise_error_when_function_stubbed_and_not_called_with_expected_argument(self):
+    def test_should_raise_error_when_function_patched_and_not_called_with_expected_argument(self):
 
         when(targetpackage).targetfunction(1).then_return('123')
 
@@ -123,7 +123,7 @@ Expected: call targetpackage.targetfunction(1)
 
         verify(targetpackage).targetfunction(1, 2)
 
-    def test_should_raise_error_when_function_stubbed_and_not_called_with_expected_arguments(self):
+    def test_should_raise_error_when_function_patched_and_not_called_with_expected_arguments(self):
 
         when(targetpackage).targetfunction(1, 2).then_return('123')
 
