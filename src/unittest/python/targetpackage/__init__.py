@@ -21,11 +21,11 @@ def targetfunction():
 
 
 def stub_test_1():
-    return 'not stubbed 1'
+    return 'not patched 1'
 
 
 def stub_test_2():
-    return 'not stubbed 2'
+    return 'not patched 2'
 
 
 class TheClass(object):
