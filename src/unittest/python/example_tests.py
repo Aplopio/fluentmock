@@ -21,10 +21,8 @@ import targetpackage
 
 class ExampleTest(UnitTests):
 
-    def test_should_return_configured_value_three_when_called_and_verify_it_has_been_called(self):
+    def test_should_return_configured_value_three(self):
 
         when(targetpackage).targetfunction(2).then_return(3)
-
         assert_that(targetpackage.targetfunction(2), equal_to(3))
-
         verify(targetpackage).targetfunction(2)
