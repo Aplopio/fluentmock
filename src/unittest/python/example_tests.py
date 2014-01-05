@@ -19,10 +19,32 @@ from fluentmock import UnitTests, when, verify
 import targetpackage
 
 
-class ExampleTest(UnitTests):
+class ExampleTests(UnitTests):
 
-    def test_should_return_configured_value_three(self):
+    def test_should_return_configured_value(self):
 
         when(targetpackage).targetfunction(2).then_return(3)
         assert_that(targetpackage.targetfunction(2), equal_to(3))
+        verify(targetpackage).targetfunction(2)
+
+    def test_should_return_configured_values_in_given_order(self):
+
+        when(targetpackage).targetfunction(2).then_return(1).then_return(2).then_return(3)
+
+        assert_that(targetpackage.targetfunction(2), equal_to(1))
+        assert_that(targetpackage.targetfunction(2), equal_to(2))
+        assert_that(targetpackage.targetfunction(2), equal_to(3))
+
+        verify(targetpackage).targetfunction(2)
+
+    def test_should_repeatedly_return_last_configured_value(self):
+
+        when(targetpackage).targetfunction(2).then_return(1).then_return(5)
+
+        targetpackage.targetfunction(2)
+
+        assert_that(targetpackage.targetfunction(2), equal_to(5))
+        assert_that(targetpackage.targetfunction(2), equal_to(5))
+        assert_that(targetpackage.targetfunction(2), equal_to(5))
+
         verify(targetpackage).targetfunction(2)
