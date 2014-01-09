@@ -17,7 +17,7 @@ __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
 
-from mock import patch
+from mock import Mock, patch
 from logging import getLogger
 from unittest import TestCase
 from types import ModuleType
@@ -106,10 +106,13 @@ class FluentPatchEntry(FluentTargeting):
         self._full_qualified_target_name = None
 
     def patch_away_with(self, fluent_mock):
-        self._full_qualified_target_name = self._target_name + '.' + self._attribute_name
-        self._patch = patch(self._full_qualified_target_name)
-        self._mock = self._patch.__enter__()
-        self._mock.side_effect = fluent_mock
+        if isinstance(self._target, Mock):
+            setattr(self._target, self._attribute_name, fluent_mock)
+        else:
+            self._full_qualified_target_name = self._target_name + '.' + self._attribute_name
+            self._patch = patch(self._full_qualified_target_name)
+            self._mock = self._patch.__enter__()
+            self._mock.side_effect = fluent_mock
 
     def undo(self):
         if self._patch:

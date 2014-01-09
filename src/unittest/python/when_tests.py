@@ -15,6 +15,7 @@
 
 from hamcrest import assert_that, equal_to, instance_of
 from fluentmock import FluentAnswer, FluentMockConfigurator, FluentMockException, UnitTests, when
+from mock import Mock
 
 import targetpackage
 
@@ -150,7 +151,7 @@ class WhenTests(UnitTests):
         assert_that(targetpackage.targetfunction(2), equal_to(2))
         assert_that(targetpackage.targetfunction(0), equal_to(None))
 
-    def test_should_patch_away_method_from_object(self):
+    def test_should_patch_away_method_of_object(self):
 
         test_object = targetpackage.TheClass()
 
@@ -168,3 +169,11 @@ class WhenTests(UnitTests):
             self.assertEqual('The target "targetpackage" has no attribute called "invalid_function".', str(exception))
 
         self.assertTrue(exception_raised, "Did not raise exception when trying to patch away an invalid function")
+
+    def test_should_patch_away_method_of_mock(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        when(test_object).some_method(1).then_return(0)
+
+        assert_that(test_object.some_method(1), equal_to(0))
