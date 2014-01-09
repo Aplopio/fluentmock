@@ -25,7 +25,7 @@ from types import ModuleType
 LOGGER = getLogger(__name__)
 
 
-MESSAGE_COULD_NOT_VERIFY = 'Could not verify {target_name}.{attribute_name}()'
+MESSAGE_COULD_NOT_VERIFY = 'Could not verify {target_name}.{attribute_name}{arguments}'
 MESSAGE_INVALID_ATTRIBUTE = 'The target "{target_name}" has no attribute called "{attribute_name}".'
 MESSAGE_NO_CALLS = """
 Expected: call {target_name}.{attribute_name}()
@@ -246,10 +246,10 @@ class Verifier(FluentTargeting):
                     error_message += '          {call}\n'.format(call=call)
             raise AssertionError(error_message)
 
-        raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY))
+        raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY, arguments))
 
-    def format_message(self, message):
-        return message.format(target_name=self._target_name, attribute_name=self._attribute_name)
+    def format_message(self, message, arguments='()'):
+        return message.format(target_name=self._target_name, attribute_name=self._attribute_name, arguments=arguments)
 
 
 class FluentMockException(Exception):

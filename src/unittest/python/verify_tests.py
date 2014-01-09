@@ -80,6 +80,25 @@ Expected: call targetpackage.targetfunction()
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
+    def test_should_raise_error_and_list_the_expected_arguments_when_function_not_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+        when(targetpackage).patch_test_1().then_return('123')
+
+        targetpackage.targetfunction()
+
+        raised_error = False
+
+        verify(targetpackage).targetfunction()
+
+        try:
+            verify(targetpackage).patch_test_1(1, 2, 3)
+        except AssertionError as error:
+            raised_error = True
+            self.assertEqual('Could not verify targetpackage.patch_test_1(1, 2, 3)', str(error))
+
+        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+
     def test_should_raise_error_with_a_detailed_message_when_function_patched_and_not_called(self):
 
         when(targetpackage).targetfunction().then_return('123')
