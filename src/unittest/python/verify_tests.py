@@ -13,6 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+from mock import Mock
 from hamcrest import assert_that, equal_to
 from fluentmock import UnitTests, FluentMockException, when, verify
 
@@ -219,3 +220,13 @@ Expected: call targetpackage.targetfunction(1, 2)
         test_object.some_method(1, 2)
 
         verify(test_object).some_method(1, 2)
+
+    def test_should_verify_a_call_to_a_mock(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        when(test_object).some_method(1).then_return(0)
+
+        assert_that(test_object.some_method(1), equal_to(0))
+
+        verify(test_object).some_method(1)
