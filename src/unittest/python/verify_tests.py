@@ -56,7 +56,7 @@ class VerifyTests(UnitTests):
             raised_error = True
             self.assertEqual("""
 Expected: call targetpackage.targetfunction()
-     Got: no patched function has been called.
+ but was: no patched function has been called.
 """, str(error))
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
@@ -91,7 +91,7 @@ Expected: call targetpackage.targetfunction()
             raised_error = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction()
-     Got: no patched function has been called.
+ but was: no patched function has been called.
 """))
         assert_that(raised_error, "Did not raise error even though function has never been called.")
 

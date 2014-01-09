@@ -29,7 +29,7 @@ MESSAGE_COULD_NOT_VERIFY = 'Could not verify {target_name}.{attribute_name}()'
 MESSAGE_INVALID_ATTRIBUTE = 'The target "{target_name}" has no attribute called "{attribute_name}".'
 MESSAGE_NO_CALLS = """
 Expected: call {target_name}.{attribute_name}()
-     Got: no patched function has been called.
+ but was: no patched function has been called.
 """
 MESSAGE_EXPECTED_BUT_WAS = """
 Expected: {expected}
