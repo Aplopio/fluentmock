@@ -18,6 +18,7 @@ from fluentmock import FluentAnswer, FluentMockConfigurator, FluentMockException
 from mock import Mock
 
 import targetpackage
+import targetpackage.subpackage
 
 
 class WhenTests(UnitTests):
@@ -177,3 +178,9 @@ class WhenTests(UnitTests):
         when(test_object).some_method(1).then_return(0)
 
         assert_that(test_object.some_method(1), equal_to(0))
+
+    def test_should_patch_away_method_of_subpackage(self):
+
+        when(targetpackage.subpackage).subtargetfunction(0).then_return(0)
+
+        assert_that(targetpackage.subpackage.subtargetfunction(0), equal_to(0))

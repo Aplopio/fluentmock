@@ -16,7 +16,7 @@
 __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
-
+from importlib import import_module
 from mock import Mock, patch
 from logging import getLogger
 from unittest import TestCase
@@ -65,7 +65,7 @@ class FluentTargeting(object):
     def __init__(self, target):
         if isinstance(target, ModuleType):
             self._target_name = target.__name__
-            self._target = __import__(self._target_name)
+            self._target = import_module(self._target_name)
         else:
             target_type = type(target)
             self._target_name = target_type.__module__ + '.' + target_type.__name__
