@@ -15,7 +15,7 @@
 
 from mock import Mock
 from hamcrest import assert_that, equal_to
-from fluentmock import UnitTests, FluentMockException, when, verify
+from fluentmock import NEVER, UnitTests, FluentMockException, when, verify
 
 import targetpackage
 
@@ -230,3 +230,30 @@ Expected: call targetpackage.targetfunction(1, 2)
         assert_that(test_object.some_method(1), equal_to(0))
 
         verify(test_object).some_method(1)
+
+    def test_should_verify_that_function_has_not_been_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+
+        verify(targetpackage, NEVER).targetfunction()
+
+    def test_raise_exception_when_trying_to_verify_something_other_than_never_or_once(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+
+        exception_raised = False
+        try:
+            verify(targetpackage, 17)
+        except NotImplementedError as error:
+            exception_raised = True
+            self.assertEqual('Times can be 0 or 1.', str(error))
+
+        self.assertTrue(exception_raised, 'Expected a NotImplementedError when something else than 0 or 1 is given.')
+
+    def test_should_verify_that_function_has_not_been_called_when_function_has_been_called_with_other_arguments(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+
+        targetpackage.targetfunction(1)
+
+        verify(targetpackage, NEVER).targetfunction()

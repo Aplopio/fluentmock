@@ -26,6 +26,9 @@ LOGGER = getLogger(__name__)
 
 
 MESSAGE_COULD_NOT_VERIFY = 'Could not verify {target_name}.{attribute_name}{arguments}'
+MESSAGE_COULD_NOT_VERIFY_NEVER = 'Could not verify {target_name}.{attribute_name}{arguments} has never been called.'
+MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE = """{target_name}.{attribute_name}{arguments} should NEVER have been called, but
+has been called at least once."""
 MESSAGE_INVALID_ATTRIBUTE = 'The target "{target_name}" has no attribute called "{attribute_name}".'
 MESSAGE_NO_CALLS = """
 Expected: call {target_name}.{attribute_name}()
@@ -36,6 +39,7 @@ Expected: {expected}
  but was: {actual}
 """
 
+NEVER = 0
 
 _configurators = {}
 _patches = []
@@ -223,9 +227,13 @@ class FluentWhen(FluentTargeting):
 
 class Verifier(FluentTargeting):
 
-    def __init__(self, target):
+    def __init__(self, target, times):
         FluentTargeting.__init__(self, target)
         self._attribute_name = None
+        self._times = times
+
+        if times not in [0, 1]:
+            raise NotImplementedError('Times can be 0 or 1.')
 
     def __getattr__(self, name):
         self._attribute_name = name
@@ -235,7 +243,7 @@ class Verifier(FluentTargeting):
 
         return self
 
-    def __call__(self, *arguments):
+    def _assert_called(self, *arguments):
         if not _calls:
             raise AssertionError(self.format_message(MESSAGE_NO_CALLS))
 
@@ -259,6 +267,19 @@ class Verifier(FluentTargeting):
             raise AssertionError(error_message)
 
         raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY, arguments))
+
+    def __call__(self, *arguments):
+        if self._times == 0:
+            if not _calls:
+                return
+
+            for call in _calls:
+                if call.verify(self._target, self._attribute_name, arguments):
+                    raise AssertionError(self.format_message(MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE, arguments))
+
+            return
+        else:
+            self._assert_called(*arguments)
 
     def format_message(self, message, arguments='()'):
         return message.format(target_name=self._target_name, attribute_name=self._attribute_name, arguments=arguments)
@@ -287,5 +308,5 @@ def get_patches():
     return _patches
 
 
-def verify(target):
-    return Verifier(target)
+def verify(target, times=1):
+    return Verifier(target, times)
