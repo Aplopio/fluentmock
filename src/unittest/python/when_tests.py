@@ -14,7 +14,7 @@
 #   limitations under the License.
 
 from hamcrest import assert_that, equal_to, instance_of
-from fluentmock import FluentAnswer, FluentMockConfigurator, FluentMockException, UnitTests, when
+from fluentmock import ANY_ARGUMENTS, FluentAnswer, FluentMockConfigurator, FluentMockException, UnitTests, when
 from mock import Mock
 
 import targetpackage
@@ -184,3 +184,12 @@ class WhenTests(UnitTests):
         when(targetpackage.subpackage).subtargetfunction(0).then_return(0)
 
         assert_that(targetpackage.subpackage.subtargetfunction(0), equal_to(0))
+
+    def test_should_always_return_the_same_answer_for_any_argument(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return('foobar')
+
+        assert_that(targetpackage.targetfunction(0), equal_to('foobar'))
+        assert_that(targetpackage.targetfunction(1, 2, 3), equal_to('foobar'))
+        assert_that(targetpackage.targetfunction(), equal_to('foobar'))
+        assert_that(targetpackage.targetfunction('hello', 1), equal_to('foobar'))

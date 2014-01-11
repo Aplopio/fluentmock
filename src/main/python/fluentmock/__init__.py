@@ -60,6 +60,13 @@ class UnitTests(TestCase):
         pass
 
 
+class FluentAnyArguments(object):
+    pass
+
+
+ANY_ARGUMENTS = FluentAnyArguments()
+
+
 class FluentTargeting(object):
 
     def __init__(self, target):
@@ -159,6 +166,8 @@ class FluentMock(FluentTargeting):
 
         for answer in self._answers:
             if answer.arguments == arguments:
+                return answer.next()
+            if answer.arguments and answer.arguments[0] == ANY_ARGUMENTS:
                 return answer.next()
 
         return None
