@@ -85,25 +85,46 @@ class FluentTargeting(object):
 
 class FluentAnswer(object):
 
+    RETURN_ANSWER = 0
+    RAISE_ANSWER = 1
+
     def __init__(self, arguments):
         self.arguments = arguments
-        self._values = []
+        self._answers = []
 
     def next(self):
-        if len(self._values) == 0:
+        if len(self._answers) == 0:
             return None
 
-        if len(self._values) > 1:
-            return self._values.pop(0)
+        if len(self._answers) == 1:
+            value = self._answers[0]
 
-        return self._values[0]
+        if len(self._answers) > 1:
+            value = self._answers.pop(0)
+
+        return self.give_answer(value)
+
+    def give_answer(self, answer):
+        answer_type = answer[1]
+        answer_value = answer[0]
+        if answer_type == self.RETURN_ANSWER:
+            return answer_value
+
+        if answer_type == self.RAISE_ANSWER:
+            raise answer_value
+
+        raise NotImplementedError('The answer type %s is not implemented')
 
     def then_return(self, value):
-        self._values.append(value)
+        self._answers.append((value, self.RETURN_ANSWER))
+        return self
+
+    def then_raise(self, value):
+        self._answers.append((value, self.RAISE_ANSWER))
         return self
 
     def __repr__(self):
-        return "Answer(arguments={arguments}, values={values})".format(arguments=self.arguments, values=self._values)
+        return "Answer(arguments={arguments}, values={values})".format(arguments=self.arguments, values=self._answers)
 
 
 class FluentPatchEntry(FluentTargeting):

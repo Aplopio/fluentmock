@@ -193,3 +193,16 @@ class WhenTests(UnitTests):
         assert_that(targetpackage.targetfunction(1, 2, 3), equal_to('foobar'))
         assert_that(targetpackage.targetfunction(), equal_to('foobar'))
         assert_that(targetpackage.targetfunction('hello', 1), equal_to('foobar'))
+
+    def test_should_raise_exception_when_configured_to_raise_exception(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_raise(Exception('foobar'))
+
+        exception_raised = False
+        try:
+            targetpackage.targetfunction()
+        except Exception as exception:
+            exception_raised = True
+            assert_that(str(exception), equal_to('foobar'))
+
+        self.assertTrue(exception_raised, 'Exception has not been raised event thow the mock has been configured so.')
