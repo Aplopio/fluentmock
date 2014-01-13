@@ -32,7 +32,7 @@ description = 'Please visit {0} for more information!'.format(url)
 authors = [Author('Michael Gruber', 'aelgru@gmail.com')]
 license = 'Apache License, Version 2.0'
 summary = 'Fluent interface for mock.'
-version = '0.1.2'
+version = '0.1.3'
 
 default_task = ['analyze', 'publish']
 
@@ -41,7 +41,8 @@ default_task = ['analyze', 'publish']
 def set_properties(project):
     project.build_depends_on('PyHamcrest')
     project.build_depends_on('wheel')
-    project.build_depends_on('mock')
+
+    project.depends_on('mock')
 
     project.set_property('dir_source_integrationtest_python', 'src/unittest')
     project.set_property('unittest_test_method_prefix', 'test_should')
