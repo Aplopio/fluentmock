@@ -206,3 +206,15 @@ class WhenTests(UnitTests):
             assert_that(str(exception), equal_to('foobar'))
 
         self.assertTrue(exception_raised, 'Exception has not been raised event thow the mock has been configured so.')
+
+    def test_should_return_none_when_configured_for_keyword_argument_but_not_called_with_it(self):
+
+        when(targetpackage).targetfunction(keyword_argument='abc').then_return('foobar')
+
+        assert_that(targetpackage.targetfunction(), equal_to(None))
+
+    def test_should_return_configured_answer_when_keyword_argument_given(self):
+
+        when(targetpackage).targetfunction(keyword_argument='abc').then_return('foobar')
+
+        assert_that(targetpackage.targetfunction(keyword_argument='abc'), equal_to('foobar'))

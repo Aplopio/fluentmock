@@ -88,8 +88,9 @@ class FluentAnswer(object):
     RETURN_ANSWER = 0
     RAISE_ANSWER = 1
 
-    def __init__(self, arguments):
+    def __init__(self, arguments, kwargs):
         self.arguments = arguments
+        self.kwargs = kwargs
         self._answers = []
 
     def next(self):
@@ -183,14 +184,14 @@ class FluentMock(FluentTargeting):
         self._attribute_name = attribute_name
         self._answers = []
 
-    def __call__(self, *arguments):
+    def __call__(self, *arguments, **kwargs):
         _calls.append(FluentCallEntry(self._target, self._attribute_name, arguments))
 
         if not self._answers:
             return None
 
         for answer in self._answers:
-            if answer.arguments == arguments:
+            if answer.arguments == arguments and answer.kwargs == kwargs:
                 return answer.next()
             if answer.arguments and answer.arguments[0] == ANY_ARGUMENTS:
                 return answer.next()
@@ -210,10 +211,12 @@ class FluentMockConfigurator(object):
         self._mock = mock
         self._arguments = None
         self._answer = None
+        self._kwargs = None
 
-    def __call__(self, *arguments):
+    def __call__(self, *arguments, **kwargs):
         self._arguments = arguments
-        self._answer = FluentAnswer(self._arguments)
+        self._kwargs = kwargs
+        self._answer = FluentAnswer(self._arguments, self._kwargs)
         self._mock.append_new_answer(self._answer)
         return self._answer
 
