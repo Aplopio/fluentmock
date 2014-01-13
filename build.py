@@ -32,7 +32,7 @@ description = 'Please visit {0} for more information!'.format(url)
 authors = [Author('Michael Gruber', 'aelgru@gmail.com')]
 license = 'Apache License, Version 2.0'
 summary = 'Fluent interface for mock.'
-version = '0.1.3'
+version = '0.1.4'
 
 default_task = ['analyze', 'publish']
 
@@ -68,7 +68,6 @@ def set_properties(project):
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.0',
