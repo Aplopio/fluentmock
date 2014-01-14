@@ -257,3 +257,29 @@ Expected: call targetpackage.targetfunction(1, 2)
         targetpackage.targetfunction(1)
 
         verify(targetpackage, NEVER).targetfunction()
+
+    def test_should_verify_a_simple_call_using_a_keyword_argument(self):
+
+        when(targetpackage).targetfunction(keyword_argument='foobar').then_return('123')
+
+        targetpackage.targetfunction(keyword_argument='foobar')
+
+        verify(targetpackage).targetfunction(keyword_argument='foobar')
+
+    def test_should_raise_error_when_function_patched_and_not_called_with_expected_keyword_argument(self):
+
+        when(targetpackage).targetfunction(test=1).then_return('123')
+
+        targetpackage.targetfunction(test=2)
+
+        raised_error = False
+        try:
+            verify(targetpackage).targetfunction(test=1)
+        except AssertionError as error:
+            raised_error = True
+            assert_that(str(error), equal_to("""
+Expected: call targetpackage.targetfunction(test=1)
+ but was: call targetpackage.targetfunction(test=2)
+"""))
+
+        assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")

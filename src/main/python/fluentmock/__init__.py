@@ -17,7 +17,7 @@ __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
 from importlib import import_module
-from mock import Mock, patch
+from mock import Mock, call, patch
 from logging import getLogger
 from unittest import TestCase
 from types import ModuleType
@@ -153,14 +153,17 @@ class FluentPatchEntry(FluentTargeting):
 
 
 class FluentCallEntry(FluentTargeting):
-    def __init__(self, target, attribute, arguments):
+    def __init__(self, target, attribute, arguments, keyword_arguments):
         FluentTargeting.__init__(self, target)
         self._attribute_name = attribute
         self._arguments = arguments
+        self._keyword_arguments = keyword_arguments
 
-    def verify(self, target, attribute_name, arguments):
-        if self._target == target and self._attribute_name == attribute_name and self._arguments == arguments:
-            return True
+    def verify(self, target, attribute_name, arguments, keyword_arguments):
+        if self._target == target and self._attribute_name == attribute_name:
+            if self._arguments == arguments and self._keyword_arguments == keyword_arguments:
+                return True
+
         return False
 
     def __repr__(self):
@@ -171,10 +174,10 @@ class FluentCallEntry(FluentTargeting):
             else:
                 arguments_as_strings.append(str(argument))
 
-        arguments = ", ".join(arguments_as_strings)
-        return 'call {target_name}.{attribute_name}({arguments})'.format(target_name=self._target_name,
+        call_string = str(call(*self._arguments, **self._keyword_arguments)).replace('call', '')
+        return 'call {target_name}.{attribute_name}{call_string}'.format(target_name=self._target_name,
                                                                          attribute_name=self._attribute_name,
-                                                                         arguments=arguments)
+                                                                         call_string=call_string)
 
 
 class FluentMock(FluentTargeting):
@@ -184,14 +187,15 @@ class FluentMock(FluentTargeting):
         self._attribute_name = attribute_name
         self._answers = []
 
-    def __call__(self, *arguments, **kwargs):
-        _calls.append(FluentCallEntry(self._target, self._attribute_name, arguments))
+    def __call__(self, *arguments, **keyword_arguments):
+        call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
+        _calls.append(call_entry)
 
         if not self._answers:
             return None
 
         for answer in self._answers:
-            if answer.arguments == arguments and answer.kwargs == kwargs:
+            if answer.arguments == arguments and answer.kwargs == keyword_arguments:
                 return answer.next()
             if answer.arguments and answer.arguments[0] == ANY_ARGUMENTS:
                 return answer.next()
@@ -267,12 +271,12 @@ class Verifier(FluentTargeting):
 
         return self
 
-    def _assert_called(self, *arguments):
+    def _assert_called(self, *arguments, **keyword_arguments):
         if not _calls:
             raise AssertionError(self.format_message(MESSAGE_NO_CALLS))
 
         for call in _calls:
-            if call.verify(self._target, self._attribute_name, arguments):
+            if call.verify(self._target, self._attribute_name, arguments, keyword_arguments):
                 return
 
         found_calls = []
@@ -283,7 +287,7 @@ class Verifier(FluentTargeting):
 
         number_of_found_calls = len(found_calls)
         if number_of_found_calls > 0:
-            expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments)
+            expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
             error_message = MESSAGE_EXPECTED_BUT_WAS.format(expected=expected_call_entry, actual=found_calls[0])
             if number_of_found_calls > 1:
                 for call in found_calls[1:]:
@@ -292,18 +296,18 @@ class Verifier(FluentTargeting):
 
         raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY, arguments))
 
-    def __call__(self, *arguments):
+    def __call__(self, *arguments, **keyword_arguments):
         if self._times == 0:
             if not _calls:
                 return
 
             for call in _calls:
-                if call.verify(self._target, self._attribute_name, arguments):
+                if call.verify(self._target, self._attribute_name, arguments, keyword_arguments):
                     raise AssertionError(self.format_message(MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE, arguments))
 
             return
         else:
-            self._assert_called(*arguments)
+            self._assert_called(*arguments, **keyword_arguments)
 
     def format_message(self, message, arguments='()'):
         return message.format(target_name=self._target_name, attribute_name=self._attribute_name, arguments=arguments)
