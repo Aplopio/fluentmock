@@ -275,23 +275,23 @@ class Verifier(FluentTargeting):
         if not _calls:
             raise AssertionError(self.format_message(MESSAGE_NO_CALLS))
 
-        for call in _calls:
-            if call.verify(self._target, self._attribute_name, arguments, keyword_arguments):
+        for call_entry in _calls:
+            if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
                 return
 
         found_calls = []
 
-        for call in _calls:
-            if call._target == self._target and call._attribute_name == self._attribute_name:
-                found_calls.append(call)
+        for call_entry in _calls:
+            if call_entry._target == self._target and call_entry._attribute_name == self._attribute_name:
+                found_calls.append(call_entry)
 
         number_of_found_calls = len(found_calls)
         if number_of_found_calls > 0:
             expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
             error_message = MESSAGE_EXPECTED_BUT_WAS.format(expected=expected_call_entry, actual=found_calls[0])
             if number_of_found_calls > 1:
-                for call in found_calls[1:]:
-                    error_message += '          {call}\n'.format(call=call)
+                for call_entry in found_calls[1:]:
+                    error_message += '          {call_entry}\n'.format(call_entry=call_entry)
             raise AssertionError(error_message)
 
         raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY, arguments))
