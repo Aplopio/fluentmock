@@ -45,5 +45,3 @@ class ExampleTests(UnitTests):
 
 fluentmock is licensed under the
 [Apache License, Version 2.0](https://raw.github.com/aelgru/fluentmock/master/src/main/python/fluentmock/LICENSE.txt)
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/aelgru/fluentmock/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
