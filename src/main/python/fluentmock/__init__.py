@@ -43,7 +43,7 @@ NEVER = 0
 
 _configurators = {}
 _patches = []
-_calls = []
+_call_entries = []
 
 
 class UnitTests(TestCase):
@@ -189,7 +189,7 @@ class FluentMock(FluentTargeting):
 
     def __call__(self, *arguments, **keyword_arguments):
         call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
-        _calls.append(call_entry)
+        _call_entries.append(call_entry)
 
         if not self._answers:
             return None
@@ -272,16 +272,16 @@ class Verifier(FluentTargeting):
         return self
 
     def _assert_called(self, *arguments, **keyword_arguments):
-        if not _calls:
+        if not _call_entries:
             raise AssertionError(self.format_message(MESSAGE_NO_CALLS))
 
-        for call_entry in _calls:
+        for call_entry in _call_entries:
             if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
                 return
 
         found_calls = []
 
-        for call_entry in _calls:
+        for call_entry in _call_entries:
             if call_entry._target == self._target and call_entry._attribute_name == self._attribute_name:
                 found_calls.append(call_entry)
 
@@ -298,10 +298,10 @@ class Verifier(FluentTargeting):
 
     def __call__(self, *arguments, **keyword_arguments):
         if self._times == 0:
-            if not _calls:
+            if not _call_entries:
                 return
 
-            for call in _calls:
+            for call in _call_entries:
                 if call.verify(self._target, self._attribute_name, arguments, keyword_arguments):
                     raise AssertionError(self.format_message(MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE, arguments))
 
@@ -322,12 +322,12 @@ def when(target):
 
 
 def undo_patches():
-    global _calls, _patches, _configurators
+    global _call_entries, _patches, _configurators
 
     for _patch in _patches:
         _patch.undo()
 
-    _calls = []
+    _call_entries = []
     _patches = []
     _configurators = {}
 
