@@ -301,8 +301,8 @@ class Verifier(FluentTargeting):
             if not _call_entries:
                 return
 
-            for call in _call_entries:
-                if call.verify(self._target, self._attribute_name, arguments, keyword_arguments):
+            for call_entry in _call_entries:
+                if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
                     raise AssertionError(self.format_message(MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE, arguments))
 
             return
