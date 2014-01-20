@@ -84,8 +84,21 @@ class FluentTargeting(object):
 
 class FluentAnswer(object):
 
-    RETURN_ANSWER = 0
-    RAISE_ANSWER = 1
+    class ReturnAnswer(object):
+
+        def __init__(self, value):
+            self._value = value
+
+        def __call__(self):
+            return self._value
+
+    class RaiseAnswer(object):
+
+        def __init__(self, value):
+            self._value = value
+
+        def __call__(self):
+            raise self._value
 
     def __init__(self, arguments, kwargs):
         self.arguments = arguments
@@ -97,30 +110,21 @@ class FluentAnswer(object):
             return None
 
         if len(self._answers) == 1:
-            value = self._answers[0]
+            answer = self._answers[0]
 
         if len(self._answers) > 1:
-            value = self._answers.pop(0)
+            answer = self._answers.pop(0)
 
-        return self.give_answer(value)
-
-    def give_answer(self, answer):
-        answer_type = answer[1]
-        answer_value = answer[0]
-        if answer_type == self.RETURN_ANSWER:
-            return answer_value
-
-        if answer_type == self.RAISE_ANSWER:
-            raise answer_value
-
-        raise NotImplementedError('The answer type %s is not implemented')
+        return answer()
 
     def then_return(self, value):
-        self._answers.append((value, self.RETURN_ANSWER))
+        answer = self.ReturnAnswer(value)
+        self._answers.append(answer)
         return self
 
     def then_raise(self, value):
-        self._answers.append((value, self.RAISE_ANSWER))
+        answer = self.RaiseAnswer(value)
+        self._answers.append(answer)
         return self
 
     def __repr__(self):
