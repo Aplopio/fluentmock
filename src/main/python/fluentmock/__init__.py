@@ -320,8 +320,8 @@ def when(target):
 def undo_patches():
     global _call_entries, _patch_entries, _configurators
 
-    for _patch in _patch_entries:
-        _patch.undo()
+    for patch_entry in _patch_entries:
+        patch_entry.undo()
 
     _call_entries = []
     _patch_entries = []
