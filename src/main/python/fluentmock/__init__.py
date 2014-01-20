@@ -37,7 +37,7 @@ MESSAGE_EXPECTED_BUT_WAS = """
 Expected: {expected}
  but was: {actual}
 """
-ADDITIONAL_CALL_ENTRIES = '          {call_entry}\n'
+ADDITIONAL_CALL_ENTRIES = '          {actual}\n'
 
 NEVER = 0
 
@@ -293,7 +293,7 @@ class Verifier(FluentTargeting):
             error_message = MESSAGE_EXPECTED_BUT_WAS.format(expected=self._call_entry, actual=found_calls[0])
             if number_of_found_calls > 1:
                 for call_entry in found_calls[1:]:
-                    error_message += ADDITIONAL_CALL_ENTRIES.format(call_entry=call_entry)
+                    error_message += ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
             raise AssertionError(error_message)
 
         raise AssertionError(MESSAGE_COULD_NOT_VERIFY.format(expected=self._call_entry))
