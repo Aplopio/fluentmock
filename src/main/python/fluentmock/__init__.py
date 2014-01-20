@@ -250,6 +250,13 @@ class InvalidAttributeError(Exception):
         super(InvalidAttributeError, self).__init__(error_message)
 
 
+class CouldNotVerifyCallError(AssertionError):
+
+    def __init__(self, expected_call_entry):
+        error_message = MESSAGE_COULD_NOT_VERIFY.format(expected=expected_call_entry)
+        super(CouldNotVerifyCallError, self).__init__(error_message)
+
+
 class Verifier(FluentTarget):
 
     def __init__(self, target, times):
@@ -292,7 +299,7 @@ class Verifier(FluentTarget):
                     error_message += ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
             raise AssertionError(error_message)
 
-        raise AssertionError(MESSAGE_COULD_NOT_VERIFY.format(expected=expected_call_entry))
+        raise CouldNotVerifyCallError(expected_call_entry)
 
     def _assert_never_called(self, *arguments, **keyword_arguments):
         for call_entry in _call_entries:

@@ -15,7 +15,12 @@
 
 from mock import Mock
 from hamcrest import assert_that, equal_to
-from fluentmock import NEVER, UnitTests, InvalidAttributeError, when, verify
+from fluentmock import (NEVER,
+                        UnitTests,
+                        CouldNotVerifyCallError,
+                        InvalidAttributeError,
+                        when,
+                        verify)
 
 import targetpackage
 
@@ -76,63 +81,6 @@ Expected: call targetpackage.targetfunction()
 Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar')
  but was: no patched function has been called.
 """, str(error))
-
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
-
-    def test_should_raise_error_when_two_functions_patched_and_only_one_called(self):
-
-        when(targetpackage).targetfunction().then_return('123')
-        when(targetpackage).patch_test_1().then_return('123')
-
-        targetpackage.targetfunction()
-
-        raised_error = False
-
-        verify(targetpackage).targetfunction()
-
-        try:
-            verify(targetpackage).patch_test_1()
-        except AssertionError as error:
-            raised_error = True
-            self.assertEqual('Could not verify call targetpackage.patch_test_1()', str(error))
-
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
-
-    def test_should_show_error_message_including_keyword_arguments_when_two_functions_patched_and_only_one_called(self):
-
-        when(targetpackage).targetfunction().then_return('123')
-        when(targetpackage).patch_test_1().then_return('123')
-
-        targetpackage.targetfunction()
-
-        raised_error = False
-
-        verify(targetpackage).targetfunction()
-
-        try:
-            verify(targetpackage).patch_test_1(1, 2, 3, hello='world')
-        except AssertionError as error:
-            raised_error = True
-            self.assertEqual("Could not verify call targetpackage.patch_test_1(1, 2, 3, hello='world')", str(error))
-
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
-
-    def test_should_raise_error_and_list_the_expected_arguments_when_function_not_called(self):
-
-        when(targetpackage).targetfunction().then_return('123')
-        when(targetpackage).patch_test_1().then_return('123')
-
-        targetpackage.targetfunction()
-
-        raised_error = False
-
-        verify(targetpackage).targetfunction()
-
-        try:
-            verify(targetpackage).patch_test_1(1, 2, 3)
-        except AssertionError as error:
-            raised_error = True
-            self.assertEqual('Could not verify call targetpackage.patch_test_1(1, 2, 3)', str(error))
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
@@ -305,6 +253,66 @@ Expected: call targetpackage.targetfunction(test=1)
 """))
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+
+
+class CouldNotVerifyCallTests(UnitTests):
+
+    def test_should_raise_error_when_two_functions_patched_and_only_one_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+        when(targetpackage).patch_test_1().then_return('123')
+
+        targetpackage.targetfunction()
+
+        raised_error = False
+
+        verify(targetpackage).targetfunction()
+
+        try:
+            verify(targetpackage).patch_test_1()
+        except CouldNotVerifyCallError as error:
+            raised_error = True
+            self.assertEqual('Could not verify call targetpackage.patch_test_1()', str(error))
+
+        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+
+    def test_should_show_error_message_including_keyword_arguments_when_two_functions_patched_and_only_one_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+        when(targetpackage).patch_test_1().then_return('123')
+
+        targetpackage.targetfunction()
+
+        raised_error = False
+
+        verify(targetpackage).targetfunction()
+
+        try:
+            verify(targetpackage).patch_test_1(1, 2, 3, hello='world')
+        except CouldNotVerifyCallError as error:
+            raised_error = True
+            self.assertEqual("Could not verify call targetpackage.patch_test_1(1, 2, 3, hello='world')", str(error))
+
+        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+
+    def test_should_raise_error_and_list_the_expected_arguments_when_function_not_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+        when(targetpackage).patch_test_1().then_return('123')
+
+        targetpackage.targetfunction()
+
+        raised_error = False
+
+        verify(targetpackage).targetfunction()
+
+        try:
+            verify(targetpackage).patch_test_1(1, 2, 3)
+        except CouldNotVerifyCallError as error:
+            raised_error = True
+            self.assertEqual('Could not verify call targetpackage.patch_test_1(1, 2, 3)', str(error))
+
+        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
 
 class VerfiyNeverTests(UnitTests):
