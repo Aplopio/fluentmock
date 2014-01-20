@@ -173,17 +173,10 @@ class FluentCallEntry(FluentTargeting):
         return False
 
     def __repr__(self):
-        arguments_as_strings = []
-        for argument in self._arguments:
-            if type(argument) == str:
-                arguments_as_strings.append("'{argument}'".format(argument=argument))
-            else:
-                arguments_as_strings.append(str(argument))
-
-        call_string = str(call(*self._arguments, **self._keyword_arguments)).replace('call', '')
-        return 'call {target_name}.{attribute_name}{call_string}'.format(target_name=self._target_name,
-                                                                         attribute_name=self._attribute_name,
-                                                                         call_string=call_string)
+        target_string = 'call {target_name}.{attribute_name}'.format(target_name=self._target_name,
+                                                                     attribute_name=self._attribute_name)
+        call_string = str(call(*self._arguments, **self._keyword_arguments))
+        return call_string.replace('call', target_string)
 
 
 class FluentMock(FluentTargeting):
