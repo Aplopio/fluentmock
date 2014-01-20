@@ -30,7 +30,7 @@ MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE = """{call_entry} should NEVER have been c
 but has been called at least once."""
 MESSAGE_INVALID_ATTRIBUTE = 'The target "{target_name}" has no attribute called "{attribute_name}".'
 MESSAGE_NO_CALLS = """
-Expected: call {target_name}.{attribute_name}()
+Expected: {expected}
  but was: no patched function has been called.
 """
 MESSAGE_EXPECTED_BUT_WAS = """
@@ -272,7 +272,9 @@ class Verifier(FluentTargeting):
 
     def _assert_called(self, *arguments, **keyword_arguments):
         if not _call_entries:
-            raise AssertionError(self.format_message(MESSAGE_NO_CALLS))
+            call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
+            error_message = MESSAGE_NO_CALLS.format(expected=call_entry)
+            raise AssertionError(error_message)
 
         for call_entry in _call_entries:
             if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):

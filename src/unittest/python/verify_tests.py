@@ -45,7 +45,7 @@ class VerifyTests(UnitTests):
 
         assert_that(raised_exception, "Did not raise exception even though target does not have attribute.")
 
-    def test_should_not_verify_a_simple_call(self):
+    def test_should_not_verify_a_simple_call_when_no_function_has_been_called(self):
 
         when(targetpackage).targetfunction().then_return('123')
 
@@ -57,6 +57,23 @@ class VerifyTests(UnitTests):
             raised_error = True
             self.assertEqual("""
 Expected: call targetpackage.targetfunction()
+ but was: no patched function has been called.
+""", str(error))
+
+        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+
+    def test_should_not_verify_a_call_when_no_function_has_been_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+
+        raised_error = False
+
+        try:
+            verify(targetpackage).targetfunction(1, 2, 3, hello='foobar')
+        except AssertionError as error:
+            raised_error = True
+            self.assertEqual("""
+Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar')
  but was: no patched function has been called.
 """, str(error))
 
