@@ -254,7 +254,7 @@ class CouldNotVerifyCallError(AssertionError):
         super(CouldNotVerifyCallError, self).__init__(error_message)
 
 
-class CalledButWasDifferentThanExpectedError(AssertionError):
+class TargetHasBeenCalledWithDifferentArguments(AssertionError):
 
     MESSAGE_FORMAT = """
 Expected: {expected}
@@ -269,7 +269,7 @@ Expected: {expected}
             for call_entry in found_calls[1:]:
                 error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
 
-        super(CalledButWasDifferentThanExpectedError, self).__init__(error_message)
+        super(TargetHasBeenCalledWithDifferentArguments, self).__init__(error_message)
 
 
 class Verifier(FluentTarget):
@@ -307,7 +307,7 @@ class Verifier(FluentTarget):
                 found_calls.append(call_entry)
 
         if len(found_calls) > 0:
-            raise CalledButWasDifferentThanExpectedError(expected_call_entry, found_calls)
+            raise TargetHasBeenCalledWithDifferentArguments(expected_call_entry, found_calls)
 
         raise CouldNotVerifyCallError(expected_call_entry)
 
