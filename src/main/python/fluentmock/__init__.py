@@ -290,6 +290,13 @@ class Verifier(FluentTarget):
 
         return self
 
+    def find_calls_to_same_target(self):
+        found_calls = []
+        for call_entry in _call_entries:
+            if call_entry._target == self._target and call_entry._attribute_name == self._attribute_name:
+                found_calls.append(call_entry)
+        return found_calls
+
     def _assert_called(self, *arguments, **keyword_arguments):
         expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
 
@@ -300,11 +307,7 @@ class Verifier(FluentTarget):
             if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
                 return
 
-        found_calls = []
-
-        for call_entry in _call_entries:
-            if call_entry._target == self._target and call_entry._attribute_name == self._attribute_name:
-                found_calls.append(call_entry)
+        found_calls = self.find_calls_to_same_target()
 
         if len(found_calls) > 0:
             raise TargetHasBeenCalledWithDifferentArguments(expected_call_entry, found_calls)
