@@ -260,8 +260,6 @@ class Verifier(FluentTargeting):
         if times not in [0, 1]:
             raise NotImplementedError('Times can be 0 or 1.')
 
-        self._call_entry = None
-
     def __getattr__(self, name):
         self._attribute_name = name
 
@@ -273,10 +271,10 @@ class Verifier(FluentTargeting):
         return self
 
     def _assert_called(self, *arguments, **keyword_arguments):
-        self._call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
+        expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
 
         if not _call_entries:
-            raise AssertionError(MESSAGE_NO_CALLS.format(expected=self._call_entry))
+            raise AssertionError(MESSAGE_NO_CALLS.format(expected=expected_call_entry))
 
         for call_entry in _call_entries:
             if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
@@ -290,13 +288,13 @@ class Verifier(FluentTargeting):
 
         number_of_found_calls = len(found_calls)
         if number_of_found_calls > 0:
-            error_message = MESSAGE_EXPECTED_BUT_WAS.format(expected=self._call_entry, actual=found_calls[0])
+            error_message = MESSAGE_EXPECTED_BUT_WAS.format(expected=expected_call_entry, actual=found_calls[0])
             if number_of_found_calls > 1:
                 for call_entry in found_calls[1:]:
                     error_message += ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
             raise AssertionError(error_message)
 
-        raise AssertionError(MESSAGE_COULD_NOT_VERIFY.format(expected=self._call_entry))
+        raise AssertionError(MESSAGE_COULD_NOT_VERIFY.format(expected=expected_call_entry))
 
     def _assert_never_called(self, *arguments, **keyword_arguments):
         for call_entry in _call_entries:
