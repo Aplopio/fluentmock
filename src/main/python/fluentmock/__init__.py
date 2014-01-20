@@ -25,7 +25,6 @@ from types import ModuleType
 LOGGER = getLogger(__name__)
 
 
-MESSAGE_COULD_NOT_VERIFY = 'Could not verify {expected}'
 MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE = """{call_entry} should NEVER have been called,
 but has been called at least once."""
 MESSAGE_NO_CALLS = """
@@ -252,8 +251,10 @@ class InvalidAttributeError(Exception):
 
 class CouldNotVerifyCallError(AssertionError):
 
+    MESSAGE_COULD_NOT_VERIFY = 'Could not verify {expected}'
+
     def __init__(self, expected_call_entry):
-        error_message = MESSAGE_COULD_NOT_VERIFY.format(expected=expected_call_entry)
+        error_message = self.MESSAGE_COULD_NOT_VERIFY.format(expected=expected_call_entry)
         super(CouldNotVerifyCallError, self).__init__(error_message)
 
 
