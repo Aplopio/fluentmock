@@ -314,7 +314,7 @@ class Verifier(FluentTarget):
 
         found_calls = self._find_calls_to_same_target()
 
-        if len(found_calls) > 0:
+        if found_calls:
             raise TargetHasBeenCalledWithDifferentArguments(expected_call_entry, found_calls)
 
         raise CouldNotVerifyCallError(expected_call_entry)
