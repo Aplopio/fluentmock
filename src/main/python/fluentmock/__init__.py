@@ -188,9 +188,6 @@ class FluentMock(FluentTarget):
         call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
         _call_entries.append(call_entry)
 
-        if not self._answers:
-            return None
-
         for answer in self._answers:
             if answer.arguments == arguments and answer.kwargs == keyword_arguments:
                 return answer.next()
