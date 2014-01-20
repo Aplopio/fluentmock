@@ -85,7 +85,7 @@ class FluentTarget(object):
 
 class FluentAnswer(object):
 
-    class ReturnAnswer(object):
+    class AnswerByReturning(object):
 
         def __init__(self, value):
             self._value = value
@@ -93,7 +93,7 @@ class FluentAnswer(object):
         def __call__(self):
             return self._value
 
-    class RaiseAnswer(object):
+    class AnswerByRaising(object):
 
         def __init__(self, value):
             self._value = value
@@ -123,11 +123,11 @@ class FluentAnswer(object):
         self._answers.append(answer)
 
     def then_return(self, value):
-        self.append_answer(self.ReturnAnswer, value)
+        self.append_answer(self.AnswerByReturning, value)
         return self
 
     def then_raise(self, value):
-        self.append_answer(self.RaiseAnswer, value)
+        self.append_answer(self.AnswerByRaising, value)
         return self
 
 
