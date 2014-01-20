@@ -290,14 +290,11 @@ class Verifier(FluentTarget):
 
         return self
 
-    def _find_calls_to_same_target(self):
-        found_calls = []
-
-        for call_entry in _call_entries:
-            if call_entry._target == self._target and call_entry._attribute_name == self._attribute_name:
-                found_calls.append(call_entry)
-
-        return found_calls
+    def __call__(self, *arguments, **keyword_arguments):
+        if self._times == 0:
+            self._assert_never_called(*arguments, **keyword_arguments)
+        else:
+            self._assert_called(*arguments, **keyword_arguments)
 
     def _assert_called(self, *arguments, **keyword_arguments):
         expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
@@ -322,11 +319,14 @@ class Verifier(FluentTarget):
                 error_message = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE.format(call_entry=call_entry)
                 raise AssertionError(error_message)
 
-    def __call__(self, *arguments, **keyword_arguments):
-        if self._times == 0:
-            self._assert_never_called(*arguments, **keyword_arguments)
-        else:
-            self._assert_called(*arguments, **keyword_arguments)
+    def _find_calls_to_same_target(self):
+        found_calls = []
+
+        for call_entry in _call_entries:
+            if call_entry._target == self._target and call_entry._attribute_name == self._attribute_name:
+                found_calls.append(call_entry)
+
+        return found_calls
 
 
 def when(target):
