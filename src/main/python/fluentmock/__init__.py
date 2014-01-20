@@ -31,11 +31,6 @@ MESSAGE_NO_CALLS = """
 Expected: {expected}
  but was: no patched function has been called.
 """
-MESSAGE_EXPECTED_BUT_WAS = """
-Expected: {expected}
- but was: {actual}
-"""
-ADDITIONAL_CALL_ENTRIES = '          {actual}\n'
 
 NEVER = 0
 
@@ -259,6 +254,24 @@ class CouldNotVerifyCallError(AssertionError):
         super(CouldNotVerifyCallError, self).__init__(error_message)
 
 
+class CalledButWasDifferentThanExpectedError(AssertionError):
+
+    MESSAGE_FORMAT = """
+Expected: {expected}
+ but was: {actual}
+"""
+    ADDITIONAL_CALL_ENTRIES = '          {actual}\n'
+
+    def __init__(self, expected_call_entry, found_calls):
+
+        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry, actual=found_calls[0])
+        if len(found_calls) > 1:
+            for call_entry in found_calls[1:]:
+                error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
+
+        super(CalledButWasDifferentThanExpectedError, self).__init__(error_message)
+
+
 class Verifier(FluentTarget):
 
     def __init__(self, target, times):
@@ -295,11 +308,7 @@ class Verifier(FluentTarget):
 
         number_of_found_calls = len(found_calls)
         if number_of_found_calls > 0:
-            error_message = MESSAGE_EXPECTED_BUT_WAS.format(expected=expected_call_entry, actual=found_calls[0])
-            if number_of_found_calls > 1:
-                for call_entry in found_calls[1:]:
-                    error_message += ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
-            raise AssertionError(error_message)
+            raise CalledButWasDifferentThanExpectedError(expected_call_entry, found_calls)
 
         raise CouldNotVerifyCallError(expected_call_entry)
 
