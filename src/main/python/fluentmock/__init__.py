@@ -25,7 +25,7 @@ from types import ModuleType
 LOGGER = getLogger(__name__)
 
 
-MESSAGE_COULD_NOT_VERIFY = 'Could not verify {target_name}.{attribute_name}{arguments}'
+MESSAGE_COULD_NOT_VERIFY = 'Could not verify {call_entry}'
 MESSAGE_COULD_NOT_VERIFY_NEVER = 'Could not verify {target_name}.{attribute_name}{arguments} has never been called.'
 MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE = """{target_name}.{attribute_name}{arguments} should NEVER have been called, but
 has been called at least once."""
@@ -294,7 +294,9 @@ class Verifier(FluentTargeting):
                     error_message += '          {call_entry}\n'.format(call_entry=call_entry)
             raise AssertionError(error_message)
 
-        raise AssertionError(self.format_message(MESSAGE_COULD_NOT_VERIFY, arguments))
+        call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
+        error_message = MESSAGE_COULD_NOT_VERIFY.format(call_entry=call_entry)
+        raise AssertionError(error_message)
 
     def __call__(self, *arguments, **keyword_arguments):
         if self._times == 0:

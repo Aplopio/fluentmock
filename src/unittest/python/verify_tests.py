@@ -77,7 +77,26 @@ Expected: call targetpackage.targetfunction()
             verify(targetpackage).patch_test_1()
         except AssertionError as error:
             raised_error = True
-            self.assertEqual('Could not verify targetpackage.patch_test_1()', str(error))
+            self.assertEqual('Could not verify call targetpackage.patch_test_1()', str(error))
+
+        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+
+    def test_should_show_error_message_including_keyword_arguments_when_two_functions_patched_and_only_one_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+        when(targetpackage).patch_test_1().then_return('123')
+
+        targetpackage.targetfunction()
+
+        raised_error = False
+
+        verify(targetpackage).targetfunction()
+
+        try:
+            verify(targetpackage).patch_test_1(1, 2, 3, hello='world')
+        except AssertionError as error:
+            raised_error = True
+            self.assertEqual("Could not verify call targetpackage.patch_test_1(1, 2, 3, hello='world')", str(error))
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
@@ -96,7 +115,7 @@ Expected: call targetpackage.targetfunction()
             verify(targetpackage).patch_test_1(1, 2, 3)
         except AssertionError as error:
             raised_error = True
-            self.assertEqual('Could not verify targetpackage.patch_test_1(1, 2, 3)', str(error))
+            self.assertEqual('Could not verify call targetpackage.patch_test_1(1, 2, 3)', str(error))
 
         assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
 
