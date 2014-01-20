@@ -296,6 +296,12 @@ class Verifier(FluentTarget):
         else:
             self._assert_called(*arguments, **keyword_arguments)
 
+    def _assert_never_called(self, *arguments, **keyword_arguments):
+        for call_entry in _call_entries:
+            if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
+                error_message = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE.format(call_entry=call_entry)
+                raise AssertionError(error_message)
+
     def _assert_called(self, *arguments, **keyword_arguments):
         expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
 
@@ -312,12 +318,6 @@ class Verifier(FluentTarget):
             raise TargetHasBeenCalledWithDifferentArguments(expected_call_entry, found_calls)
 
         raise CouldNotVerifyCallError(expected_call_entry)
-
-    def _assert_never_called(self, *arguments, **keyword_arguments):
-        for call_entry in _call_entries:
-            if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
-                error_message = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE.format(call_entry=call_entry)
-                raise AssertionError(error_message)
 
     def _find_calls_to_same_target(self):
         found_calls = []
