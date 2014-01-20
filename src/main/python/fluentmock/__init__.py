@@ -232,14 +232,14 @@ class FluentWhen(FluentTarget):
         patch_entry = FluentPatchEntry(self._target, name, original)
         _patch_entries.append(patch_entry)
 
-        key = (self._target, name)
-        if not key in _configurators:
+        configurator_key = (self._target, name)
+        if not configurator_key in _configurators:
             fluent_mock = FluentMock(self._target, name)
             mock_configurator = FluentMockConfigurator(fluent_mock)
             patch_entry.patch_away_with(fluent_mock)
-            _configurators[key] = mock_configurator
+            _configurators[configurator_key] = mock_configurator
 
-        return _configurators[key]
+        return _configurators[configurator_key]
 
 
 class InvalidAttributeError(Exception):
