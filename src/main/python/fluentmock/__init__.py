@@ -130,9 +130,6 @@ class FluentAnswer(object):
         self.append_answer(self.RaiseAnswer, value)
         return self
 
-    def __repr__(self):
-        return "Answer(arguments={arguments}, values={values})".format(arguments=self.arguments, values=self._answers)
-
 
 class FluentPatchEntry(FluentTarget):
 
