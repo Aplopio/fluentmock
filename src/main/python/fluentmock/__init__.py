@@ -242,6 +242,7 @@ class FluentWhen(FluentTarget):
 
 
 class InvalidAttributeError(Exception):
+
     MESSAGE_FORMAT = 'The target "{target_name}" has no attribute called "{attribute_name}".'
 
     def __init__(self, target_name, attribute_name):
@@ -251,10 +252,10 @@ class InvalidAttributeError(Exception):
 
 class CouldNotVerifyCallError(AssertionError):
 
-    MESSAGE_COULD_NOT_VERIFY = 'Could not verify {expected}'
+    MESSAGE_FORMAT = 'Could not verify {expected}'
 
     def __init__(self, expected_call_entry):
-        error_message = self.MESSAGE_COULD_NOT_VERIFY.format(expected=expected_call_entry)
+        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry)
         super(CouldNotVerifyCallError, self).__init__(error_message)
 
 
