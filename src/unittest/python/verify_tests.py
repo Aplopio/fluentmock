@@ -250,12 +250,6 @@ Expected: call targetpackage.targetfunction(1, 2)
 
         verify(test_object).some_method(1)
 
-    def test_should_verify_that_function_has_not_been_called(self):
-
-        when(targetpackage).targetfunction().then_return('123')
-
-        verify(targetpackage, NEVER).targetfunction()
-
     def test_raise_exception_when_trying_to_verify_something_other_than_never_or_once(self):
 
         when(targetpackage).targetfunction().then_return('123')
@@ -268,14 +262,6 @@ Expected: call targetpackage.targetfunction(1, 2)
             self.assertEqual('Times can be 0 or 1.', str(error))
 
         self.assertTrue(exception_raised, 'Expected a NotImplementedError when something else than 0 or 1 is given.')
-
-    def test_should_verify_that_function_has_not_been_called_when_function_has_been_called_with_other_arguments(self):
-
-        when(targetpackage).targetfunction().then_return('123')
-
-        targetpackage.targetfunction(1)
-
-        verify(targetpackage, NEVER).targetfunction()
 
     def test_should_verify_a_simple_call_using_a_keyword_argument(self):
 
@@ -302,3 +288,37 @@ Expected: call targetpackage.targetfunction(test=1)
 """))
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+
+
+class VerfiyNeverTests(UnitTests):
+
+    def test_should_verify_that_function_has_not_been_called_when_function_has_been_called_with_other_arguments(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+
+        targetpackage.targetfunction(1)
+
+        verify(targetpackage, NEVER).targetfunction()
+
+    def test_should_verify_that_function_has_not_been_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+
+        verify(targetpackage, NEVER).targetfunction()
+
+    def test_should_raise_error_when_function_called_but_it_should_not_have_been_called(self):
+
+        when(targetpackage).targetfunction(1, 2, 3, test=1).then_return('123')
+
+        targetpackage.targetfunction(1, 2, 3, test=1)
+
+        raised_error = False
+        try:
+            verify(targetpackage, NEVER).targetfunction(1, 2, 3, test=1)
+        except AssertionError as error:
+            raised_error = True
+            error_message = """call targetpackage.targetfunction(1, 2, 3, test=1) should NEVER have been called,
+but has been called at least once."""
+            assert_that(str(error), equal_to(error_message))
+
+        self.assertTrue(raised_error, 'No error raised even though function has been called.')

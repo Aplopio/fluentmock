@@ -26,8 +26,8 @@ LOGGER = getLogger(__name__)
 
 
 MESSAGE_COULD_NOT_VERIFY = 'Could not verify {call_entry}'
-MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE = """{target_name}.{attribute_name}{arguments} should NEVER have been called, but
-has been called at least once."""
+MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE = """{call_entry} should NEVER have been called,
+but has been called at least once."""
 MESSAGE_INVALID_ATTRIBUTE = 'The target "{target_name}" has no attribute called "{attribute_name}".'
 MESSAGE_NO_CALLS = """
 Expected: call {target_name}.{attribute_name}()
@@ -304,7 +304,8 @@ class Verifier(FluentTargeting):
 
             for call_entry in _call_entries:
                 if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
-                    raise AssertionError(self.format_message(MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE, arguments))
+                    error_message = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE.format(call_entry=call_entry)
+                    raise AssertionError(error_message)
 
             return
         else:
