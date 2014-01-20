@@ -152,6 +152,7 @@ class FluentPatchEntry(FluentTargeting):
 
 
 class FluentCallEntry(FluentTargeting):
+
     def __init__(self, target, attribute, arguments, keyword_arguments):
         FluentTargeting.__init__(self, target)
         self._attribute_name = attribute
