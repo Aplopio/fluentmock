@@ -14,7 +14,7 @@
 #   limitations under the License.
 
 from hamcrest import assert_that, equal_to, instance_of
-from fluentmock import ANY_ARGUMENTS, FluentAnswer, FluentMockConfigurator, FluentMockException, UnitTests, when
+from fluentmock import ANY_ARGUMENTS, FluentAnswer, FluentMockConfigurator, InvalidAttributeError, UnitTests, when
 from mock import Mock
 
 import targetpackage
@@ -165,9 +165,9 @@ class WhenTests(UnitTests):
         exception_raised = False
         try:
             when(targetpackage).invalid_function(1)
-        except FluentMockException as exception:
+        except InvalidAttributeError as error:
             exception_raised = True
-            self.assertEqual('The target "targetpackage" has no attribute called "invalid_function".', str(exception))
+            self.assertEqual('The target "targetpackage" has no attribute called "invalid_function".', str(error))
 
         self.assertTrue(exception_raised, "Did not raise exception when trying to patch away an invalid function")
 

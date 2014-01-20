@@ -230,8 +230,7 @@ class FluentWhen(FluentTarget):
     def _get_original_attribute(self, name):
 
         if not hasattr(self._target, name):
-            error_message = MESSAGE_INVALID_ATTRIBUTE.format(target_name=self._target_name, attribute_name=name)
-            raise FluentMockException(error_message)
+            raise InvalidAttributeError(self._target_name, name)
 
         return getattr(self._target, name)
 
@@ -250,6 +249,13 @@ class FluentWhen(FluentTarget):
         return _configurators[key]
 
 
+class InvalidAttributeError(Exception):
+
+    def __init__(self, target_name, attribute_name):
+        error_message = MESSAGE_INVALID_ATTRIBUTE.format(target_name=target_name, attribute_name=attribute_name)
+        super(InvalidAttributeError, self).__init__(error_message)
+
+
 class Verifier(FluentTarget):
 
     def __init__(self, target, times):
@@ -264,9 +270,7 @@ class Verifier(FluentTarget):
         self._attribute_name = name
 
         if not hasattr(self._target, name):
-            error_message = MESSAGE_INVALID_ATTRIBUTE.format(target_name=self._target_name,
-                                                             attribute_name=self._attribute_name)
-            raise FluentMockException(error_message)
+            raise InvalidAttributeError(self._target_name, name)
 
         return self
 
@@ -307,10 +311,6 @@ class Verifier(FluentTarget):
             self._assert_never_called(*arguments, **keyword_arguments)
         else:
             self._assert_called(*arguments, **keyword_arguments)
-
-
-class FluentMockException(Exception):
-    pass
 
 
 def when(target):

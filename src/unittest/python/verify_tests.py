@@ -15,7 +15,7 @@
 
 from mock import Mock
 from hamcrest import assert_that, equal_to
-from fluentmock import NEVER, UnitTests, FluentMockException, when, verify
+from fluentmock import NEVER, UnitTests, InvalidAttributeError, when, verify
 
 import targetpackage
 
@@ -39,9 +39,9 @@ class VerifyTests(UnitTests):
         raised_exception = False
         try:
             verify(targetpackage).spameggs
-        except FluentMockException as exception:
+        except InvalidAttributeError as error:
             raised_exception = True
-            self.assertEqual('The target "targetpackage" has no attribute called "spameggs".', str(exception))
+            self.assertEqual('The target "targetpackage" has no attribute called "spameggs".', str(error))
 
         assert_that(raised_exception, "Did not raise exception even though target does not have attribute.")
 
