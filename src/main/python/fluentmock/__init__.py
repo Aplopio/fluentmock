@@ -268,7 +268,9 @@ class Verifier(FluentTargeting):
         self._attribute_name = name
 
         if not hasattr(self._target, name):
-            raise FluentMockException(self.format_message(MESSAGE_INVALID_ATTRIBUTE))
+            error_message = MESSAGE_INVALID_ATTRIBUTE.format(target_name=self._target_name,
+                                                             attribute_name=self._attribute_name)
+            raise FluentMockException(error_message)
 
         return self
 
@@ -313,9 +315,6 @@ class Verifier(FluentTargeting):
             return
         else:
             self._assert_called(*arguments, **keyword_arguments)
-
-    def format_message(self, message, arguments='()'):
-        return message.format(target_name=self._target_name, attribute_name=self._attribute_name, arguments=arguments)
 
 
 class FluentMockException(Exception):
