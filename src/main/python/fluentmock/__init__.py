@@ -297,17 +297,20 @@ class Verifier(FluentTargeting):
 
         raise AssertionError(MESSAGE_COULD_NOT_VERIFY.format(expected=self._call_entry))
 
+    def _assert_never_called(self, *arguments, **keyword_arguments):
+        if not _call_entries:
+            return
+
+        for call_entry in _call_entries:
+            if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
+                error_message = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE.format(call_entry=call_entry)
+                raise AssertionError(error_message)
+
+        return
+
     def __call__(self, *arguments, **keyword_arguments):
         if self._times == 0:
-            if not _call_entries:
-                return
-
-            for call_entry in _call_entries:
-                if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
-                    error_message = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE.format(call_entry=call_entry)
-                    raise AssertionError(error_message)
-
-            return
+            self._assert_never_called(*arguments, **keyword_arguments)
         else:
             self._assert_called(*arguments, **keyword_arguments)
 
