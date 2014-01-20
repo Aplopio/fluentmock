@@ -191,7 +191,7 @@ class FluentMock(FluentTarget):
         for answer in self._answers:
             if answer.arguments == arguments and answer.kwargs == keyword_arguments:
                 return answer.next()
-            if answer.arguments and answer.arguments[0] == ANY_ARGUMENTS:
+            if answer.arguments and answer.arguments[0] is ANY_ARGUMENTS:
                 return answer.next()
 
         return None
