@@ -45,6 +45,13 @@ _patch_entries = []
 _call_entries = []
 
 
+class FluentAnyArguments(object):
+    pass
+
+
+ANY_ARGUMENTS = FluentAnyArguments()
+
+
 class UnitTests(TestCase):
 
     def setUp(self):
@@ -61,13 +68,6 @@ class UnitTests(TestCase):
     def tear_down(self):
         """ Override this method to tear down your unit test environment """
         pass
-
-
-class FluentAnyArguments(object):
-    pass
-
-
-ANY_ARGUMENTS = FluentAnyArguments()
 
 
 class FluentTarget(object):
