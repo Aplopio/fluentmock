@@ -41,7 +41,7 @@ Expected: {expected}
 NEVER = 0
 
 _configurators = {}
-_patches = []
+_patch_entries = []
 _call_entries = []
 
 
@@ -237,7 +237,7 @@ class FluentWhen(FluentTargeting):
     def __getattr__(self, name):
         original = self._get_original_attribute(name)
         patch_entry = FluentPatchEntry(self._target, name, original)
-        _patches.append(patch_entry)
+        _patch_entries.append(patch_entry)
 
         key = (self._target, name)
         if not key in _configurators:
@@ -319,18 +319,18 @@ def when(target):
 
 
 def undo_patches():
-    global _call_entries, _patches, _configurators
+    global _call_entries, _patch_entries, _configurators
 
-    for _patch in _patches:
+    for _patch in _patch_entries:
         _patch.undo()
 
     _call_entries = []
-    _patches = []
+    _patch_entries = []
     _configurators = {}
 
 
 def get_patches():
-    return _patches
+    return _patch_entries
 
 
 def verify(target, times=1):
