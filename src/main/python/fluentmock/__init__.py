@@ -306,8 +306,7 @@ class Verifier(FluentTarget):
             if call_entry._target == self._target and call_entry._attribute_name == self._attribute_name:
                 found_calls.append(call_entry)
 
-        number_of_found_calls = len(found_calls)
-        if number_of_found_calls > 0:
+        if len(found_calls) > 0:
             raise CalledButWasDifferentThanExpectedError(expected_call_entry, found_calls)
 
         raise CouldNotVerifyCallError(expected_call_entry)
