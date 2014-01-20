@@ -28,7 +28,6 @@ LOGGER = getLogger(__name__)
 MESSAGE_COULD_NOT_VERIFY = 'Could not verify {expected}'
 MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE = """{call_entry} should NEVER have been called,
 but has been called at least once."""
-MESSAGE_INVALID_ATTRIBUTE = 'The target "{target_name}" has no attribute called "{attribute_name}".'
 MESSAGE_NO_CALLS = """
 Expected: {expected}
  but was: no patched function has been called.
@@ -244,9 +243,10 @@ class FluentWhen(FluentTarget):
 
 
 class InvalidAttributeError(Exception):
+    MESSAGE_FORMAT = 'The target "{target_name}" has no attribute called "{attribute_name}".'
 
     def __init__(self, target_name, attribute_name):
-        error_message = MESSAGE_INVALID_ATTRIBUTE.format(target_name=target_name, attribute_name=attribute_name)
+        error_message = self.MESSAGE_FORMAT.format(target_name=target_name, attribute_name=attribute_name)
         super(InvalidAttributeError, self).__init__(error_message)
 
 
