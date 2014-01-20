@@ -204,9 +204,6 @@ class FluentMock(FluentTargeting):
     def append_new_answer(self, answer):
         self._answers.append(answer)
 
-    def __str__(self):
-        return "Mock(" + str(self._answers) + ")"
-
 
 class FluentMockConfigurator(object):
 
