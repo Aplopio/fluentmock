@@ -278,8 +278,7 @@ class Verifier(FluentTargeting):
         self._call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
 
         if not _call_entries:
-            error_message = MESSAGE_NO_CALLS.format(expected=self._call_entry)
-            raise AssertionError(error_message)
+            raise AssertionError(MESSAGE_NO_CALLS.format(expected=self._call_entry))
 
         for call_entry in _call_entries:
             if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
@@ -299,8 +298,7 @@ class Verifier(FluentTargeting):
                     error_message += '          {call_entry}\n'.format(call_entry=call_entry)
             raise AssertionError(error_message)
 
-        error_message = MESSAGE_COULD_NOT_VERIFY.format(expected=self._call_entry)
-        raise AssertionError(error_message)
+        raise AssertionError(MESSAGE_COULD_NOT_VERIFY.format(expected=self._call_entry))
 
     def __call__(self, *arguments, **keyword_arguments):
         if self._times == 0:
