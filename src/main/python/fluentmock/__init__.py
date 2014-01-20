@@ -71,7 +71,7 @@ class FluentAnyArguments(object):
 ANY_ARGUMENTS = FluentAnyArguments()
 
 
-class FluentTargeting(object):
+class FluentTarget(object):
 
     def __init__(self, target):
         if isinstance(target, ModuleType):
@@ -134,10 +134,10 @@ class FluentAnswer(object):
         return "Answer(arguments={arguments}, values={values})".format(arguments=self.arguments, values=self._answers)
 
 
-class FluentPatchEntry(FluentTargeting):
+class FluentPatchEntry(FluentTarget):
 
     def __init__(self, target, attribute_name, original):
-        FluentTargeting.__init__(self, target)
+        FluentTarget.__init__(self, target)
         self._attribute_name = attribute_name
         self._original = original
         self._patch = None
@@ -158,10 +158,10 @@ class FluentPatchEntry(FluentTargeting):
             self._patch.__exit__()
 
 
-class FluentCallEntry(FluentTargeting):
+class FluentCallEntry(FluentTarget):
 
     def __init__(self, target, attribute, arguments, keyword_arguments):
-        FluentTargeting.__init__(self, target)
+        FluentTarget.__init__(self, target)
         self._attribute_name = attribute
         self._arguments = arguments
         self._keyword_arguments = keyword_arguments
@@ -180,10 +180,10 @@ class FluentCallEntry(FluentTargeting):
         return call_string.replace('call', target_string)
 
 
-class FluentMock(FluentTargeting):
+class FluentMock(FluentTarget):
 
     def __init__(self, target, attribute_name):
-        FluentTargeting.__init__(self, target)
+        FluentTarget.__init__(self, target)
         self._attribute_name = attribute_name
         self._answers = []
 
@@ -222,10 +222,10 @@ class FluentMockConfigurator(object):
         return self._answer
 
 
-class FluentWhen(FluentTargeting):
+class FluentWhen(FluentTarget):
 
     def __init__(self, target):
-        FluentTargeting.__init__(self, target)
+        FluentTarget.__init__(self, target)
 
     def _get_original_attribute(self, name):
 
@@ -250,10 +250,10 @@ class FluentWhen(FluentTargeting):
         return _configurators[key]
 
 
-class Verifier(FluentTargeting):
+class Verifier(FluentTarget):
 
     def __init__(self, target, times):
-        FluentTargeting.__init__(self, target)
+        FluentTarget.__init__(self, target)
         self._attribute_name = None
         self._times = times
 
