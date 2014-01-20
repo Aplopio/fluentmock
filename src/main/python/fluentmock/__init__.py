@@ -306,8 +306,6 @@ class Verifier(FluentTargeting):
                 error_message = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE.format(call_entry=call_entry)
                 raise AssertionError(error_message)
 
-        return
-
     def __call__(self, *arguments, **keyword_arguments):
         if self._times == 0:
             self._assert_never_called(*arguments, **keyword_arguments)
