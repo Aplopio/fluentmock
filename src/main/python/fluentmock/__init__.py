@@ -26,7 +26,6 @@ LOGGER = getLogger(__name__)
 
 
 MESSAGE_COULD_NOT_VERIFY = 'Could not verify {call_entry}'
-MESSAGE_COULD_NOT_VERIFY_NEVER = 'Could not verify {target_name}.{attribute_name}{arguments} has never been called.'
 MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE = """{target_name}.{attribute_name}{arguments} should NEVER have been called, but
 has been called at least once."""
 MESSAGE_INVALID_ATTRIBUTE = 'The target "{target_name}" has no attribute called "{attribute_name}".'
