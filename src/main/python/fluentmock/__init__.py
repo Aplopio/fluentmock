@@ -33,12 +33,6 @@ from types import ModuleType
 
 LOGGER = getLogger(__name__)
 
-
-MESSAGE_NO_CALLS = """
-Expected: {expected}
- but was: no patched function has been called.
-"""
-
 NEVER = 0
 
 _configurators = {}
@@ -291,7 +285,10 @@ but has been called at least once."""
 
 class NoCallsStoredError(AssertionError):
 
-    MESSAGE_FORMAT = MESSAGE_NO_CALLS
+    MESSAGE_FORMAT = """
+Expected: {expected}
+ but was: no patched function has been called.
+"""
 
     def __init__(self, expected_call_entry):
         error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry)
