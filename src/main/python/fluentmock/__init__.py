@@ -289,6 +289,15 @@ but has been called at least once."""
         super(HasBeenCalledAtLeastOnceError, self).__init__(error_message)
 
 
+class NoCallsStoredError(AssertionError):
+
+    MESSAGE_FORMAT = MESSAGE_NO_CALLS
+
+    def __init__(self, expected_call_entry):
+        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry)
+        super(NoCallsStoredError, self).__init__(error_message)
+
+
 class Verifier(FluentTarget):
 
     def __init__(self, target, times):
@@ -322,7 +331,7 @@ class Verifier(FluentTarget):
         expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
 
         if not _call_entries:
-            raise AssertionError(MESSAGE_NO_CALLS.format(expected=expected_call_entry))
+            raise NoCallsStoredError(expected_call_entry)
 
         for call_entry in _call_entries:
             if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
