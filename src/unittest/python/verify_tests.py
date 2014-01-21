@@ -17,9 +17,11 @@ from mock import Mock
 from hamcrest import assert_that, equal_to
 from fluentmock import (NEVER,
                         UnitTests,
-                        TargetHasBeenCalledWithDifferentArguments,
                         CouldNotVerifyCallError,
+                        HasBeenCalledAtLeastOnceError,
                         InvalidAttributeError,
+                        NoCallsStoredError,
+                        TargetHasBeenCalledWithDifferentArguments,
                         when,
                         verify)
 
@@ -50,55 +52,6 @@ class VerifyTests(UnitTests):
             self.assertEqual('The target "targetpackage" has no attribute called "spameggs".', str(error))
 
         assert_that(raised_exception, "Did not raise exception even though target does not have attribute.")
-
-    def test_should_not_verify_a_simple_call_when_no_function_has_been_called(self):
-
-        when(targetpackage).targetfunction().then_return('123')
-
-        raised_error = False
-
-        try:
-            verify(targetpackage).targetfunction()
-        except AssertionError as error:
-            raised_error = True
-            self.assertEqual("""
-Expected: call targetpackage.targetfunction()
- but was: no patched function has been called.
-""", str(error))
-
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
-
-    def test_should_not_verify_a_call_when_no_function_has_been_called(self):
-
-        when(targetpackage).targetfunction().then_return('123')
-
-        raised_error = False
-
-        try:
-            verify(targetpackage).targetfunction(1, 2, 3, hello='foobar')
-        except AssertionError as error:
-            raised_error = True
-            self.assertEqual("""
-Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar')
- but was: no patched function has been called.
-""", str(error))
-
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
-
-    def test_should_raise_error_with_a_detailed_message_when_function_patched_and_not_called(self):
-
-        when(targetpackage).targetfunction().then_return('123')
-
-        raised_error = False
-        try:
-            verify(targetpackage).targetfunction()
-        except AssertionError as error:
-            raised_error = True
-            assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction()
- but was: no patched function has been called.
-"""))
-        assert_that(raised_error, "Did not raise error even though function has never been called.")
 
     def test_should_verify_a_simple_call_with_a_argument(self):
 
@@ -341,10 +294,62 @@ class VerfiyNeverTests(UnitTests):
         raised_error = False
         try:
             verify(targetpackage, NEVER).targetfunction(1, 2, 3, test=1)
-        except AssertionError as error:
+        except HasBeenCalledAtLeastOnceError as error:
             raised_error = True
             error_message = """call targetpackage.targetfunction(1, 2, 3, test=1) should NEVER have been called,
 but has been called at least once."""
             assert_that(str(error), equal_to(error_message))
 
         self.assertTrue(raised_error, 'No error raised even though function has been called.')
+
+
+class NoCallsStoredTests(UnitTests):
+
+    def test_should_not_verify_a_call_when_no_function_has_been_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+
+        raised_error = False
+
+        try:
+            verify(targetpackage).targetfunction(1, 2, 3, hello='foobar')
+        except NoCallsStoredError as error:
+            raised_error = True
+            self.assertEqual("""
+Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar')
+ but was: no patched function has been called.
+""", str(error))
+
+        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+
+    def test_should_not_verify_a_simple_call_when_no_function_has_been_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+
+        raised_error = False
+
+        try:
+            verify(targetpackage).targetfunction()
+        except NoCallsStoredError as error:
+            raised_error = True
+            self.assertEqual("""
+Expected: call targetpackage.targetfunction()
+ but was: no patched function has been called.
+""", str(error))
+
+        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+
+    def test_should_raise_error_with_a_detailed_message_when_function_patched_and_not_called(self):
+
+        when(targetpackage).targetfunction().then_return('123')
+
+        raised_error = False
+        try:
+            verify(targetpackage).targetfunction()
+        except NoCallsStoredError as error:
+            raised_error = True
+            assert_that(str(error), equal_to("""
+Expected: call targetpackage.targetfunction()
+ but was: no patched function has been called.
+"""))
+        assert_that(raised_error, "Did not raise error even though function has never been called.")
