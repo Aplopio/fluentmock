@@ -281,6 +281,15 @@ Expected: {expected}
         super(TargetHasBeenCalledWithDifferentArguments, self).__init__(error_message)
 
 
+class HasBeenCalledAtLeastOnceError(AssertionError):
+
+    MESSAGE_FORMAT = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE
+
+    def __init__(self, call_entry):
+        error_message = self.MESSAGE_FORMAT.format(call_entry=call_entry)
+        super(HasBeenCalledAtLeastOnceError, self).__init__(error_message)
+
+
 class Verifier(FluentTarget):
 
     def __init__(self, target, times):
@@ -308,8 +317,7 @@ class Verifier(FluentTarget):
     def _assert_never_called(self, *arguments, **keyword_arguments):
         for call_entry in _call_entries:
             if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
-                error_message = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE.format(call_entry=call_entry)
-                raise AssertionError(error_message)
+                raise HasBeenCalledAtLeastOnceError(call_entry)
 
     def _assert_called(self, *arguments, **keyword_arguments):
         expected_call_entry = FluentCallEntry(self._target, self._attribute_name, arguments, keyword_arguments)
