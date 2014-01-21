@@ -16,7 +16,16 @@
 __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
-from importlib import import_module
+try:
+    from importlib import import_module
+except ImportError as import_error:
+    print(str(import_error))
+    print('fluentmock does not define importlib as a dependency,')
+    print('because importlib is part of the standard library')
+    print('starting with Python version 2.7')
+    print('')
+    print('Please install importlib using "pip install importlib".')
+
 from mock import Mock, call, patch
 from logging import getLogger
 from unittest import TestCase
