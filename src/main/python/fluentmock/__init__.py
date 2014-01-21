@@ -261,7 +261,7 @@ class TargetHasBeenCalledWithDifferentArguments(AssertionError):
 Expected: {expected}
  but was: {actual}
 """
-    ADDITIONAL_CALL_ENTRIES = '          {actual}\n'
+    ADDITIONAL_CALL_ENTRIES = ' ' * 10 + '{actual}\n'
 
     def __init__(self, expected_call_entry, found_calls):
 
