@@ -4,7 +4,29 @@
 
 Fluent interface for Michael Foord's mock.
 
+A example test using _fluentmock_ and hamcrest:
+```python
+from fluentmock import UnitTests, when, verify
+from hamcrest import assert_that, equal_to
 
+
+class SeveralAnswersTests(UnitTests):
+
+    def test_should_return_configured_values_in_given_order(self):
+
+        when(targetpackage).targetfunction(2).then_return(1).then_return(2).then_return(3)
+
+        assert_that(targetpackage.targetfunction(2), equal_to(1))
+        assert_that(targetpackage.targetfunction(2), equal_to(2))
+        assert_that(targetpackage.targetfunction(2), equal_to(3))
+
+        verify(targetpackage).targetfunction(2)
+```
+
+## Comparing Mock with Fluentmock
+
+Here is a simple test example which configures a mock with a "side effect" in such a way it returns 3 when 2 is given
+as a argument.
 ```python
 from unittest import TestCase
 from mock import patch
@@ -27,7 +49,7 @@ class MockStyleTest(TestCase):
         mock_targetfunction.assert_called_with(2)
 ```
 
-
+Here is a equivalent written using _fluentmock_:
 ```python
 from fluentmock import UnitTests, when, verify
 
