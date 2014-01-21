@@ -30,7 +30,6 @@ as a argument.
 from unittest import TestCase
 from mock import patch
 
-
 class MockStyleTest(TestCase):
 
     @patch('targetpackage.targetfunction')
@@ -51,7 +50,6 @@ class MockStyleTest(TestCase):
 Here is a equivalent written using _fluentmock_:
 ```python
 from fluentmock import UnitTests, when, verify
-
 
 class FluentmockStyleTest(UnitTests):
 
