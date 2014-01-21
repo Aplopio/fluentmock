@@ -11,16 +11,15 @@ from hamcrest import assert_that, equal_to
 
 
 class SeveralAnswersTests(UnitTests):
+  def test_should_return_configured_values_in_given_order(self):
 
-    def test_should_return_configured_values_in_given_order(self):
+    when(targetpackage).targetfunction(2).then_return(1).then_return(2).then_return(3)
 
-        when(targetpackage).targetfunction(2).then_return(1).then_return(2).then_return(3)
+    assert_that(targetpackage.targetfunction(2), equal_to(1))
+    assert_that(targetpackage.targetfunction(2), equal_to(2))
+    assert_that(targetpackage.targetfunction(2), equal_to(3))
 
-        assert_that(targetpackage.targetfunction(2), equal_to(1))
-        assert_that(targetpackage.targetfunction(2), equal_to(2))
-        assert_that(targetpackage.targetfunction(2), equal_to(3))
-
-        verify(targetpackage).targetfunction(2)
+    verify(targetpackage).targetfunction(2)
 ```
 
 ## Comparing Mock with Fluentmock
