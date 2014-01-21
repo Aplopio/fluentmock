@@ -34,8 +34,6 @@ from types import ModuleType
 LOGGER = getLogger(__name__)
 
 
-MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE = """{call_entry} should NEVER have been called,
-but has been called at least once."""
 MESSAGE_NO_CALLS = """
 Expected: {expected}
  but was: no patched function has been called.
@@ -283,7 +281,8 @@ Expected: {expected}
 
 class HasBeenCalledAtLeastOnceError(AssertionError):
 
-    MESSAGE_FORMAT = MESSAGE_HAS_BEEN_CALLED_AT_LEAST_ONCE
+    MESSAGE_FORMAT = """{call_entry} should NEVER have been called,
+but has been called at least once."""
 
     def __init__(self, call_entry):
         error_message = self.MESSAGE_FORMAT.format(call_entry=call_entry)
