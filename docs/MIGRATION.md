@@ -17,7 +17,7 @@ from mock import Mock
 ## unittest.TestCase -> fluentmock.UnitTests
 
 Replace the usage of class `TestCase` from unittest with fluentmock's class `UnitTests`.
-UnitTests will undo the patches after execution and offers you a nice way to stick with the underscore convetion for
+UnitTests will undo the patches after execution and offers you a nice way to stick with the underscore convention for
 method names.
 
 Legacy:
@@ -52,8 +52,8 @@ Replace the call to `any()` with a `ANY_ARGUMENTS`.
 
 ## thenReturn -> then_return
 
-Fluentmock uses the underscore convetion for method names.
+Fluentmock uses the underscore convention for method names.
 
 ## thenRaise -> then_raise
 
-Fluentmock uses the underscore convetion for method names.
+Fluentmock uses the underscore convention for method names.
