@@ -159,16 +159,6 @@ Expected: call targetpackage.targetfunction(1, 2)
 
         verify(test_object).some_method(1, 2)
 
-    def test_should_verify_a_call_to_a_mock(self):
-
-        test_object = Mock(targetpackage.TheClass())
-
-        when(test_object).some_method(1).then_return(0)
-
-        assert_that(test_object.some_method(1), equal_to(0))
-
-        verify(test_object).some_method(1)
-
     def test_raise_exception_when_trying_to_verify_something_other_than_never_or_once(self):
 
         when(targetpackage).targetfunction().then_return('123')
@@ -207,6 +197,96 @@ Expected: call targetpackage.targetfunction(test=1)
 """))
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+
+
+class MockVerificationTests(UnitTests):
+
+    def test_should_verify_a_call_to_a_field_of_a_mock(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        when(test_object).some_method(1).then_return(0)
+
+        assert_that(test_object.some_method(1), equal_to(0))
+
+        verify(test_object).some_method(1)
+
+    def test_should_verify_a_call_to_a_field_of_a_mock_without_any_arguments(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        test_object.some_method()
+
+        verify(test_object).some_method()
+
+    def test_should_verify_a_call_to_a_field_of_a_mock_with_arguments(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        test_object.some_method(1, 2, 3)
+
+        verify(test_object).some_method(1, 2, 3)
+
+    def test_should_verify_a_call_to_a_field_of_a_mock_with_arguments_and_keyword_arguments(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        test_object.some_method(1, 2, 3, hello='world')
+
+        verify(test_object).some_method(1, 2, 3, hello='world')
+
+    def test_should_verify_never_called_a_field_of_a_mock_without_any_arguments(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        test_object.some_method(1, 2, 3)
+
+        verify(test_object, NEVER).some_method()
+
+    def test_should_raise_exception_when_called_a_field_of_a_mock_without_any_arguments(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        test_object.some_method()
+
+        exception_raised = False
+        try:
+            verify(test_object, NEVER).some_method()
+        except HasBeenCalledAtLeastOnceError as error:
+            exception_raised = True
+            self.assertEqual(str(error), 'call() should NEVER have been called,\nbut has been called at least once.')
+
+        self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
+
+    def test_should_raise_exception_when_called_a_field_of_a_mock_with_arguments(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        test_object.some_method(1, 2, 3)
+
+        exception_raised = False
+        try:
+            verify(test_object, NEVER).some_method(1, 2, 3)
+        except HasBeenCalledAtLeastOnceError as error:
+            exception_raised = True
+            self.assertEqual(str(error), 'call() should NEVER have been called,\nbut has been called at least once.')
+
+        self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
+
+    def test_should_raise_exception_when_called_a_field_of_a_mock_with_keyword_arguments(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        test_object.some_method(1, 2, 3, hello='world')
+
+        exception_raised = False
+        try:
+            verify(test_object, NEVER).some_method(1, 2, 3, hello='world')
+        except HasBeenCalledAtLeastOnceError as error:
+            exception_raised = True
+            self.assertEqual(str(error), 'call() should NEVER have been called,\nbut has been called at least once.')
+
+        self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
 
 
 class CouldNotVerifyCallTests(UnitTests):

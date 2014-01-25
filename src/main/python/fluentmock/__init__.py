@@ -314,10 +314,18 @@ class Verifier(FluentTarget):
         return self
 
     def __call__(self, *arguments, **keyword_arguments):
-        if self._times == 0:
-            self._assert_never_called(*arguments, **keyword_arguments)
+        method_of_mock = getattr(self._target, self._attribute_name)
+        if isinstance(self._target, Mock) and isinstance(method_of_mock, Mock):
+            if self._times == NEVER:
+                if call(*arguments, **keyword_arguments) in method_of_mock.call_args_list:
+                    raise HasBeenCalledAtLeastOnceError(call())
+            else:
+                method_of_mock.assert_called_with(*arguments, **keyword_arguments)
         else:
-            self._assert_called(*arguments, **keyword_arguments)
+            if self._times == NEVER:
+                self._assert_never_called(*arguments, **keyword_arguments)
+            else:
+                self._assert_called(*arguments, **keyword_arguments)
 
     def _assert_never_called(self, *arguments, **keyword_arguments):
         for call_entry in _call_entries:
