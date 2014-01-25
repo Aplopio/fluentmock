@@ -317,8 +317,9 @@ class Verifier(FluentTarget):
         method_of_mock = getattr(self._target, self._attribute_name)
         if isinstance(self._target, Mock) and isinstance(method_of_mock, Mock):
             if self._times == NEVER:
-                if call(*arguments, **keyword_arguments) in method_of_mock.call_args_list:
-                    raise HasBeenCalledAtLeastOnceError(call())
+                call_entry = call(*arguments, **keyword_arguments)
+                if call_entry in method_of_mock.call_args_list:
+                    raise HasBeenCalledAtLeastOnceError(call_entry)
             else:
                 method_of_mock.assert_called_with(*arguments, **keyword_arguments)
         else:
