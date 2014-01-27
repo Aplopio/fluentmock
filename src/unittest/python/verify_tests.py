@@ -254,7 +254,7 @@ class MockVerificationTests(UnitTests):
             verify(test_object, NEVER).some_method()
         except HasBeenCalledAtLeastOnceError as error:
             exception_raised = True
-            self.assertEqual(str(error), 'call() should NEVER have been called,\nbut has been called at least once.')
+            self.assertEqual(str(error), 'mock.Mock.some_method() should NEVER have been called,\nbut has been called at least once.')
 
         self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
 
@@ -270,7 +270,7 @@ class MockVerificationTests(UnitTests):
         except HasBeenCalledAtLeastOnceError as error:
             exception_raised = True
             self.assertEqual(str(error),
-                             'call(1, 2, 3) should NEVER have been called,\nbut has been called at least once.')
+                             'mock.Mock.some_method(1, 2, 3) should NEVER have been called,\nbut has been called at least once.')
 
         self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
 
@@ -287,7 +287,7 @@ class MockVerificationTests(UnitTests):
             exception_raised = True
             self.assertEqual(
                 str(error),
-                "call(1, 2, 3, hello='world') should NEVER have been called,\nbut has been called at least once.")
+                "mock.Mock.some_method(1, 2, 3, hello='world') should NEVER have been called,\nbut has been called at least once.")
 
         self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
 

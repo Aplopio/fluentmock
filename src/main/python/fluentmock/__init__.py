@@ -319,7 +319,8 @@ class Verifier(FluentTarget):
             if self._times == NEVER:
                 call_entry = call(*arguments, **keyword_arguments)
                 if call_entry in method_of_mock.call_args_list:
-                    raise HasBeenCalledAtLeastOnceError(call_entry)
+                    call_entry_string = str(call_entry).replace('call', self._target_name + '.' + self._attribute_name)
+                    raise HasBeenCalledAtLeastOnceError(call_entry_string)
             else:
                 method_of_mock.assert_called_with(*arguments, **keyword_arguments)
         else:
