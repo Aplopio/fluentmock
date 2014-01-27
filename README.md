@@ -1,11 +1,12 @@
 # *fluentmock*
+
+Fluent interface facade for Michael Foord's mock.
+
 [![PyPI version](https://badge.fury.io/py/fluentmock.png)](http://badge.fury.io/py/fluentmock)
 [![Downloads](https://pypip.in/d/fluentmock/badge.png)](https://pypi.python.org/pypi/fluentmock)
 [![Coverage Status](https://coveralls.io/repos/aelgru/fluentmock/badge.png)](https://coveralls.io/r/aelgru/fluentmock)
 [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
 [![License](https://pypip.in/license/fluentmock/badge.png)](https://raw.github.com/aelgru/fluentmock/master/src/main/python/fluentmock/LICENSE.txt)
-
-Fluent interface for Michael Foord's mock.
 
 A example test using _fluentmock_ and hamcrest:
 ```python
