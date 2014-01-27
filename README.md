@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
 [![License](https://pypip.in/license/fluentmock/badge.png)](https://raw.github.com/aelgru/fluentmock/master/src/main/python/fluentmock/LICENSE.txt)
 
-![Logo](https://raw.github.com/aelgru/fluentmock/master/docs/fluentmock-logo.png)
+[![Logo](https://raw.github.com/aelgru/fluentmock/master/docs/fluentmock-logo.png)](https://pypi.python.org/pypi/fluentmock)
 
 Fluent interface facade for Michael Foord's mock.
 
