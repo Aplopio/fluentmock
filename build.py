@@ -27,12 +27,15 @@ use_plugin('python.install_dependencies')
 use_plugin('python.unittest')
 
 url = 'https://github.com/aelgru/fluentmock'
-description = 'Please visit {0} for more information!'.format(url)
+description = """Visit {0} for more information!
+
+If you are using fluentmock please become a stargazer https://github.com/aelgru/fluentmock/star
+""".format(url)
 
 authors = [Author('Michael Gruber', 'aelgru@gmail.com')]
 license = 'Apache License, Version 2.0'
 summary = "Fluent interface facade for Michael Foord's mock."
-version = '0.1.12'
+version = '0.1.13'
 
 default_task = ['analyze', 'publish']
 
