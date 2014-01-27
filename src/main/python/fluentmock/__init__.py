@@ -68,7 +68,10 @@ class UnitTests(TestCase):
 class FluentTarget(object):
 
     def __init__(self, target):
-        if isinstance(target, ModuleType):
+        if isinstance(target, str):
+            self._target_name = target
+            self._target = import_module(self._target_name)
+        elif isinstance(target, ModuleType):
             self._target_name = target.__name__
             self._target = import_module(self._target_name)
         else:

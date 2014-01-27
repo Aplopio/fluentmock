@@ -218,3 +218,9 @@ class WhenTests(UnitTests):
         when(targetpackage).targetfunction(keyword_argument='abc').then_return('foobar')
 
         assert_that(targetpackage.targetfunction(keyword_argument='abc'), equal_to('foobar'))
+
+    def test_should_return_configured_answer_when_addressing_target_using_string(self):
+
+        when('targetpackage').targetfunction(ANY_ARGUMENTS).then_return('foobar')
+
+        assert_that(targetpackage.targetfunction(keyword_argument='abc'), equal_to('foobar'))
