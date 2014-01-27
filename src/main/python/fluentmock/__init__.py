@@ -33,7 +33,7 @@ from types import ModuleType
 
 LOGGER = getLogger(__name__)
 
-AT_LEAST_ONCE = 1
+AT_LEAST_ONCE = 'AT-LEAST-ONCE'
 NEVER = 'NEVER'
 
 _configurators = {}
