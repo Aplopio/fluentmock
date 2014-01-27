@@ -34,7 +34,7 @@ from types import ModuleType
 LOGGER = getLogger(__name__)
 
 HAS_BEEN_CALLED_AT_LEAST_ONCE = 1
-NEVER = 0
+NEVER = 'NEVER'
 
 _configurators = {}
 _patch_entries = []
