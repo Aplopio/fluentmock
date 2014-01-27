@@ -167,7 +167,7 @@ Expected: call targetpackage.targetfunction(1, 2)
 
         verify(test_object).some_method(1, 2)
 
-    def test_raise_exception_when_trying_to_verify_something_other_than_never_or_once(self):
+    def test_should_raise_exception_when_trying_to_verify_something_other_than_never_or_once(self):
 
         when(targetpackage).targetfunction().then_return('123')
 
