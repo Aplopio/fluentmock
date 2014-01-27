@@ -2,7 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/fluentmock.png)](http://badge.fury.io/py/fluentmock)
 [![Downloads](https://pypip.in/d/fluentmock/badge.png)](https://pypi.python.org/pypi/fluentmock)
 [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
-[![License](https://pypip.in/license/fluentmock/badge.png)](https://pypi.python.org/pypi/fluentmock)
+[![License](https://pypip.in/license/fluentmock/badge.png)](https://raw.github.com/aelgru/fluentmock/master/src/main/python/fluentmock/LICENSE.txt)
 
 Fluent interface for Michael Foord's mock.
 
@@ -31,8 +31,3 @@ class SeveralAnswersTests(UnitTests):
 ## Motivation
 
 ... was to replace mockito with something that is as powerful as Mock.
-
-## License
-
-fluentmock is licensed under the
-[Apache License, Version 2.0](https://raw.github.com/aelgru/fluentmock/master/src/main/python/fluentmock/LICENSE.txt)
