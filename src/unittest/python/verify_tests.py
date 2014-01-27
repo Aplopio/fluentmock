@@ -38,6 +38,14 @@ class VerifyTests(UnitTests):
 
         verify(targetpackage).targetfunction()
 
+    def test_should_verify_a_simple_call_when_addressing_using_strings(self):
+
+        when('targetpackage').targetfunction().then_return('123')
+
+        targetpackage.targetfunction()
+
+        verify('targetpackage').targetfunction()
+
     def test_should_raise_exception_when_target_does_not_have_attribute(self):
 
         when(targetpackage).targetfunction().then_return('123')
