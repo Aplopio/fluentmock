@@ -306,8 +306,9 @@ class Verifier(FluentTarget):
         self._attribute_name = None
         self._times = times
 
-        if times not in [0, HAS_BEEN_CALLED_AT_LEAST_ONCE]:
-            raise NotImplementedError('Times can be 0 or {once}.'.format(once=HAS_BEEN_CALLED_AT_LEAST_ONCE))
+        if times not in [NEVER, HAS_BEEN_CALLED_AT_LEAST_ONCE]:
+            error_message = 'Times can be {never} or {once}.'.format(never=NEVER, once=HAS_BEEN_CALLED_AT_LEAST_ONCE)
+            raise NotImplementedError(error_message)
 
     def __getattr__(self, name):
         self._attribute_name = name
