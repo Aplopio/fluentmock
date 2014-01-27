@@ -33,6 +33,7 @@ from types import ModuleType
 
 LOGGER = getLogger(__name__)
 
+HAS_BEEN_CALLED_AT_LEAST_ONCE = 1
 NEVER = 0
 
 _configurators = {}
@@ -305,8 +306,8 @@ class Verifier(FluentTarget):
         self._attribute_name = None
         self._times = times
 
-        if times not in [0, 1]:
-            raise NotImplementedError('Times can be 0 or 1.')
+        if times not in [0, HAS_BEEN_CALLED_AT_LEAST_ONCE]:
+            raise NotImplementedError('Times can be 0 or {once}.'.format(once=HAS_BEEN_CALLED_AT_LEAST_ONCE))
 
     def __getattr__(self, name):
         self._attribute_name = name
@@ -383,5 +384,5 @@ def get_patches():
     return _patch_entries
 
 
-def verify(target, times=1):
+def verify(target, times=HAS_BEEN_CALLED_AT_LEAST_ONCE):
     return Verifier(target, times)
