@@ -174,9 +174,9 @@ Expected: call targetpackage.targetfunction(1, 2)
         exception_raised = False
         try:
             verify(targetpackage, 17)
-        except NotImplementedError as error:
+        except ValueError as error:
             exception_raised = True
-            self.assertEqual('Times can be NEVER or AT-LEAST-ONCE.', str(error))
+            self.assertEqual('Argument times can be "NEVER" or "AT-LEAST-ONCE".', str(error))
 
         self.assertTrue(exception_raised, 'Expected a NotImplementedError when something else than 0 or 1 is given.')
 
