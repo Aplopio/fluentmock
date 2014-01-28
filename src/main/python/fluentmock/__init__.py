@@ -16,6 +16,16 @@
 __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
+__all__ = [
+    'NEVER',
+    'ANY_ARGUMENTS',
+    'AT_LEAST_ONCE',
+    'UnitTests',
+    'create_mock',
+    'when',
+    'verify'
+]
+
 try:
     from importlib import import_module
 except ImportError as import_error:
