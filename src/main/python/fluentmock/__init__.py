@@ -115,16 +115,14 @@ class FluentAnswer(object):
 
         return answer()
 
-    def append_answer(self, answer_class, value):
-        answer = answer_class(value)
-        self._answers.append(answer)
-
     def then_return(self, value):
-        self.append_answer(self.AnswerByReturning, value)
+        answer = self.AnswerByReturning(value)
+        self._answers.append(answer)
         return self
 
     def then_raise(self, value):
-        self.append_answer(self.AnswerByRaising, value)
+        answer = self.AnswerByRaising(value)
+        self._answers.append(answer)
         return self
 
 
