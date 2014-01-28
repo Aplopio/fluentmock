@@ -98,6 +98,24 @@ class VerifyTests(UnitTests):
         self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
 other arguments.""")
 
+    def test_should_raise_exception_when_any_arguments_in_arguments_but_not_first(self):
+
+        when(targetpackage).targetfunction(1).then_return('123')
+
+        targetpackage.targetfunction(1)
+
+        exception_raised = False
+
+        try:
+            verify(targetpackage).targetfunction(1, 2, 3, ANY_ARGUMENTS)
+
+        except InvalidUsageOfAnyArgumentsError as error:
+            exception_raised = True
+            self.assertEqual(str(error), 'Do not use ANY_ARGUMENTS together with other arguments!')
+
+        self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
+other arguments.""")
+
     def test_should_raise_error_when_function_patched_and_not_called_with_expected_argument(self):
 
         when(targetpackage).targetfunction(1).then_return('123')

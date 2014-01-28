@@ -304,7 +304,7 @@ class Verifier(FluentTarget):
         found_calls = self._find_calls_to_same_target()
 
         if found_calls:
-            if arguments and arguments[0] is ANY_ARGUMENTS:
+            if arguments and ANY_ARGUMENTS in arguments:
                 if len(arguments) > 1:
                     raise InvalidUsageOfAnyArgumentsError()
                 return
