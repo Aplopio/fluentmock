@@ -233,9 +233,9 @@ class FluentWhen(FluentTarget):
     def __init__(self, target):
         FluentTarget.__init__(self, target)
 
-    def _check_target_has_attribute(self, name):
-        if not hasattr(self._target, name):
-            raise InvalidAttributeError(self._target_name, name)
+    def _check_target_has_attribute(self, attribute_name):
+        if not hasattr(self._target, attribute_name):
+            raise InvalidAttributeError(self._target_name, attribute_name)
 
     def __getattr__(self, attribute_name):
         self._check_target_has_attribute(attribute_name)
