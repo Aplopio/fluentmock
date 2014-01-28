@@ -45,7 +45,7 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    HasBeenCalledAtLeastOnceError,
                                    InvalidAttributeError,
                                    NoCallsStoredError,
-                                   TargetHasBeenCalledWithDifferentArguments)
+                                   TargetHasBeenCalledWithDifferentArgumentsError)
 
 
 class FluentAnyArguments(object):
@@ -304,7 +304,7 @@ class Verifier(FluentTarget):
         found_calls = self._find_calls_to_same_target()
 
         if found_calls:
-            raise TargetHasBeenCalledWithDifferentArguments(expected_call_entry, found_calls)
+            raise TargetHasBeenCalledWithDifferentArgumentsError(expected_call_entry, found_calls)
 
         raise CouldNotVerifyCallError(expected_call_entry)
 

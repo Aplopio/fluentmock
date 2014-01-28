@@ -54,7 +54,7 @@ Expected: {expected}
         super(NoCallsStoredError, self).__init__(error_message)
 
 
-class TargetHasBeenCalledWithDifferentArguments(AssertionError):
+class TargetHasBeenCalledWithDifferentArgumentsError(AssertionError):
 
     MESSAGE_FORMAT = """
 Expected: {expected}
@@ -69,4 +69,4 @@ Expected: {expected}
             for call_entry in found_calls[1:]:
                 error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
 
-        super(TargetHasBeenCalledWithDifferentArguments, self).__init__(error_message)
+        super(TargetHasBeenCalledWithDifferentArgumentsError, self).__init__(error_message)
