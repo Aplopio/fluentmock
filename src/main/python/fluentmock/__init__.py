@@ -131,10 +131,9 @@ class FluentAnswer(object):
 
 class FluentPatchEntry(FluentTarget):
 
-    def __init__(self, target, attribute_name, original):
+    def __init__(self, target, attribute_name):
         FluentTarget.__init__(self, target)
         self._attribute_name = attribute_name
-        self._original = original
         self._patch = None
         self._mock = None
         self._full_qualified_target_name = None
@@ -219,16 +218,13 @@ class FluentWhen(FluentTarget):
     def __init__(self, target):
         FluentTarget.__init__(self, target)
 
-    def _get_original_attribute(self, name):
-
+    def _check_target_has_attribute(self, name):
         if not hasattr(self._target, name):
             raise InvalidAttributeError(self._target_name, name)
 
-        return getattr(self._target, name)
-
     def __getattr__(self, name):
-        original = self._get_original_attribute(name)
-        patch_entry = FluentPatchEntry(self._target, name, original)
+        self._check_target_has_attribute(name)
+        patch_entry = FluentPatchEntry(self._target, name)
         _patch_entries.append(patch_entry)
 
         configurator_key = (self._target, name)
