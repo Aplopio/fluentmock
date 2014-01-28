@@ -262,11 +262,11 @@ class Verifier(FluentTarget):
             error_message = 'Argument times can be "{never}" or "{once}".'.format(never=NEVER, once=AT_LEAST_ONCE)
             raise ValueError(error_message)
 
-    def __getattr__(self, name):
-        self._attribute_name = name
+    def __getattr__(self, attribute_name):
+        self._attribute_name = attribute_name
 
-        if not hasattr(self._target, name):
-            raise InvalidAttributeError(self._target_name, name)
+        if not hasattr(self._target, attribute_name):
+            raise InvalidAttributeError(self._target_name, attribute_name)
 
         return self
 
