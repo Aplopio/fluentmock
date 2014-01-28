@@ -77,7 +77,7 @@ class UnitTests(TestCase):
 
 class FluentTarget(object):
 
-    def __init__(self, target):
+    def __init__(self, target, attribute_name=None):
         if isinstance(target, str):
             self._target_name = target
             self._target = import_module(self._target_name)
@@ -88,6 +88,8 @@ class FluentTarget(object):
             target_type = type(target)
             self._target_name = target_type.__module__ + '.' + target_type.__name__
             self._target = target
+
+        self._attribute_name = attribute_name
 
     @property
     def full_qualified_target_name(self):
@@ -141,8 +143,7 @@ class FluentAnswer(object):
 class FluentPatchEntry(FluentTarget):
 
     def __init__(self, target, attribute_name):
-        FluentTarget.__init__(self, target)
-        self._attribute_name = attribute_name
+        FluentTarget.__init__(self, target, attribute_name)
         self._patch = None
         self._mock = None
 
@@ -161,9 +162,8 @@ class FluentPatchEntry(FluentTarget):
 
 class FluentCallEntry(FluentTarget):
 
-    def __init__(self, target, attribute, arguments, keyword_arguments):
-        FluentTarget.__init__(self, target)
-        self._attribute_name = attribute
+    def __init__(self, target, attribute_name, arguments, keyword_arguments):
+        FluentTarget.__init__(self, target, attribute_name)
         self._arguments = arguments
         self._keyword_arguments = keyword_arguments
 
@@ -187,8 +187,7 @@ class FluentCallEntry(FluentTarget):
 class FluentMock(FluentTarget):
 
     def __init__(self, target, attribute_name):
-        FluentTarget.__init__(self, target)
-        self._attribute_name = attribute_name
+        FluentTarget.__init__(self, target, attribute_name)
         self._answers = []
 
     def __call__(self, *arguments, **keyword_arguments):
