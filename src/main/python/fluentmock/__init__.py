@@ -98,9 +98,9 @@ class FluentAnswer(object):
         def __call__(self):
             raise self._value
 
-    def __init__(self, arguments, kwargs):
+    def __init__(self, arguments, keyword_arguments):
         self.arguments = arguments
-        self.kwargs = kwargs
+        self.keyword_arguments = keyword_arguments
         self._answers = []
 
     def next(self):
@@ -181,7 +181,7 @@ class FluentMock(FluentTarget):
         _call_entries.append(call_entry)
 
         for answer in self._answers:
-            if answer.arguments == arguments and answer.kwargs == keyword_arguments:
+            if answer.arguments == arguments and answer.keyword_arguments == keyword_arguments:
                 return answer.next()
             if answer.arguments and answer.arguments[0] is ANY_ARGUMENTS:
                 return answer.next()
