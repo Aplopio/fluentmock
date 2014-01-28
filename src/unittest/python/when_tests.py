@@ -221,6 +221,18 @@ class WhenTests(UnitTests):
         self.assertTrue(exception_raised, """Exception has not been raised even though there was a bad configuration
 using ANY_ARGUMENTS""")
 
+    def test_should_raise_exception_when_trying_to_configure_mock_with_any_arguments_as_second_argument(self):
+
+        exception_raised = False
+        try:
+            when(targetpackage).targetfunction(1, ANY_ARGUMENTS, 2, 3).then_raise(Exception('foobar'))
+        except InvalidUsageOfAnyArgumentsError as exception:
+            exception_raised = True
+            assert_that(str(exception), equal_to('Do not use ANY_ARGUMENTS together with other arguments!'))
+
+        self.assertTrue(exception_raised, """Exception has not been raised even though there was a bad configuration
+using ANY_ARGUMENTS""")
+
     def test_should_return_none_when_configured_for_keyword_argument_but_not_called_with_it(self):
 
         when(targetpackage).targetfunction(keyword_argument='abc').then_return('foobar')
