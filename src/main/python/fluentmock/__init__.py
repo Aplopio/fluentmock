@@ -215,13 +215,9 @@ class FluentMockConfigurator(object):
 
     def __init__(self, fluent_mock):
         self._fluent_mock = fluent_mock
-        self._arguments = None
-        self._keyword_arguments = None
 
     def __call__(self, *arguments, **keyword_arguments):
-        self._arguments = arguments
-        self._keyword_arguments = keyword_arguments
-        answer = FluentAnswer(self._arguments, self._keyword_arguments)
+        answer = FluentAnswer(arguments, keyword_arguments)
         self._fluent_mock.append_new_answer(answer)
         return answer
 
