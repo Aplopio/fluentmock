@@ -14,15 +14,6 @@
 #   limitations under the License.
 
 
-class InvalidAttributeError(Exception):
-
-    MESSAGE_FORMAT = 'The target "{target_name}" has no attribute called "{attribute_name}".'
-
-    def __init__(self, target_name, attribute_name):
-        error_message = self.MESSAGE_FORMAT.format(target_name=target_name, attribute_name=attribute_name)
-        super(InvalidAttributeError, self).__init__(error_message)
-
-
 class CouldNotVerifyCallError(AssertionError):
 
     MESSAGE_FORMAT = 'Could not verify {expected}'
@@ -32,22 +23,13 @@ class CouldNotVerifyCallError(AssertionError):
         super(CouldNotVerifyCallError, self).__init__(error_message)
 
 
-class TargetHasBeenCalledWithDifferentArguments(AssertionError):
+class InvalidAttributeError(Exception):
 
-    MESSAGE_FORMAT = """
-Expected: {expected}
- but was: {actual}
-"""
-    ADDITIONAL_CALL_ENTRIES = ' ' * 10 + '{actual}\n'
+    MESSAGE_FORMAT = 'The target "{target_name}" has no attribute called "{attribute_name}".'
 
-    def __init__(self, expected_call_entry, found_calls):
-
-        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry, actual=found_calls[0])
-        if len(found_calls) > 1:
-            for call_entry in found_calls[1:]:
-                error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
-
-        super(TargetHasBeenCalledWithDifferentArguments, self).__init__(error_message)
+    def __init__(self, target_name, attribute_name):
+        error_message = self.MESSAGE_FORMAT.format(target_name=target_name, attribute_name=attribute_name)
+        super(InvalidAttributeError, self).__init__(error_message)
 
 
 class HasBeenCalledAtLeastOnceError(AssertionError):
@@ -70,3 +52,21 @@ Expected: {expected}
     def __init__(self, expected_call_entry):
         error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry)
         super(NoCallsStoredError, self).__init__(error_message)
+
+
+class TargetHasBeenCalledWithDifferentArguments(AssertionError):
+
+    MESSAGE_FORMAT = """
+Expected: {expected}
+ but was: {actual}
+"""
+    ADDITIONAL_CALL_ENTRIES = ' ' * 10 + '{actual}\n'
+
+    def __init__(self, expected_call_entry, found_calls):
+
+        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry, actual=found_calls[0])
+        if len(found_calls) > 1:
+            for call_entry in found_calls[1:]:
+                error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
+
+        super(TargetHasBeenCalledWithDifferentArguments, self).__init__(error_message)
