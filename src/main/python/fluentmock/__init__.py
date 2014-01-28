@@ -312,8 +312,17 @@ class Verifier(FluentTarget):
         return found_calls
 
 
-def when(target):
-    return FluentWhen(target)
+def create_mock(*arguments, **keyword_arguments):
+    if len(arguments) > 0:
+        specification = arguments[0]
+        mock = Mock(specification)
+    else:
+        mock = Mock()
+
+    for property_name in keyword_arguments.keys():
+        setattr(mock, property_name, keyword_arguments[property_name])
+
+    return mock
 
 
 def undo_patches():
@@ -331,18 +340,9 @@ def get_patches():
     return _patch_entries
 
 
+def when(target):
+    return FluentWhen(target)
+
+
 def verify(target, times=AT_LEAST_ONCE):
     return Verifier(target, times)
-
-
-def create_mock(*arguments, **keyword_arguments):
-    if len(arguments) > 0:
-        specification = arguments[0]
-        mock = Mock(specification)
-    else:
-        mock = Mock()
-
-    for property_name in keyword_arguments.keys():
-        setattr(mock, property_name, keyword_arguments[property_name])
-
-    return mock
