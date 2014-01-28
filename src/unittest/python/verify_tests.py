@@ -15,7 +15,8 @@
 
 from mock import Mock
 from hamcrest import assert_that, equal_to
-from fluentmock import (NEVER,
+from fluentmock import (ANY_ARGUMENTS,
+                        NEVER,
                         UnitTests,
                         CouldNotVerifyCallError,
                         HasBeenCalledAtLeastOnceError,
@@ -68,6 +69,14 @@ class VerifyTests(UnitTests):
         targetpackage.targetfunction(1)
 
         verify(targetpackage).targetfunction(1)
+
+    def test_should_verify_a_simple_call_with_any_arguments(self):
+
+        when(targetpackage).targetfunction(1).then_return('123')
+
+        targetpackage.targetfunction(1)
+
+        verify(targetpackage).targetfunction(ANY_ARGUMENTS)
 
     def test_should_raise_error_when_function_patched_and_not_called_with_expected_argument(self):
 

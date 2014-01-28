@@ -49,7 +49,9 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
 
 
 class FluentAnyArguments(object):
-    pass
+
+    def __repr__(self):
+        return '<< ANY_ARGUMENTS >>'
 
 
 LOGGER = getLogger(__name__)
@@ -298,6 +300,8 @@ class Verifier(FluentTarget):
         found_calls = self._find_calls_to_same_target()
 
         if found_calls:
+            if arguments and arguments[0] is ANY_ARGUMENTS:
+                return
             raise HasBeenCalledWithDifferentArgumentsError(expected_call_entry, found_calls)
 
         raise CouldNotVerifyCallError(expected_call_entry)
