@@ -231,14 +231,14 @@ class FluentWhen(FluentTarget):
         if not hasattr(self._target, name):
             raise InvalidAttributeError(self._target_name, name)
 
-    def __getattr__(self, name):
-        self._check_target_has_attribute(name)
-        patch_entry = FluentPatchEntry(self._target, name)
+    def __getattr__(self, attribute_name):
+        self._check_target_has_attribute(attribute_name)
+        patch_entry = FluentPatchEntry(self._target, attribute_name)
         _patch_entries.append(patch_entry)
 
-        configurator_key = (self._target, name)
+        configurator_key = (self._target, attribute_name)
         if not configurator_key in _configurators:
-            fluent_mock = FluentMock(self._target, name)
+            fluent_mock = FluentMock(self._target, attribute_name)
             mock_configurator = FluentMockConfigurator(fluent_mock)
             patch_entry.patch_away_with(fluent_mock)
             _configurators[configurator_key] = mock_configurator
