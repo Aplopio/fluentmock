@@ -44,6 +44,7 @@ from types import ModuleType
 from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    HasBeenCalledAtLeastOnceError,
                                    InvalidAttributeError,
+                                   InvalidUsageOfAnyArgumentsError,
                                    NoCallsStoredError,
                                    HasBeenCalledWithDifferentArgumentsError)
 
@@ -301,6 +302,8 @@ class Verifier(FluentTarget):
 
         if found_calls:
             if arguments and arguments[0] is ANY_ARGUMENTS:
+                if len(arguments) > 1:
+                    raise InvalidUsageOfAnyArgumentsError()
                 return
             raise HasBeenCalledWithDifferentArgumentsError(expected_call_entry, found_calls)
 

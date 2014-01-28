@@ -32,6 +32,14 @@ class InvalidAttributeError(Exception):
         super(InvalidAttributeError, self).__init__(error_message)
 
 
+class InvalidUsageOfAnyArgumentsError(AssertionError):
+
+    MESSAGE_FORMAT = 'Do not use ANY_ARGUMENTS together with other arguments!'
+
+    def __init__(self):
+        super(InvalidUsageOfAnyArgumentsError, self).__init__(self.MESSAGE_FORMAT)
+
+
 class HasBeenCalledAtLeastOnceError(AssertionError):
 
     MESSAGE_FORMAT = """{call_entry} should NEVER have been called,
