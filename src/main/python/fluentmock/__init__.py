@@ -216,15 +216,14 @@ class FluentMockConfigurator(object):
     def __init__(self, mock):
         self._mock = mock
         self._arguments = None
-        self._answer = None
         self._keyword_arguments = None
 
     def __call__(self, *arguments, **keyword_arguments):
         self._arguments = arguments
         self._keyword_arguments = keyword_arguments
-        self._answer = FluentAnswer(self._arguments, self._keyword_arguments)
-        self._mock.append_new_answer(self._answer)
-        return self._answer
+        answer = FluentAnswer(self._arguments, self._keyword_arguments)
+        self._mock.append_new_answer(answer)
+        return answer
 
 
 class FluentWhen(FluentTarget):
