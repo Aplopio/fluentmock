@@ -101,6 +101,9 @@ class FluentTarget(object):
     def full_qualified_target_name(self):
         return self._target_name + '.' + self._attribute_name
 
+    def has_target(self, target, attribute_name):
+        return self._target == target and self._attribute_name == attribute_name
+
 
 class FluentAnswer(object):
 
@@ -178,9 +181,6 @@ class FluentCallEntry(FluentTarget):
                 return True
 
         return False
-
-    def has_target(self, target, attribute_name):
-        return self._target == target and self._attribute_name == attribute_name
 
     def __repr__(self):
         target_string = 'call {target_name}.{attribute_name}'.format(target_name=self._target_name,
