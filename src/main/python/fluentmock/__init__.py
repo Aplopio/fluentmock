@@ -106,11 +106,9 @@ class FluentAnswer(object):
     def next(self):
         if len(self._answers) == 0:
             return None
-
-        if len(self._answers) == 1:
+        elif len(self._answers) == 1:
             answer = self._answers[0]
-
-        if len(self._answers) > 1:
+        else:
             answer = self._answers.pop(0)
 
         return answer()
