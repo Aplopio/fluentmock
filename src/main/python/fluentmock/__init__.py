@@ -89,6 +89,10 @@ class FluentTarget(object):
             self._target_name = target_type.__module__ + '.' + target_type.__name__
             self._target = target
 
+    @property
+    def full_qualified_target_name(self):
+        return self._target_name + '.' + self._attribute_name
+
 
 class FluentAnswer(object):
 
@@ -141,14 +145,12 @@ class FluentPatchEntry(FluentTarget):
         self._attribute_name = attribute_name
         self._patch = None
         self._mock = None
-        self._full_qualified_target_name = None
 
     def patch_away_with(self, fluent_mock):
         if isinstance(self._target, Mock):
             setattr(self._target, self._attribute_name, fluent_mock)
         else:
-            self._full_qualified_target_name = self._target_name + '.' + self._attribute_name
-            self._patch = patch(self._full_qualified_target_name)
+            self._patch = patch(self.full_qualified_target_name)
             self._mock = self._patch.__enter__()
             self._mock.side_effect = fluent_mock
 
@@ -328,7 +330,7 @@ class Verifier(FluentTarget):
             if self._times == NEVER:
                 call_entry = call(*arguments, **keyword_arguments)
                 if call_entry in method_of_mock.call_args_list:
-                    call_entry_string = str(call_entry).replace('call', self._target_name + '.' + self._attribute_name)
+                    call_entry_string = str(call_entry).replace('call', self.full_qualified_target_name)
                     raise HasBeenCalledAtLeastOnceError(call_entry_string)
             else:
                 method_of_mock.assert_called_with(*arguments, **keyword_arguments)
