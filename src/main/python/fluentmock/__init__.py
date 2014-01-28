@@ -101,7 +101,7 @@ class FluentTarget(object):
     def full_qualified_target_name(self):
         return self._target_name + '.' + self._attribute_name
 
-    def has_target(self, target, attribute_name):
+    def is_equal_to(self, target, attribute_name):
         return self._target == target and self._attribute_name == attribute_name
 
 
@@ -311,7 +311,7 @@ class Verifier(FluentTarget):
         found_calls = []
 
         for call_entry in _call_entries:
-            if call_entry.has_target(self._target, self._attribute_name):
+            if call_entry.is_equal_to(self._target, self._attribute_name):
                 found_calls.append(call_entry)
 
         return found_calls
