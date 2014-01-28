@@ -176,7 +176,7 @@ class FluentCallEntry(FluentTarget):
         self._keyword_arguments = keyword_arguments
 
     def verify(self, target, attribute_name, arguments, keyword_arguments):
-        if self._target == target and self._attribute_name == attribute_name:
+        if self.is_equal_to(target, attribute_name):
             if self._arguments == arguments and self._keyword_arguments == keyword_arguments:
                 return True
 
