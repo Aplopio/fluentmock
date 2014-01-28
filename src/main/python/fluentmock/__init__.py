@@ -31,21 +31,20 @@ from logging import getLogger
 from unittest import TestCase
 from types import ModuleType
 
+
+class FluentAnyArguments(object):
+    pass
+
+
 LOGGER = getLogger(__name__)
 
+ANY_ARGUMENTS = FluentAnyArguments()
 AT_LEAST_ONCE = 'AT-LEAST-ONCE'
 NEVER = 'NEVER'
 
 _configurators = {}
 _patch_entries = []
 _call_entries = []
-
-
-class FluentAnyArguments(object):
-    pass
-
-
-ANY_ARGUMENTS = FluentAnyArguments()
 
 
 class UnitTests(TestCase):
