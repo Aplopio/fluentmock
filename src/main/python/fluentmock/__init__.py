@@ -256,7 +256,6 @@ class Verifier(FluentTarget):
 
     def __init__(self, target, times):
         FluentTarget.__init__(self, target)
-        self._attribute_name = None
         self._times = times
 
         if times not in [NEVER, AT_LEAST_ONCE]:
