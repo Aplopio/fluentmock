@@ -151,15 +151,14 @@ class FluentPatchEntry(FluentTarget):
     def __init__(self, target, attribute_name):
         FluentTarget.__init__(self, target, attribute_name)
         self._patch = None
-        self._mock = None
 
     def patch_away_with(self, fluent_mock):
         if isinstance(self._target, Mock):
             setattr(self._target, self._attribute_name, fluent_mock)
         else:
             self._patch = patch(self.full_qualified_target_name)
-            self._mock = self._patch.__enter__()
-            self._mock.side_effect = fluent_mock
+            mock = self._patch.__enter__()
+            mock.side_effect = fluent_mock
 
     def undo(self):
         if self._patch:
