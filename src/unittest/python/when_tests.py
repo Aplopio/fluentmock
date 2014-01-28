@@ -14,8 +14,10 @@
 #   limitations under the License.
 
 from hamcrest import assert_that, equal_to, instance_of
-from fluentmock import ANY_ARGUMENTS, FluentAnswer, FluentMockConfigurator, InvalidAttributeError, UnitTests, when
 from mock import Mock
+
+from fluentmock import ANY_ARGUMENTS, FluentAnswer, FluentMockConfigurator, UnitTests, when
+from fluentmock.exceptions import InvalidAttributeError, InvalidUsageOfAnyArgumentsError
 
 import targetpackage
 import targetpackage.subpackage
@@ -205,7 +207,19 @@ class WhenTests(UnitTests):
             exception_raised = True
             assert_that(str(exception), equal_to('foobar'))
 
-        self.assertTrue(exception_raised, 'Exception has not been raised event thow the mock has been configured so.')
+        self.assertTrue(exception_raised, 'Exception has not been raised even though the mock has been configured so.')
+
+    def test_should_raise_exception_when_trying_to_configure_mock_with_any_arguments_with_other_arguments(self):
+
+        exception_raised = False
+        try:
+            when(targetpackage).targetfunction(ANY_ARGUMENTS, 1, 2, 3).then_raise(Exception('foobar'))
+        except InvalidUsageOfAnyArgumentsError as exception:
+            exception_raised = True
+            assert_that(str(exception), equal_to('Do not use ANY_ARGUMENTS together with other arguments!'))
+
+        self.assertTrue(exception_raised, """Exception has not been raised even though there was a bad configuration
+using ANY_ARGUMENTS""")
 
     def test_should_return_none_when_configured_for_keyword_argument_but_not_called_with_it(self):
 

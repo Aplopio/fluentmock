@@ -220,6 +220,9 @@ class FluentMockConfigurator(object):
         self._fluent_mock = fluent_mock
 
     def __call__(self, *arguments, **keyword_arguments):
+        if len(arguments) > 1 and arguments[0] is ANY_ARGUMENTS:
+            raise InvalidUsageOfAnyArgumentsError()
+
         answer = FluentAnswer(arguments, keyword_arguments)
         self._fluent_mock.append_new_answer(answer)
         return answer
