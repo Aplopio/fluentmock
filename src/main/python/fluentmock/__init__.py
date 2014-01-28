@@ -172,6 +172,9 @@ class FluentCallEntry(FluentTarget):
 
         return False
 
+    def has_target(self, target, attribute_name):
+        return self._target == target and self._attribute_name == attribute_name
+
     def __repr__(self):
         target_string = 'call {target_name}.{attribute_name}'.format(target_name=self._target_name,
                                                                      attribute_name=self._attribute_name)
@@ -361,7 +364,7 @@ class Verifier(FluentTarget):
         found_calls = []
 
         for call_entry in _call_entries:
-            if call_entry._target == self._target and call_entry._attribute_name == self._attribute_name:
+            if call_entry.has_target(self._target, self._attribute_name):
                 found_calls.append(call_entry)
 
         return found_calls
