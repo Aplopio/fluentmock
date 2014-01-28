@@ -21,7 +21,7 @@ from fluentmock import (NEVER,
                         HasBeenCalledAtLeastOnceError,
                         InvalidAttributeError,
                         NoCallsStoredError,
-                        TargetHasBeenCalledWithDifferentArgumentsError,
+                        HasBeenCalledWithDifferentArgumentsError,
                         when,
                         verify)
 
@@ -78,7 +78,7 @@ class VerifyTests(UnitTests):
         raised_error = False
         try:
             verify(targetpackage).targetfunction(1)
-        except TargetHasBeenCalledWithDifferentArgumentsError as error:
+        except HasBeenCalledWithDifferentArgumentsError as error:
             raised_error = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1)
@@ -104,7 +104,7 @@ Expected: call targetpackage.targetfunction(1)
         raised_error = False
         try:
             verify(targetpackage).targetfunction(1, 2)
-        except TargetHasBeenCalledWithDifferentArgumentsError as error:
+        except HasBeenCalledWithDifferentArgumentsError as error:
             raised_error = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2)
@@ -123,7 +123,7 @@ Expected: call targetpackage.targetfunction(1, 2)
         raised_error = False
         try:
             verify(targetpackage).targetfunction(1, 2)
-        except TargetHasBeenCalledWithDifferentArgumentsError as error:
+        except HasBeenCalledWithDifferentArgumentsError as error:
             raised_error = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2)
@@ -145,7 +145,7 @@ Expected: call targetpackage.targetfunction(1, 2)
         raised_error = False
         try:
             verify(targetpackage).targetfunction(1, 2)
-        except TargetHasBeenCalledWithDifferentArgumentsError as error:
+        except HasBeenCalledWithDifferentArgumentsError as error:
             raised_error = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2)
@@ -197,7 +197,7 @@ Expected: call targetpackage.targetfunction(1, 2)
         raised_error = False
         try:
             verify(targetpackage).targetfunction(test=1)
-        except TargetHasBeenCalledWithDifferentArgumentsError as error:
+        except HasBeenCalledWithDifferentArgumentsError as error:
             raised_error = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(test=1)

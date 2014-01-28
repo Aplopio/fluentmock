@@ -42,19 +42,7 @@ but has been called at least once."""
         super(HasBeenCalledAtLeastOnceError, self).__init__(error_message)
 
 
-class NoCallsStoredError(AssertionError):
-
-    MESSAGE_FORMAT = """
-Expected: {expected}
- but was: no patched function has been called.
-"""
-
-    def __init__(self, expected_call_entry):
-        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry)
-        super(NoCallsStoredError, self).__init__(error_message)
-
-
-class TargetHasBeenCalledWithDifferentArgumentsError(AssertionError):
+class HasBeenCalledWithDifferentArgumentsError(AssertionError):
 
     MESSAGE_FORMAT = """
 Expected: {expected}
@@ -69,4 +57,16 @@ Expected: {expected}
             for call_entry in found_calls[1:]:
                 error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
 
-        super(TargetHasBeenCalledWithDifferentArgumentsError, self).__init__(error_message)
+        super(HasBeenCalledWithDifferentArgumentsError, self).__init__(error_message)
+
+
+class NoCallsStoredError(AssertionError):
+
+    MESSAGE_FORMAT = """
+Expected: {expected}
+ but was: no patched function has been called.
+"""
+
+    def __init__(self, expected_call_entry):
+        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry)
+        super(NoCallsStoredError, self).__init__(error_message)
