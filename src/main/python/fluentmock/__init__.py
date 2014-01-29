@@ -55,8 +55,15 @@ class FluentAnyArguments(object):
         return '<< ANY_ARGUMENTS >>'
 
 
+class FluentAnyArgument(object):
+
+    def __repr__(self):
+        return '<< ANY_ARGUMENT >>'
+
+
 LOGGER = getLogger(__name__)
 
+ANY_ARGUMENT = FluentAnyArgument()
 ANY_ARGUMENTS = FluentAnyArguments()
 AT_LEAST_ONCE = 'AT-LEAST-ONCE'
 NEVER = 'NEVER'
@@ -151,6 +158,29 @@ class FluentAnswer(object):
         self._answers.append(answer)
         return self
 
+    def matches(self, arguments, keyword_arguments):
+        if self.arguments == arguments and self.keyword_arguments == keyword_arguments:
+            return True
+
+        if len(self.arguments) != len(arguments):
+            return False
+
+        if len(self.keyword_arguments) != len(keyword_arguments):
+            return False
+
+        for index, argument in enumerate(arguments):
+            if not self.arguments[index] is ANY_ARGUMENT:
+                if self.arguments[index] != argument:
+                    return False
+
+        if len(self.keyword_arguments) > 0:
+            for key in self.keyword_arguments.keys():
+                if not self.keyword_arguments[key] is ANY_ARGUMENT:
+                    if self.keyword_arguments[key] != keyword_arguments[key]:
+                        return False
+
+        return True
+
 
 class FluentPatchEntry(FluentTarget):
 
@@ -203,7 +233,7 @@ class FluentMock(FluentTarget):
         _call_entries.append(call_entry)
 
         for answer in self._answers:
-            if answer.arguments == arguments and answer.keyword_arguments == keyword_arguments:
+            if answer.matches(arguments, keyword_arguments):
                 return answer.next()
             if answer.arguments and answer.arguments[0] is ANY_ARGUMENTS:
                 return answer.next()
