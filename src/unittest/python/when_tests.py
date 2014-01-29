@@ -321,3 +321,15 @@ class AnyArgumentTests(UnitTests):
         when(targetpackage.subpackage).subtargetfunction(1, a='1', b=ANY_ARGUMENT, c='3').then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, a='1', b='hello world', c='3'), equal_to('specific'))
+
+    def test_should_not_match_when_using_any_argument_but_equal_number_of_keyword_arguments(self):
+
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT, foo='bar', spam='egg').then_return('specific')
+
+        assert_that(targetpackage.subpackage.subtargetfunction(1, 2, foo='bar', blam='blabla'), equal_to(None))
+
+    def test_should_not_match_when_using_any_argument_but_equal_number_of_keyword_arguments_but_not_equal_keys(self):
+
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT, foo='bar', spam='egg').then_return('specific')
+
+        assert_that(targetpackage.subpackage.subtargetfunction(1, 2, zap='bran', spam='blabla'), equal_to(None))

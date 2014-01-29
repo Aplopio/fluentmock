@@ -175,6 +175,10 @@ class FluentAnswer(object):
 
         if len(self.keyword_arguments) > 0:
             for key in self.keyword_arguments.keys():
+                if key not in keyword_arguments:
+                    return False
+
+            for key in self.keyword_arguments.keys():
                 if not self.keyword_arguments[key] is ANY_ARGUMENT:
                     if self.keyword_arguments[key] != keyword_arguments[key]:
                         return False
