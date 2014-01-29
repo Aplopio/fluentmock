@@ -44,8 +44,6 @@ def set_properties(project):
 
     project.depends_on('mock')
 
-    project.set_property('dir_source_integrationtest_python', 'src/unittest')
-
     project.set_property('coverage_break_build', True)
 
     project.set_property('copy_resources_target', '$dir_dist')
