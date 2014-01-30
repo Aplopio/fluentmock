@@ -210,7 +210,7 @@ class FluentCallEntry(FluentTarget):
         self._arguments = arguments
         self._keyword_arguments = keyword_arguments
 
-    def verify(self, target, attribute_name, arguments, keyword_arguments):
+    def matches(self, target, attribute_name, arguments, keyword_arguments):
         if self.is_equal_to(target, attribute_name):
             if self._arguments == arguments and self._keyword_arguments == keyword_arguments:
                 return True
@@ -320,7 +320,7 @@ class Verifier(FluentTarget):
 
     def _assert_never_called(self, *arguments, **keyword_arguments):
         for call_entry in _call_entries:
-            if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
+            if call_entry.matches(self._target, self._attribute_name, arguments, keyword_arguments):
                 raise HasBeenCalledAtLeastOnceError(call_entry)
 
     def _assert_called(self, *arguments, **keyword_arguments):
@@ -330,7 +330,7 @@ class Verifier(FluentTarget):
             raise NoCallsStoredError(expected_call_entry)
 
         for call_entry in _call_entries:
-            if call_entry.verify(self._target, self._attribute_name, arguments, keyword_arguments):
+            if call_entry.matches(self._target, self._attribute_name, arguments, keyword_arguments):
                 return
 
         found_calls = self._find_calls_to_same_target()
