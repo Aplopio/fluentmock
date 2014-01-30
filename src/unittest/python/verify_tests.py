@@ -72,50 +72,6 @@ class VerifyTests(UnitTests):
 
         verify(targetpackage).targetfunction(1)
 
-    def test_should_verify_a_simple_call_with_any_arguments(self):
-
-        when(targetpackage).targetfunction(1).then_return('123')
-
-        targetpackage.targetfunction(1)
-
-        verify(targetpackage).targetfunction(ANY_ARGUMENTS)
-
-    def test_should_raise_exception_when_trying_to_use_any_arguments_with_(self):
-
-        when(targetpackage).targetfunction(1).then_return('123')
-
-        targetpackage.targetfunction(1)
-
-        exception_raised = False
-
-        try:
-            verify(targetpackage).targetfunction(ANY_ARGUMENTS, 123)
-
-        except InvalidUsageOfAnyArgumentsError as error:
-            exception_raised = True
-            self.assertEqual(str(error), 'Do not use ANY_ARGUMENTS together with other arguments!')
-
-        self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
-other arguments.""")
-
-    def test_should_raise_exception_when_any_arguments_in_arguments_but_not_first(self):
-
-        when(targetpackage).targetfunction(1).then_return('123')
-
-        targetpackage.targetfunction(1)
-
-        exception_raised = False
-
-        try:
-            verify(targetpackage).targetfunction(1, 2, 3, ANY_ARGUMENTS)
-
-        except InvalidUsageOfAnyArgumentsError as error:
-            exception_raised = True
-            self.assertEqual(str(error), 'Do not use ANY_ARGUMENTS together with other arguments!')
-
-        self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
-other arguments.""")
-
     def test_should_raise_error_when_function_patched_and_not_called_with_expected_argument(self):
 
         when(targetpackage).targetfunction(1).then_return('123')
@@ -252,6 +208,53 @@ Expected: call targetpackage.targetfunction(test=1)
 """))
 
         assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+
+
+class AnyArgumentsVerificationTests(UnitTests):
+
+    def test_should_verify_a_simple_call_with_any_arguments(self):
+
+        when(targetpackage).targetfunction(1).then_return('123')
+
+        targetpackage.targetfunction(1)
+
+        verify(targetpackage).targetfunction(ANY_ARGUMENTS)
+
+    def test_should_raise_exception_when_trying_to_use_any_arguments_with_(self):
+
+        when(targetpackage).targetfunction(1).then_return('123')
+
+        targetpackage.targetfunction(1)
+
+        exception_raised = False
+
+        try:
+            verify(targetpackage).targetfunction(ANY_ARGUMENTS, 123)
+
+        except InvalidUsageOfAnyArgumentsError as error:
+            exception_raised = True
+            self.assertEqual(str(error), 'Do not use ANY_ARGUMENTS together with other arguments!')
+
+        self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
+other arguments.""")
+
+    def test_should_raise_exception_when_any_arguments_in_arguments_but_not_first(self):
+
+        when(targetpackage).targetfunction(1).then_return('123')
+
+        targetpackage.targetfunction(1)
+
+        exception_raised = False
+
+        try:
+            verify(targetpackage).targetfunction(1, 2, 3, ANY_ARGUMENTS)
+
+        except InvalidUsageOfAnyArgumentsError as error:
+            exception_raised = True
+            self.assertEqual(str(error), 'Do not use ANY_ARGUMENTS together with other arguments!')
+
+        self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
+other arguments.""")
 
 
 class MockVerificationTests(UnitTests):
