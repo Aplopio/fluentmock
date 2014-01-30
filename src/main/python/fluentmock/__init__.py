@@ -16,15 +16,13 @@
 __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
-__all__ = [
-    'NEVER',
-    'ANY_ARGUMENTS',
-    'AT_LEAST_ONCE',
-    'UnitTests',
-    'create_mock',
-    'when',
-    'verify'
-]
+__all__ = ['ANY_ARGUMENTS',
+           'AT_LEAST_ONCE',
+           'NEVER',
+           'UnitTests',
+           'create_mock',
+           'verify',
+           'when']
 
 try:
     from importlib import import_module
