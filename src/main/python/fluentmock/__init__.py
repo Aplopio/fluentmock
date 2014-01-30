@@ -169,6 +169,9 @@ class FluentAnswer(object):
         return self
 
     def matches(self, arguments, keyword_arguments):
+        if self.arguments and self.arguments[0] is ANY_ARGUMENTS:
+            return True
+
         if self.arguments == arguments and self.keyword_arguments == keyword_arguments:
             return True
 
@@ -252,8 +255,6 @@ class FluentMock(FluentTarget):
 
         for answer in self._answers:
             if answer.matches(arguments, keyword_arguments):
-                return answer.next()
-            if answer.arguments and answer.arguments[0] is ANY_ARGUMENTS:
                 return answer.next()
 
         return None
