@@ -45,31 +45,7 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    InvalidUsageOfAnyArgumentsError,
                                    NoCallsStoredError,
                                    HasBeenCalledWithDifferentArgumentsError)
-
-
-class FluentMatcher(object):
-
-    def matches(self, value):
-        raise NotImplementedError()
-
-
-class FluentAnyArguments(FluentMatcher):
-
-    def matches(self, value):
-        return True
-
-    def __repr__(self):
-        return '<< ANY_ARGUMENTS >>'
-
-
-class FluentAnyArgument(FluentMatcher):
-
-    def matches(self, value):
-        return True
-
-    def __repr__(self):
-        return '<< ANY_ARGUMENT >>'
-
+from fluentmock.matchers import FluentMatcher, FluentAnyArguments, FluentAnyArgument
 
 LOGGER = getLogger(__name__)
 
