@@ -187,6 +187,21 @@ class WhenTests(UnitTests):
 
         assert_that(targetpackage.subpackage.subtargetfunction(0), equal_to(0))
 
+    def test_should_return_none_when_configured_for_keyword_argument_but_not_called_with_it(self):
+
+        when(targetpackage).targetfunction(keyword_argument='abc').then_return('foobar')
+
+        assert_that(targetpackage.targetfunction(), equal_to(None))
+
+    def test_should_return_configured_answer_when_keyword_argument_given(self):
+
+        when(targetpackage).targetfunction(keyword_argument='abc').then_return('foobar')
+
+        assert_that(targetpackage.targetfunction(keyword_argument='abc'), equal_to('foobar'))
+
+
+class AnyArgumentsTest(UnitTests):
+
     def test_should_always_return_the_same_answer_for_any_argument(self):
 
         when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return('foobar')
@@ -232,18 +247,6 @@ using ANY_ARGUMENTS""")
 
         self.assertTrue(exception_raised, """Exception has not been raised even though there was a bad configuration
 using ANY_ARGUMENTS""")
-
-    def test_should_return_none_when_configured_for_keyword_argument_but_not_called_with_it(self):
-
-        when(targetpackage).targetfunction(keyword_argument='abc').then_return('foobar')
-
-        assert_that(targetpackage.targetfunction(), equal_to(None))
-
-    def test_should_return_configured_answer_when_keyword_argument_given(self):
-
-        when(targetpackage).targetfunction(keyword_argument='abc').then_return('foobar')
-
-        assert_that(targetpackage.targetfunction(keyword_argument='abc'), equal_to('foobar'))
 
     def test_should_return_configured_answer_when_addressing_target_using_string(self):
 
