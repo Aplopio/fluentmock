@@ -47,13 +47,25 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    HasBeenCalledWithDifferentArgumentsError)
 
 
-class FluentAnyArguments(object):
+class FluentMatcher(object):
+
+    def matches(self, value):
+        raise NotImplementedError()
+
+
+class FluentAnyArguments(FluentMatcher):
+
+    def matches(self, value):
+        return True
 
     def __repr__(self):
         return '<< ANY_ARGUMENTS >>'
 
 
-class FluentAnyArgument(object):
+class FluentAnyArgument(FluentMatcher):
+
+    def matches(self, value):
+        return True
 
     def __repr__(self):
         return '<< ANY_ARGUMENT >>'
@@ -167,9 +179,11 @@ class FluentAnswer(object):
             return False
 
         for index, argument in enumerate(arguments):
-            if not self.arguments[index] is ANY_ARGUMENT:
-                if self.arguments[index] != argument:
+            if isinstance(self.arguments[index], FluentMatcher):
+                if not self.arguments[index].matches(argument):
                     return False
+            elif self.arguments[index] != argument:
+                return False
 
         if len(self.keyword_arguments) > 0:
             for key in self.keyword_arguments.keys():
@@ -177,9 +191,11 @@ class FluentAnswer(object):
                     return False
 
             for key in self.keyword_arguments.keys():
-                if not self.keyword_arguments[key] is ANY_ARGUMENT:
-                    if self.keyword_arguments[key] != keyword_arguments[key]:
+                if isinstance(self.keyword_arguments[key], FluentMatcher):
+                    if not self.keyword_arguments[key].matches(keyword_arguments[key]):
                         return False
+                elif self.keyword_arguments[key] != keyword_arguments[key]:
+                    return False
 
         return True
 
