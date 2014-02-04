@@ -11,7 +11,7 @@ install:
 
 script:
   - pyb install_dependencies analyze publish --verbose
-  - coverage run --source=src/main/python/committer `which pyb` run_unit_tests
+  - coverage run --source=src/main/python/fluentmock `which pyb` run_unit_tests
 
 after_success:
   - coveralls --verbose
