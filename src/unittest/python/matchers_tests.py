@@ -14,8 +14,8 @@
 #   limitations under the License.
 
 from fluentmock import UnitTests
-from fluentmock.matchers import ContainsMatcher, FluentAnyArgument, FluentAnyArguments, FluentMatcher
-from hamcrest import assert_that, equal_to
+from fluentmock.matchers import ContainsMatcher, FluentAnyArgument, FluentAnyArguments, FluentMatcher, contains
+from hamcrest import assert_that, equal_to, instance_of
 
 
 class FluentMatcherTests(UnitTests):
@@ -118,3 +118,18 @@ class ContainsMatcherTests(UnitTests):
         matcher = ContainsMatcher('foo')
 
         assert_that(matcher.matches('foo'), equal_to(True))
+
+
+class ContainsTests(UnitTests):
+
+    def test_should_create_a_new_contains_matcher(self):
+
+        matcher = contains('eggs')
+
+        assert_that(matcher, instance_of(ContainsMatcher))
+
+    def test_should_create_a_matcher_for_given_substring(self):
+
+        matcher = contains('eggs')
+
+        assert_that(matcher.matches('spam eggs'), equal_to(True))

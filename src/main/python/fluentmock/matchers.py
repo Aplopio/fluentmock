@@ -48,3 +48,7 @@ class ContainsMatcher(FluentMatcher):
 
     def matches(self, value):
         return value.find(self._substring) >= 0
+
+
+def contains(substring):
+    return ContainsMatcher(substring)
