@@ -39,3 +39,12 @@ class FluentAnyArgument(FluentMatcher):
 
     def __repr__(self):
         return '<< ANY_ARGUMENT >>'
+
+
+class ContainsMatcher(FluentMatcher):
+
+    def __init__(self, substring):
+        self._substring = substring
+
+    def matches(self, value):
+        return value.find(self._substring) >= 0

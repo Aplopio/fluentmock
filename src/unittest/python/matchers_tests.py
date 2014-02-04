@@ -14,7 +14,7 @@
 #   limitations under the License.
 
 from fluentmock import UnitTests
-from fluentmock.matchers import FluentAnyArgument, FluentAnyArguments, FluentMatcher
+from fluentmock.matchers import ContainsMatcher, FluentAnyArgument, FluentAnyArguments, FluentMatcher
 from hamcrest import assert_that, equal_to
 
 
@@ -97,3 +97,24 @@ class FluentAnyArgumentsTests(UnitTests):
         matcher = FluentAnyArguments()
 
         assert_that(str(matcher), equal_to('<< ANY_ARGUMENTS >>'))
+
+
+class ContainsMatcherTests(UnitTests):
+
+    def test_should_return_true_when_string_contains_substring(self):
+
+        matcher = ContainsMatcher('foo')
+
+        assert_that(matcher.matches('spam foo bar eggs'), equal_to(True))
+
+    def test_should_return_false_when_string_does_not_contain_substring(self):
+
+        matcher = ContainsMatcher('foo')
+
+        assert_that(matcher.matches('spam eggs'), equal_to(False))
+
+    def test_should_return_true_when_string_is_equal_to_substring(self):
+
+        matcher = ContainsMatcher('foo')
+
+        assert_that(matcher.matches('foo'), equal_to(True))
