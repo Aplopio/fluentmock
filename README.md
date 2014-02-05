@@ -1,5 +1,3 @@
-[![PyPI version](https://badge.fury.io/py/fluentmock.png)](http://badge.fury.io/py/fluentmock)
-[![Coverage Status](https://coveralls.io/repos/aelgru/fluentmock/badge.png)](https://coveralls.io/r/aelgru/fluentmock)
 [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
 
 [![Logo](https://raw.github.com/aelgru/fluentmock/master/docs/fluentmock-logo.png)](https://pypi.python.org/pypi/fluentmock)
