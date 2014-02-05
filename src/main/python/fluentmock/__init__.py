@@ -101,6 +101,27 @@ class FluentTarget(object):
         return self._target == target and self._attribute_name == attribute_name
 
 
+class FluentCallEntry(FluentTarget):
+
+    def __init__(self, target, attribute_name, arguments, keyword_arguments):
+        FluentTarget.__init__(self, target, attribute_name)
+        self._arguments = arguments
+        self._keyword_arguments = keyword_arguments
+
+    def matches(self, target, attribute_name, arguments, keyword_arguments):
+        if self.is_equal_to(target, attribute_name):
+            if self._arguments == arguments and self._keyword_arguments == keyword_arguments:
+                return True
+
+        return False
+
+    def __repr__(self):
+        target_string = 'call {target_name}.{attribute_name}'.format(target_name=self._target_name,
+                                                                     attribute_name=self._attribute_name)
+        call_string = str(call(*self._arguments, **self._keyword_arguments))
+        return call_string.replace('call', target_string)
+
+
 class FluentAnswer(object):
 
     class AnswerByReturning(object):
@@ -196,27 +217,6 @@ class FluentPatchEntry(FluentTarget):
     def undo(self):
         if self._patch:
             self._patch.__exit__()
-
-
-class FluentCallEntry(FluentTarget):
-
-    def __init__(self, target, attribute_name, arguments, keyword_arguments):
-        FluentTarget.__init__(self, target, attribute_name)
-        self._arguments = arguments
-        self._keyword_arguments = keyword_arguments
-
-    def matches(self, target, attribute_name, arguments, keyword_arguments):
-        if self.is_equal_to(target, attribute_name):
-            if self._arguments == arguments and self._keyword_arguments == keyword_arguments:
-                return True
-
-        return False
-
-    def __repr__(self):
-        target_string = 'call {target_name}.{attribute_name}'.format(target_name=self._target_name,
-                                                                     attribute_name=self._attribute_name)
-        call_string = str(call(*self._arguments, **self._keyword_arguments))
-        return call_string.replace('call', target_string)
 
 
 class FluentMock(FluentTarget):
