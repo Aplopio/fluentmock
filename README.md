@@ -1,8 +1,6 @@
-[![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
-
 [![Logo](https://raw.github.com/aelgru/fluentmock/master/docs/fluentmock-logo.png)](https://pypi.python.org/pypi/fluentmock)
 
-Fluent interface facade for Michael Foord's mock.
+Fluent interface facade for Michael Foord's mock. [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
 
 A example test using _fluentmock_ and hamcrest:
 ```python
