@@ -42,7 +42,7 @@ from types import ModuleType
 from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    HasBeenCalledAtLeastOnceError,
                                    InvalidAttributeError,
-                                   InvalidUsageOfAnyArgumentsError,
+                                   InvalidUseOfAnyArgumentsError,
                                    NoCallsStoredError,
                                    HasBeenCalledWithDifferentArgumentsError)
 from fluentmock.matchers import FluentMatcher, FluentAnyArguments, FluentAnyArgument
@@ -246,7 +246,7 @@ class FluentMockConfigurator(object):
 
     def __call__(self, *arguments, **keyword_arguments):
         if len(arguments) > 1 and ANY_ARGUMENTS in arguments:
-            raise InvalidUsageOfAnyArgumentsError()
+            raise InvalidUseOfAnyArgumentsError()
 
         answer = FluentAnswer(arguments, keyword_arguments)
         self._fluent_mock.append_new_answer(answer)
@@ -331,7 +331,7 @@ class Verifier(FluentTarget):
         if found_calls:
             if arguments and ANY_ARGUMENTS in arguments:
                 if len(arguments) > 1:
-                    raise InvalidUsageOfAnyArgumentsError()
+                    raise InvalidUseOfAnyArgumentsError()
                 return
             raise HasBeenCalledWithDifferentArgumentsError(expected_call_entry, found_calls)
 

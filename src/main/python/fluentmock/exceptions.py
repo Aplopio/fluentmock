@@ -32,12 +32,13 @@ class InvalidAttributeError(Exception):
         super(InvalidAttributeError, self).__init__(error_message)
 
 
-class InvalidUsageOfAnyArgumentsError(AssertionError):
+class InvalidUseOfAnyArgumentsError(AssertionError):
 
-    MESSAGE_FORMAT = 'Do not use ANY_ARGUMENTS together with other arguments!'
+    MESSAGE_FORMAT = """Do not use ANY_ARGUMENTS together with other arguments!
+Use ANY_ARGUMENT as a wildcard for single arguments."""
 
     def __init__(self):
-        super(InvalidUsageOfAnyArgumentsError, self).__init__(self.MESSAGE_FORMAT)
+        super(InvalidUseOfAnyArgumentsError, self).__init__(self.MESSAGE_FORMAT)
 
 
 class HasBeenCalledAtLeastOnceError(AssertionError):

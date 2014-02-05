@@ -17,7 +17,7 @@ from hamcrest import assert_that, equal_to, instance_of
 from mock import Mock
 
 from fluentmock import ANY_ARGUMENT, ANY_ARGUMENTS, FluentAnswer, FluentMockConfigurator, UnitTests, when
-from fluentmock.exceptions import InvalidAttributeError, InvalidUsageOfAnyArgumentsError
+from fluentmock.exceptions import InvalidAttributeError, InvalidUseOfAnyArgumentsError
 
 import targetpackage
 import targetpackage.subpackage
@@ -229,9 +229,10 @@ class AnyArgumentsTest(UnitTests):
         exception_raised = False
         try:
             when(targetpackage).targetfunction(ANY_ARGUMENTS, 1, 2, 3).then_raise(Exception('foobar'))
-        except InvalidUsageOfAnyArgumentsError as exception:
+        except InvalidUseOfAnyArgumentsError as exception:
             exception_raised = True
-            assert_that(str(exception), equal_to('Do not use ANY_ARGUMENTS together with other arguments!'))
+            assert_that(str(exception), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
+Use ANY_ARGUMENT as a wildcard for single arguments."""))
 
         self.assertTrue(exception_raised, """Exception has not been raised even though there was a bad configuration
 using ANY_ARGUMENTS""")
@@ -241,9 +242,10 @@ using ANY_ARGUMENTS""")
         exception_raised = False
         try:
             when(targetpackage).targetfunction(1, ANY_ARGUMENTS, 2, 3).then_raise(Exception('foobar'))
-        except InvalidUsageOfAnyArgumentsError as exception:
+        except InvalidUseOfAnyArgumentsError as exception:
             exception_raised = True
-            assert_that(str(exception), equal_to('Do not use ANY_ARGUMENTS together with other arguments!'))
+            assert_that(str(exception), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
+Use ANY_ARGUMENT as a wildcard for single arguments."""))
 
         self.assertTrue(exception_raised, """Exception has not been raised even though there was a bad configuration
 using ANY_ARGUMENTS""")

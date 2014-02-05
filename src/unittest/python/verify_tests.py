@@ -24,7 +24,7 @@ from fluentmock import (ANY_ARGUMENTS,
 from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    HasBeenCalledAtLeastOnceError,
                                    InvalidAttributeError,
-                                   InvalidUsageOfAnyArgumentsError,
+                                   InvalidUseOfAnyArgumentsError,
                                    NoCallsStoredError,
                                    HasBeenCalledWithDifferentArgumentsError)
 
@@ -231,9 +231,10 @@ class AnyArgumentsVerificationTests(UnitTests):
         try:
             verify(targetpackage).targetfunction(ANY_ARGUMENTS, 123)
 
-        except InvalidUsageOfAnyArgumentsError as error:
+        except InvalidUseOfAnyArgumentsError as error:
             exception_raised = True
-            self.assertEqual(str(error), 'Do not use ANY_ARGUMENTS together with other arguments!')
+            self.assertEqual(str(error), """Do not use ANY_ARGUMENTS together with other arguments!
+Use ANY_ARGUMENT as a wildcard for single arguments.""")
 
         self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
 other arguments.""")
@@ -249,9 +250,10 @@ other arguments.""")
         try:
             verify(targetpackage).targetfunction(1, 2, 3, ANY_ARGUMENTS)
 
-        except InvalidUsageOfAnyArgumentsError as error:
+        except InvalidUseOfAnyArgumentsError as error:
             exception_raised = True
-            self.assertEqual(str(error), 'Do not use ANY_ARGUMENTS together with other arguments!')
+            self.assertEqual(str(error), """Do not use ANY_ARGUMENTS together with other arguments!
+Use ANY_ARGUMENT as a wildcard for single arguments.""")
 
         self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
 other arguments.""")
