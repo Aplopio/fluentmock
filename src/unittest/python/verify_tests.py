@@ -15,7 +15,8 @@
 
 from mock import Mock
 from hamcrest import assert_that, equal_to
-from fluentmock import (ANY_ARGUMENTS,
+from fluentmock import (ANY_ARGUMENT,
+                        ANY_ARGUMENTS,
                         NEVER,
                         UnitTests,
                         when,
@@ -497,3 +498,39 @@ Expected: call targetpackage.targetfunction()
  but was: no patched function has been called.
 """))
         assert_that(raised_error, "Did not raise error even though function has never been called.")
+
+
+class VerifyAnyArgumentTests(UnitTests):
+
+    def test_should_verify_any_argument(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENT).then_return(1)
+
+        targetpackage.targetfunction(2)
+
+        verify(targetpackage).targetfunction(ANY_ARGUMENT)
+
+    def test_should_verify_any_argument_twice(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(1)
+
+        targetpackage.targetfunction(2, 'abc')
+
+        verify(targetpackage).targetfunction(ANY_ARGUMENT, ANY_ARGUMENT)
+
+    def test_should_raise_error_with_a_detailed_message_when_any_argument_does_not_match(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return('123')
+
+        targetpackage.targetfunction(1, 2, 3)
+
+        raised_error = False
+        try:
+            verify(targetpackage).targetfunction(1, 2, 'c')
+        except HasBeenCalledWithUnexpectedArgumentsError as error:
+            raised_error = True
+            assert_that(str(error), equal_to("""
+Expected: call targetpackage.targetfunction(1, 2, 'c')
+ but was: call targetpackage.targetfunction(1, 2, 3)
+"""))
+        self.assertTrue(raised_error, "Error has not been raised even though verification does not match")

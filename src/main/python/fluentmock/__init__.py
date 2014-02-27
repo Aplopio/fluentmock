@@ -134,6 +134,9 @@ class FluentCallEntry(object):
             if isinstance(self.arguments[index], FluentMatcher):
                 if not self.arguments[index].matches(argument):
                     return False
+            elif isinstance(argument, FluentMatcher):
+                if not argument.matches(self.arguments[index]):
+                    return False
             elif self.arguments[index] != argument:
                 return False
 
