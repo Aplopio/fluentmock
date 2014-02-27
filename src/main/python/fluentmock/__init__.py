@@ -100,6 +100,10 @@ class FluentTarget(object):
     def is_equal_to(self, target, attribute_name):
         return self.object == target and self.attribute_name == attribute_name
 
+    def __repr__(self):
+        return '{target_name}.{attribute_name}'.format(target_name=self.name,
+                                                       attribute_name=self.attribute_name)
+
 
 class FluentCallEntry(object):
 
@@ -119,8 +123,7 @@ class FluentCallEntry(object):
         return self.target.is_equal_to(target, attribute_name)
 
     def __repr__(self):
-        target_string = 'call {target_name}.{attribute_name}'.format(target_name=self.target.name,
-                                                                     attribute_name=self.target.attribute_name)
+        target_string = 'call {target}'.format(target=self.target)
         call_string = str(call(*self._arguments, **self._keyword_arguments))
         return call_string.replace('call', target_string)
 
