@@ -91,14 +91,14 @@ class FluentTarget(object):
             self.name = target_type.__module__ + '.' + target_type.__name__
             self.object = target
 
-        self._attribute_name = attribute_name
+        self.attribute_name = attribute_name
 
     @property
     def full_qualified_target_name(self):
-        return self.name + '.' + self._attribute_name
+        return self.name + '.' + self.attribute_name
 
     def is_equal_to(self, target, attribute_name):
-        return self.object == target and self._attribute_name == attribute_name
+        return self.object == target and self.attribute_name == attribute_name
 
 
 class FluentCallEntry(FluentTarget):
@@ -117,7 +117,7 @@ class FluentCallEntry(FluentTarget):
 
     def __repr__(self):
         target_string = 'call {target_name}.{attribute_name}'.format(target_name=self.name,
-                                                                     attribute_name=self._attribute_name)
+                                                                     attribute_name=self.attribute_name)
         call_string = str(call(*self._arguments, **self._keyword_arguments))
         return call_string.replace('call', target_string)
 
@@ -208,7 +208,7 @@ class FluentPatchEntry(FluentTarget):
 
     def patch_away_with(self, fluent_mock):
         if isinstance(self.object, Mock):
-            setattr(self.object, self._attribute_name, fluent_mock)
+            setattr(self.object, self.attribute_name, fluent_mock)
         else:
             self._patch = patch(self.full_qualified_target_name)
             mock = self._patch.__enter__()
@@ -226,7 +226,7 @@ class FluentMock(FluentTarget):
         self._answers = []
 
     def __call__(self, *arguments, **keyword_arguments):
-        call_entry = FluentCallEntry(self.object, self._attribute_name, arguments, keyword_arguments)
+        call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
         _call_entries.append(call_entry)
 
         for answer in self._answers:
@@ -288,7 +288,7 @@ class Verifier(FluentTarget):
             raise ValueError(error_message)
 
     def __getattr__(self, attribute_name):
-        self._attribute_name = attribute_name
+        self.attribute_name = attribute_name
 
         if not hasattr(self.object, attribute_name):
             raise InvalidAttributeError(self.name, attribute_name)
@@ -296,7 +296,7 @@ class Verifier(FluentTarget):
         return self
 
     def __call__(self, *arguments, **keyword_arguments):
-        method_of_mock = getattr(self.object, self._attribute_name)
+        method_of_mock = getattr(self.object, self.attribute_name)
         if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
             if self._times == NEVER:
                 call_entry = call(*arguments, **keyword_arguments)
@@ -313,17 +313,17 @@ class Verifier(FluentTarget):
 
     def _assert_never_called(self, *arguments, **keyword_arguments):
         for call_entry in _call_entries:
-            if call_entry.matches(self.object, self._attribute_name, arguments, keyword_arguments):
+            if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
                 raise HasBeenCalledAtLeastOnceError(call_entry)
 
     def _assert_called(self, *arguments, **keyword_arguments):
-        expected_call_entry = FluentCallEntry(self.object, self._attribute_name, arguments, keyword_arguments)
+        expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
 
         if not _call_entries:
             raise NoCallsStoredError(expected_call_entry)
 
         for call_entry in _call_entries:
-            if call_entry.matches(self.object, self._attribute_name, arguments, keyword_arguments):
+            if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
                 return
 
         found_calls = self._find_calls_to_same_target()
@@ -341,7 +341,7 @@ class Verifier(FluentTarget):
         found_calls = []
 
         for call_entry in _call_entries:
-            if call_entry.is_equal_to(self.object, self._attribute_name):
+            if call_entry.is_equal_to(self.object, self.attribute_name):
                 found_calls.append(call_entry)
 
         return found_calls
