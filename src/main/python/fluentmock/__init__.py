@@ -131,13 +131,14 @@ class FluentCallEntry(object):
             return False
 
         for index, argument in enumerate(arguments):
-            if isinstance(self.arguments[index], FluentMatcher):
-                if not self.arguments[index].matches(argument):
+            value = self.arguments[index]
+            if isinstance(value, FluentMatcher):
+                if not value.matches(argument):
                     return False
             elif isinstance(argument, FluentMatcher):
-                if not argument.matches(self.arguments[index]):
+                if not argument.matches(value):
                     return False
-            elif self.arguments[index] != argument:
+            elif value != argument:
                 return False
 
         if len(self.keyword_arguments) > 0:
