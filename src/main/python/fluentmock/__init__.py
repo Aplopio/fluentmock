@@ -44,7 +44,7 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
                                    NoCallsStoredError,
-                                   HasBeenCalledWithDifferentArgumentsError)
+                                   HasBeenCalledWithUnexpectedArgumentsError)
 from fluentmock.matchers import FluentMatcher, FluentAnyArguments, FluentAnyArgument
 
 LOGGER = getLogger(__name__)
@@ -331,7 +331,7 @@ class Verifier(FluentTarget):
                 if len(arguments) > 1:
                     raise InvalidUseOfAnyArgumentsError()
                 return
-            raise HasBeenCalledWithDifferentArgumentsError(expected_call_entry, found_calls)
+            raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
         raise CouldNotVerifyCallError(expected_call_entry)
 

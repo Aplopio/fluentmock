@@ -51,7 +51,7 @@ but has been called at least once."""
         super(HasBeenCalledAtLeastOnceError, self).__init__(error_message)
 
 
-class HasBeenCalledWithDifferentArgumentsError(AssertionError):
+class HasBeenCalledWithUnexpectedArgumentsError(AssertionError):
 
     MESSAGE_FORMAT = """
 Expected: {expected}
@@ -66,7 +66,7 @@ Expected: {expected}
             for call_entry in found_calls[1:]:
                 error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
 
-        super(HasBeenCalledWithDifferentArgumentsError, self).__init__(error_message)
+        super(HasBeenCalledWithUnexpectedArgumentsError, self).__init__(error_message)
 
 
 class NoCallsStoredError(AssertionError):
