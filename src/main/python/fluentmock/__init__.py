@@ -91,6 +91,9 @@ class FluentTarget(object):
             self.name = target_type.__module__ + '.' + target_type.__name__
             self.object = target
 
+        if attribute_name is not None and not hasattr(self.object, attribute_name):
+            raise InvalidAttributeError(self.name, attribute_name)
+
         self.attribute_name = attribute_name
 
     @property
@@ -206,9 +209,6 @@ class FluentPatchEntry(object):
 
     def __init__(self, target, attribute_name):
         self.target = FluentTarget(target, attribute_name)
-
-        if not hasattr(self.target.object, attribute_name):
-            raise InvalidAttributeError(self.target.name, attribute_name)
 
         self._patch = None
 
