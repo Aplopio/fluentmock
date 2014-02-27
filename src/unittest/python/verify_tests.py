@@ -526,11 +526,11 @@ class VerifyAnyArgumentTests(UnitTests):
 
         raised_error = False
         try:
-            verify(targetpackage).targetfunction(1, 2, 'c')
+            verify(targetpackage).targetfunction(ANY_ARGUMENT, ANY_ARGUMENT, 'c')
         except HasBeenCalledWithUnexpectedArgumentsError as error:
             raised_error = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(1, 2, 'c')
+Expected: call targetpackage.targetfunction(<< ANY_ARGUMENT >>, << ANY_ARGUMENT >>, 'c')
  but was: call targetpackage.targetfunction(1, 2, 3)
 """))
         self.assertTrue(raised_error, "Error has not been raised even though verification does not match")
