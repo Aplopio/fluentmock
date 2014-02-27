@@ -119,9 +119,9 @@ class FluentCallEntry(object):
         return False
 
     def __repr__(self):
-        target_string = 'call {target}'.format(target=self.target)
-        call_string = str(call(*self._arguments, **self._keyword_arguments))
-        return call_string.replace('call', target_string)
+        call_object = call(*self._arguments, **self._keyword_arguments)
+        call_string = str(call_object)
+        return call_string[:4] + ' ' + str(self.target) + call_string[4:]
 
 
 class FluentAnswer(object):
