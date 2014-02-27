@@ -118,9 +118,6 @@ class FluentCallEntry(object):
 
         return False
 
-    def is_equal_to(self, target, attribute_name):
-        return self.target.is_equal_to(target, attribute_name)
-
     def __repr__(self):
         target_string = 'call {target}'.format(target=self.target)
         call_string = str(call(*self._arguments, **self._keyword_arguments))
@@ -346,7 +343,8 @@ class Verifier(FluentTarget):
         found_calls = []
 
         for call_entry in _call_entries:
-            if call_entry.is_equal_to(self.object, self.attribute_name):
+            target = call_entry.target
+            if target.is_equal_to(self.object, self.attribute_name):
                 found_calls.append(call_entry)
 
         return found_calls
