@@ -111,66 +111,13 @@ class FluentCallEntry(object):
 
     def __init__(self, target, attribute_name, arguments, keyword_arguments):
         self.target = FluentTarget(target, attribute_name)
-        self._arguments = arguments
-        self._keyword_arguments = keyword_arguments
-
-    def matches(self, target, attribute_name, arguments, keyword_arguments):
-        if self.target.is_equal_to(target, attribute_name):
-            if self._arguments == arguments and self._keyword_arguments == keyword_arguments:
-                return True
-
-        return False
-
-    def __repr__(self):
-        call_object = call(*self._arguments, **self._keyword_arguments)
-        call_string = str(call_object)
-        return call_string[:4] + ' ' + str(self.target) + call_string[4:]
-
-
-class FluentAnswer(object):
-
-    class AnswerByReturning(object):
-
-        def __init__(self, value):
-            self._value = value
-
-        def __call__(self):
-            return self._value
-
-    class AnswerByRaising(object):
-
-        def __init__(self, value):
-            self._value = value
-
-        def __call__(self):
-            raise self._value
-
-    def __init__(self, arguments, keyword_arguments):
         self.arguments = arguments
         self.keyword_arguments = keyword_arguments
-        self._answers = []
 
-    def next(self):
-        if len(self._answers) == 0:
-            return None
-        elif len(self._answers) == 1:
-            answer = self._answers[0]
-        else:
-            answer = self._answers.pop(0)
+    def matches(self, target, attribute_name, arguments, keyword_arguments):
+        if not self.target.is_equal_to(target, attribute_name):
+            return False
 
-        return answer()
-
-    def then_return(self, value):
-        answer = self.AnswerByReturning(value)
-        self._answers.append(answer)
-        return self
-
-    def then_raise(self, value):
-        answer = self.AnswerByRaising(value)
-        self._answers.append(answer)
-        return self
-
-    def matches(self, arguments, keyword_arguments):
         if self.arguments and self.arguments[0] is ANY_ARGUMENTS:
             return True
 
@@ -204,6 +151,56 @@ class FluentAnswer(object):
 
         return True
 
+    def __repr__(self):
+        call_object = call(*self.arguments, **self.keyword_arguments)
+        call_string = str(call_object)
+        return call_string[:4] + ' ' + str(self.target) + call_string[4:]
+
+
+class FluentAnswer(FluentCallEntry):
+
+    class AnswerByReturning(object):
+
+        def __init__(self, value):
+            self._value = value
+
+        def __call__(self):
+            return self._value
+
+    class AnswerByRaising(object):
+
+        def __init__(self, value):
+            self._value = value
+
+        def __call__(self):
+            raise self._value
+
+    def __init__(self, target, attribute_name, arguments, keyword_arguments):
+        FluentCallEntry.__init__(self, target, attribute_name, arguments, keyword_arguments)
+        self.arguments = arguments
+        self.keyword_arguments = keyword_arguments
+        self._answers = []
+
+    def next(self):
+        if len(self._answers) == 0:
+            return None
+        elif len(self._answers) == 1:
+            answer = self._answers[0]
+        else:
+            answer = self._answers.pop(0)
+
+        return answer()
+
+    def then_return(self, value):
+        answer = self.AnswerByReturning(value)
+        self._answers.append(answer)
+        return self
+
+    def then_raise(self, value):
+        answer = self.AnswerByRaising(value)
+        self._answers.append(answer)
+        return self
+
 
 class FluentPatchEntry(object):
 
@@ -236,7 +233,7 @@ class FluentMock(FluentTarget):
         _call_entries.append(call_entry)
 
         for answer in self._answers:
-            if answer.matches(arguments, keyword_arguments):
+            if answer.matches(self.object, self.attribute_name, arguments, keyword_arguments):
                 return answer.next()
 
         return None
@@ -254,7 +251,7 @@ class FluentMockConfigurator(object):
         if len(arguments) > 1 and ANY_ARGUMENTS in arguments:
             raise InvalidUseOfAnyArgumentsError()
 
-        answer = FluentAnswer(arguments, keyword_arguments)
+        answer = FluentAnswer(self._fluent_mock.object, self._fluent_mock.attribute_name, arguments, keyword_arguments)
         self._fluent_mock.append_new_answer(answer)
         return answer
 
