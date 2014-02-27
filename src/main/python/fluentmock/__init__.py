@@ -206,6 +206,10 @@ class FluentPatchEntry(object):
 
     def __init__(self, target, attribute_name):
         self.target = FluentTarget(target, attribute_name)
+
+        if not hasattr(self.target.object, attribute_name):
+            raise InvalidAttributeError(self.target.name, attribute_name)
+
         self._patch = None
 
     def patch_away_with(self, fluent_mock):
@@ -260,12 +264,7 @@ class FluentWhen(FluentTarget):
     def __init__(self, target):
         FluentTarget.__init__(self, target)
 
-    def _check_target_has_attribute(self, attribute_name):
-        if not hasattr(self.object, attribute_name):
-            raise InvalidAttributeError(self.name, attribute_name)
-
     def __getattr__(self, attribute_name):
-        self._check_target_has_attribute(attribute_name)
         patch_entry = FluentPatchEntry(self.object, attribute_name)
         _patch_entries.append(patch_entry)
 
