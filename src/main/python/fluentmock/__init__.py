@@ -101,8 +101,7 @@ class FluentTarget(object):
         return self.object == target and self.attribute_name == attribute_name
 
     def __repr__(self):
-        return '{target_name}.{attribute_name}'.format(target_name=self.name,
-                                                       attribute_name=self.attribute_name)
+        return self.full_qualified_target_name
 
 
 class FluentCallEntry(object):
