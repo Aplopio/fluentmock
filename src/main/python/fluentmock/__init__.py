@@ -101,23 +101,26 @@ class FluentTarget(object):
         return self.object == target and self.attribute_name == attribute_name
 
 
-class FluentCallEntry(FluentTarget):
+class FluentCallEntry(object):
 
     def __init__(self, target, attribute_name, arguments, keyword_arguments):
-        FluentTarget.__init__(self, target, attribute_name)
+        self.target = FluentTarget(target, attribute_name)
         self._arguments = arguments
         self._keyword_arguments = keyword_arguments
 
     def matches(self, target, attribute_name, arguments, keyword_arguments):
-        if self.is_equal_to(target, attribute_name):
+        if self.target.is_equal_to(target, attribute_name):
             if self._arguments == arguments and self._keyword_arguments == keyword_arguments:
                 return True
 
         return False
 
+    def is_equal_to(self, target, attribute_name):
+        return self.target.is_equal_to(target, attribute_name)
+
     def __repr__(self):
-        target_string = 'call {target_name}.{attribute_name}'.format(target_name=self.name,
-                                                                     attribute_name=self.attribute_name)
+        target_string = 'call {target_name}.{attribute_name}'.format(target_name=self.target.name,
+                                                                     attribute_name=self.target.attribute_name)
         call_string = str(call(*self._arguments, **self._keyword_arguments))
         return call_string.replace('call', target_string)
 
