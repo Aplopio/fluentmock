@@ -202,17 +202,17 @@ class FluentAnswer(object):
         return True
 
 
-class FluentPatchEntry(FluentTarget):
+class FluentPatchEntry(object):
 
     def __init__(self, target, attribute_name):
-        FluentTarget.__init__(self, target, attribute_name)
+        self.target = FluentTarget(target, attribute_name)
         self._patch = None
 
     def patch_away_with(self, fluent_mock):
-        if isinstance(self.object, Mock):
-            setattr(self.object, self.attribute_name, fluent_mock)
+        if isinstance(self.target.object, Mock):
+            setattr(self.target.object, self.target.attribute_name, fluent_mock)
         else:
-            self._patch = patch(self.full_qualified_target_name)
+            self._patch = patch(self.target.full_qualified_target_name)
             mock = self._patch.__enter__()
             mock.side_effect = fluent_mock
 
