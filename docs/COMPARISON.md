@@ -49,3 +49,20 @@ has been called with exactly ONE argument (but ignoring the value)
 ```python
         verify(targetpackage).targetfunction(ANY_ARGUMENT)
 ```
+
+To be able to use `ANY_ARGUMENT` and `ANY_ARGUMENTS` you have to
+configure the target with `when`.
+
+## Native verification
+
+If you are using a plain mock verify will use `assert_called_with`
+for verification.
+
+```python
+test_object = Mock(targetpackage.TheClass())
+
+test_object.some_method()
+
+verify(test_object).some_method()
+```
+In this case verify will call `assert_called_with()` on the given mock.
