@@ -23,6 +23,7 @@ class SeveralAnswersTests(UnitTests):
 ## Documentation
 
 * [Comparing Mock and Fluentmock](https://github.com/aelgru/fluentmock/blob/master/docs/COMPARISON.md)
+* [Migrating from Mockito to Fluentmock](https://github.com/aelgru/fluentmock/blob/master/docs/MIGRATION.md)
 
 ## Motivation
 
