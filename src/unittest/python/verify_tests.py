@@ -272,6 +272,39 @@ class MockVerificationTests(UnitTests):
 
         verify(test_object).some_method(1)
 
+    def test_should_verify_a_call_to_a_field_of_a_mock_with_any_argument(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        when(test_object).some_method(1).then_return(0)
+
+        assert_that(test_object.some_method(1), equal_to(0))
+
+        verify(test_object).some_method(ANY_ARGUMENT)
+
+    def test_should_verify_a_call_to_a_field_of_a_mock_with_some_arguments_and_any_argument(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        when(test_object).some_method(ANY_ARGUMENTS).then_return(0)
+
+        assert_that(test_object.some_method(1, 2, 3), equal_to(0))
+
+        verify(test_object).some_method(1, ANY_ARGUMENT, 3)
+
+    def test_should_verify_a_call_to_a_field_of_a_mock_with_any_arguments(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        when(test_object).some_method(ANY_ARGUMENTS).then_return(0)
+
+        assert_that(test_object.some_method(1, 2, 3), equal_to(0))
+
+        verify(test_object).some_method(ANY_ARGUMENTS)
+
+
+class NativeMockVerificationTests(UnitTests):
+
     def test_should_verify_a_call_to_a_field_of_a_mock_without_any_arguments(self):
 
         test_object = Mock(targetpackage.TheClass())
