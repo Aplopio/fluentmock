@@ -133,3 +133,9 @@ class ContainsTests(UnitTests):
         matcher = contains('eggs')
 
         assert_that(matcher.matches('spam eggs'), equal_to(True))
+
+    def test_should_return_a_string_representation(self):
+
+        matcher = contains('eggs')
+
+        assert_that(str(matcher), equal_to('<< a string containing "eggs" >>'))
