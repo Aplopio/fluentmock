@@ -38,3 +38,14 @@ class FluentmockStyleTest(UnitTests):
         verify(targetpackage).targetfunction(2)
 ```
 
+But fluentmock gives you even more options for verification.
+You can verify that `targetfunction` has been called at all.
+```python
+        verify(targetpackage).targetfunction(ANY_ARGUMENTS)
+```
+
+... or you can be more specific and verify that `targetfunction`
+has been called with exactly ONE argument (but ignoring the value)
+```python
+        verify(targetpackage).targetfunction(ANY_ARGUMENT)
+```
