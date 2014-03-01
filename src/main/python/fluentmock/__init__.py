@@ -40,6 +40,7 @@ from unittest import TestCase
 from types import ModuleType
 
 from fluentmock.exceptions import (CouldNotVerifyCallError,
+                                   FoundMatcherInNativeVerificationError,
                                    HasBeenCalledAtLeastOnceError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
@@ -300,10 +301,19 @@ class Verifier(FluentTarget):
     def __call__(self, *arguments, **keyword_arguments):
         method_of_mock = getattr(self.object, self.attribute_name)
         if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
+            call_entry = call(*arguments, **keyword_arguments)
+            call_entry_string = str(call_entry).replace('call', self.full_qualified_target_name)
+
+            for argument in arguments:
+                if isinstance(argument, FluentMatcher):
+                    raise FoundMatcherInNativeVerificationError(call_entry_string)
+
+            for key in keyword_arguments:
+                if isinstance(keyword_arguments[key], FluentMatcher):
+                    raise FoundMatcherInNativeVerificationError(call_entry_string)
+
             if self._times == NEVER:
-                call_entry = call(*arguments, **keyword_arguments)
                 if call_entry in method_of_mock.call_args_list:
-                    call_entry_string = str(call_entry).replace('call', self.full_qualified_target_name)
                     raise HasBeenCalledAtLeastOnceError(call_entry_string)
             else:
                 method_of_mock.assert_called_with(*arguments, **keyword_arguments)

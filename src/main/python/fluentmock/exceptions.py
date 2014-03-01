@@ -79,3 +79,20 @@ Expected: {expected}
     def __init__(self, expected_call_entry):
         error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry)
         super(NoCallsStoredError, self).__init__(error_message)
+
+
+class FoundMatcherInNativeVerificationError(AssertionError):
+
+    MESSAGE_FORMAT = """
+You were trying to verify {expected_call_entry}
+fluentmock.verify will call Mock.assert_called_with for verification
+when the Mock has not been configured using fluentmock.when
+Therefore it is not possible to use matchers when verifying
+a Mock without configuring it with fluentmock.when,
+because Mock.assert_called_with does not support matchers.
+Please configure your mock in order to be able to use a matcher.
+"""
+
+    def __init__(self, expected_call_entry):
+        error_message = self.MESSAGE_FORMAT.format(expected_call_entry=expected_call_entry)
+        super(FoundMatcherInNativeVerificationError, self).__init__(error_message)
