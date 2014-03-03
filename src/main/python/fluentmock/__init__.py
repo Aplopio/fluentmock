@@ -325,9 +325,9 @@ class Verifier(FluentTarget):
 
     def __call__(self, *arguments, **keyword_arguments):
         matching_call_entries = self._count_matching_call_entries(arguments, keyword_arguments)
+        method_of_mock = getattr(self.object, self.attribute_name)
 
         if self._times == NEVER:
-            method_of_mock = getattr(self.object, self.attribute_name)
 
             if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
                 self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
@@ -338,7 +338,6 @@ class Verifier(FluentTarget):
 
             return
 
-        method_of_mock = getattr(self.object, self.attribute_name)
         expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
         if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
             self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
