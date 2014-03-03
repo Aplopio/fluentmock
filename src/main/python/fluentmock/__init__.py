@@ -335,34 +335,33 @@ class Verifier(FluentTarget):
                 expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
                 raise HasBeenCalledAtLeastOnceError(expected_call_entry)
 
-            return
-
-        if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
-            self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
-
+        if self._times == AT_LEAST_ONCE:
             if matching_call_entries == 0:
-                method_of_mock.assert_called_with(*arguments, **keyword_arguments)
-        else:
-            if matching_call_entries == 0:
-                expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
-                if not _call_entries:
-                    raise NoCallsStoredError(expected_call_entry)
+                if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
+                    self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
 
-                found_calls = []
+                    method_of_mock.assert_called_with(*arguments, **keyword_arguments)
+                else:
+                    expected_call_entry = FluentCallEntry(self.object, self.attribute_name,
+                                                          arguments, keyword_arguments)
+                    if not _call_entries:
+                        raise NoCallsStoredError(expected_call_entry)
 
-                for call_entry in _call_entries:
-                    target = call_entry.target
-                    if target.is_equal_to(self.object, self.attribute_name):
-                        found_calls.append(call_entry)
+                    found_calls = []
 
-                if found_calls:
-                    if arguments and ANY_ARGUMENTS in arguments:
-                        if len(arguments) > 1:
-                            raise InvalidUseOfAnyArgumentsError()
-                        return
-                    raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
+                    for call_entry in _call_entries:
+                        target = call_entry.target
+                        if target.is_equal_to(self.object, self.attribute_name):
+                            found_calls.append(call_entry)
 
-                raise CouldNotVerifyCallError(expected_call_entry)
+                    if found_calls:
+                        if arguments and ANY_ARGUMENTS in arguments:
+                            if len(arguments) > 1:
+                                raise InvalidUseOfAnyArgumentsError()
+                            return
+                        raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
+
+                    raise CouldNotVerifyCallError(expected_call_entry)
 
 
 def create_mock(*arguments, **keyword_arguments):
