@@ -318,7 +318,7 @@ class Verifier(FluentTarget):
 
             call_entry = call(*arguments, **keyword_arguments)
             if self._times == NEVER:
-                if call_entry in method_of_mock.call_args_list:
+                if method_of_mock.call_args_list.count(call_entry) != 0:
                     call_entry_string = str(call_entry).replace('call', self.full_qualified_target_name)
                     raise HasBeenCalledAtLeastOnceError(call_entry_string)
             else:
