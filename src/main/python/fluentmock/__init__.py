@@ -311,25 +311,30 @@ class Verifier(FluentTarget):
             if isinstance(keyword_arguments[key], FluentMatcher):
                 raise FoundMatcherInNativeVerificationError(call_entry_string)
 
+    def _count_matching_call_entries(self, arguments, keyword_arguments):
+        matching_call_entries = 0
+        method_of_mock = getattr(self.object, self.attribute_name)
+        if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
+            call_entry = call(*arguments, **keyword_arguments)
+            matching_call_entries = method_of_mock.call_args_list.count(call_entry)
+        else:
+            for call_entry in _call_entries:
+                if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
+                    matching_call_entries += 1
+        return matching_call_entries
+
     def __call__(self, *arguments, **keyword_arguments):
+        matching_call_entries = self._count_matching_call_entries(arguments, keyword_arguments)
+
         if self._times == NEVER:
             method_of_mock = getattr(self.object, self.attribute_name)
             expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
             if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
                 self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
 
-                call_entry = call(*arguments, **keyword_arguments)
-                matching_call_entries = method_of_mock.call_args_list.count(call_entry)
-                if matching_call_entries != 0:
-                    raise HasBeenCalledAtLeastOnceError(expected_call_entry)
-            else:
-                matching_call_entries = 0
-                for call_entry in _call_entries:
-                    if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
-                        matching_call_entries += 1
+            if matching_call_entries != 0:
+                raise HasBeenCalledAtLeastOnceError(expected_call_entry)
 
-                if matching_call_entries != 0:
-                    raise HasBeenCalledAtLeastOnceError(expected_call_entry)
             return
 
         method_of_mock = getattr(self.object, self.attribute_name)
