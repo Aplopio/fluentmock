@@ -349,7 +349,7 @@ class NativeMockVerificationTests(UnitTests):
             verify(test_object, NEVER).some_method()
         except HasBeenCalledAtLeastOnceError as error:
             exception_raised = True
-            self.assertEqual(str(error), """mock.Mock.some_method() should NEVER have been called,
+            self.assertEqual(str(error), """call mock.Mock.some_method() should NEVER have been called,
 but has been called at least once.""")
 
         self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
@@ -365,7 +365,7 @@ but has been called at least once.""")
             verify(test_object, NEVER).some_method(1, 2, 3)
         except HasBeenCalledAtLeastOnceError as error:
             exception_raised = True
-            self.assertEqual(str(error), """mock.Mock.some_method(1, 2, 3) should NEVER have been called,
+            self.assertEqual(str(error), """call mock.Mock.some_method(1, 2, 3) should NEVER have been called,
 but has been called at least once.""")
 
         self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
@@ -382,7 +382,7 @@ but has been called at least once.""")
         except HasBeenCalledAtLeastOnceError as error:
             exception_raised = True
             self.assertEqual(
-                str(error), """mock.Mock.some_method(1, 2, 3, hello='world') should NEVER have been called,
+                str(error), """call mock.Mock.some_method(1, 2, 3, hello='world') should NEVER have been called,
 but has been called at least once.""")
 
         self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
