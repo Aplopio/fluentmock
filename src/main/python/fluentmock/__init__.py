@@ -328,11 +328,12 @@ class Verifier(FluentTarget):
 
         if self._times == NEVER:
             method_of_mock = getattr(self.object, self.attribute_name)
-            expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
+
             if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
                 self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
 
             if matching_call_entries != 0:
+                expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
                 raise HasBeenCalledAtLeastOnceError(expected_call_entry)
 
             return
