@@ -312,6 +312,26 @@ class Verifier(FluentTarget):
                 raise FoundMatcherInNativeVerificationError(call_entry_string)
 
     def __call__(self, *arguments, **keyword_arguments):
+        if self._times == NEVER:
+            method_of_mock = getattr(self.object, self.attribute_name)
+            expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
+            if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
+                self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
+
+                call_entry = call(*arguments, **keyword_arguments)
+                matching_call_entries = method_of_mock.call_args_list.count(call_entry)
+                if matching_call_entries != 0:
+                    raise HasBeenCalledAtLeastOnceError(expected_call_entry)
+            else:
+                matching_call_entries = 0
+                for call_entry in _call_entries:
+                    if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
+                        matching_call_entries += 1
+
+                if matching_call_entries != 0:
+                    raise HasBeenCalledAtLeastOnceError(expected_call_entry)
+            return
+
         method_of_mock = getattr(self.object, self.attribute_name)
         expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
         if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
@@ -319,41 +339,33 @@ class Verifier(FluentTarget):
 
             call_entry = call(*arguments, **keyword_arguments)
             matching_call_entries = method_of_mock.call_args_list.count(call_entry)
-            if self._times == NEVER:
-                if matching_call_entries != 0:
-                    raise HasBeenCalledAtLeastOnceError(expected_call_entry)
-            else:
-                if matching_call_entries == 0:
-                    method_of_mock.assert_called_with(*arguments, **keyword_arguments)
+            if matching_call_entries == 0:
+                method_of_mock.assert_called_with(*arguments, **keyword_arguments)
         else:
             matching_call_entries = 0
             for call_entry in _call_entries:
                 if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
                     matching_call_entries += 1
 
-            if self._times == NEVER:
-                if matching_call_entries != 0:
-                    raise HasBeenCalledAtLeastOnceError(expected_call_entry)
-            else:
-                if matching_call_entries == 0:
-                    if not _call_entries:
-                        raise NoCallsStoredError(expected_call_entry)
+            if matching_call_entries == 0:
+                if not _call_entries:
+                    raise NoCallsStoredError(expected_call_entry)
 
-                    found_calls = []
+                found_calls = []
 
-                    for call_entry in _call_entries:
-                        target = call_entry.target
-                        if target.is_equal_to(self.object, self.attribute_name):
-                            found_calls.append(call_entry)
+                for call_entry in _call_entries:
+                    target = call_entry.target
+                    if target.is_equal_to(self.object, self.attribute_name):
+                        found_calls.append(call_entry)
 
-                    if found_calls:
-                        if arguments and ANY_ARGUMENTS in arguments:
-                            if len(arguments) > 1:
-                                raise InvalidUseOfAnyArgumentsError()
-                            return
-                        raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
+                if found_calls:
+                    if arguments and ANY_ARGUMENTS in arguments:
+                        if len(arguments) > 1:
+                            raise InvalidUseOfAnyArgumentsError()
+                        return
+                    raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
-                    raise CouldNotVerifyCallError(expected_call_entry)
+                raise CouldNotVerifyCallError(expected_call_entry)
 
 
 def create_mock(*arguments, **keyword_arguments):
