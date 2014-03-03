@@ -2,7 +2,7 @@
 
 Fluent interface facade for Michael Foord's Mock.
 * Easy and readable configuration of mock side effects.
-* Flexible verification of mock calls.
+* Configuration and verification using matchers.
 
 A example test using _fluentmock_ and hamcrest:
 ```python
