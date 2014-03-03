@@ -285,11 +285,12 @@ class Verifier(FluentTarget):
 
     def __init__(self, target, times):
         FluentTarget.__init__(self, target)
-        self._times = times
 
         if times not in [NEVER, AT_LEAST_ONCE]:
             error_message = 'Argument times can be "{never}" or "{once}".'.format(never=NEVER, once=AT_LEAST_ONCE)
             raise ValueError(error_message)
+
+        self._times = times
 
     def __getattr__(self, attribute_name):
         self.attribute_name = attribute_name
