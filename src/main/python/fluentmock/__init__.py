@@ -343,16 +343,9 @@ class Verifier(FluentTarget):
         if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
             self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
 
-            call_entry = call(*arguments, **keyword_arguments)
-            matching_call_entries = method_of_mock.call_args_list.count(call_entry)
             if matching_call_entries == 0:
                 method_of_mock.assert_called_with(*arguments, **keyword_arguments)
         else:
-            matching_call_entries = 0
-            for call_entry in _call_entries:
-                if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
-                    matching_call_entries += 1
-
             if matching_call_entries == 0:
                 if not _call_entries:
                     raise NoCallsStoredError(expected_call_entry)
