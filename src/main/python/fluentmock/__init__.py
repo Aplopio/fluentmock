@@ -314,7 +314,10 @@ class Verifier(FluentTarget):
     def _count_matching_call_entries(self, arguments, keyword_arguments):
         matching_call_entries = 0
         method_of_mock = getattr(self.object, self.attribute_name)
+
         if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
+            self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
+
             call_entry = call(*arguments, **keyword_arguments)
             matching_call_entries = method_of_mock.call_args_list.count(call_entry)
         else:
@@ -328,10 +331,6 @@ class Verifier(FluentTarget):
         method_of_mock = getattr(self.object, self.attribute_name)
 
         if self._times == NEVER:
-
-            if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
-                self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
-
             if matching_call_entries != 0:
                 expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
                 raise HasBeenCalledAtLeastOnceError(expected_call_entry)
