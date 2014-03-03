@@ -326,7 +326,6 @@ class Verifier(FluentTarget):
                 if matching_call_entries == 0:
                     method_of_mock.assert_called_with(*arguments, **keyword_arguments)
         else:
-
             matching_call_entries = 0
             for call_entry in _call_entries:
                 if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
@@ -340,7 +339,12 @@ class Verifier(FluentTarget):
                     if not _call_entries:
                         raise NoCallsStoredError(expected_call_entry)
 
-                    found_calls = self._find_calls_to_same_target()
+                    found_calls = []
+
+                    for call_entry in _call_entries:
+                        target = call_entry.target
+                        if target.is_equal_to(self.object, self.attribute_name):
+                            found_calls.append(call_entry)
 
                     if found_calls:
                         if arguments and ANY_ARGUMENTS in arguments:
@@ -350,16 +354,6 @@ class Verifier(FluentTarget):
                         raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
                     raise CouldNotVerifyCallError(expected_call_entry)
-
-    def _find_calls_to_same_target(self):
-        found_calls = []
-
-        for call_entry in _call_entries:
-            target = call_entry.target
-            if target.is_equal_to(self.object, self.attribute_name):
-                found_calls.append(call_entry)
-
-        return found_calls
 
 
 def create_mock(*arguments, **keyword_arguments):
