@@ -324,30 +324,31 @@ class Verifier(FluentTarget):
             else:
                 method_of_mock.assert_called_with(*arguments, **keyword_arguments)
         else:
+            expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
+
+            matching_call_entries = 0
+            for call_entry in _call_entries:
+                if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
+                    matching_call_entries += 1
+
             if self._times == NEVER:
-                for call_entry in _call_entries:
-                    if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
-                        raise HasBeenCalledAtLeastOnceError(call_entry)
+                if matching_call_entries != 0:
+                    raise HasBeenCalledAtLeastOnceError(expected_call_entry)
             else:
-                expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
+                if matching_call_entries == 0:
+                    if not _call_entries:
+                        raise NoCallsStoredError(expected_call_entry)
 
-                if not _call_entries:
-                    raise NoCallsStoredError(expected_call_entry)
+                    found_calls = self._find_calls_to_same_target()
 
-                for call_entry in _call_entries:
-                    if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
-                        return
+                    if found_calls:
+                        if arguments and ANY_ARGUMENTS in arguments:
+                            if len(arguments) > 1:
+                                raise InvalidUseOfAnyArgumentsError()
+                            return
+                        raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
-                found_calls = self._find_calls_to_same_target()
-
-                if found_calls:
-                    if arguments and ANY_ARGUMENTS in arguments:
-                        if len(arguments) > 1:
-                            raise InvalidUseOfAnyArgumentsError()
-                        return
-                    raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
-
-                raise CouldNotVerifyCallError(expected_call_entry)
+                    raise CouldNotVerifyCallError(expected_call_entry)
 
     def _find_calls_to_same_target(self):
         found_calls = []
