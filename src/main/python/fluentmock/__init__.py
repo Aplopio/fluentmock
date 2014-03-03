@@ -16,7 +16,8 @@
 __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
-__all__ = ['ANY_ARGUMENTS',
+__all__ = ['ANY_ARGUMENT',
+           'ANY_ARGUMENTS',
            'AT_LEAST_ONCE',
            'NEVER',
            'UnitTests',
