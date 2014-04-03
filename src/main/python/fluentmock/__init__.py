@@ -272,7 +272,7 @@ class FluentWhen(FluentTarget):
         _patch_entries.append(patch_entry)
 
         configurator_key = (self.object, attribute_name)
-        if not configurator_key in _configurators:
+        if configurator_key not in _configurators:
             fluent_mock = FluentMock(self.object, attribute_name)
             mock_configurator = FluentMockConfigurator(fluent_mock)
             patch_entry.patch_away_with(fluent_mock)
