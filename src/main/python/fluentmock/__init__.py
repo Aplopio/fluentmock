@@ -47,14 +47,14 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    InvalidUseOfAnyArgumentsError,
                                    NoCallsStoredError,
                                    HasBeenCalledWithUnexpectedArgumentsError)
-from fluentmock.matchers import FluentMatcher, FluentAnyArguments, FluentAnyArgument
+from fluentmock.matchers import FluentMatcher, FluentAnyArguments, FluentAnyArgument, NeverMatcher
 
 LOGGER = getLogger(__name__)
 
 ANY_ARGUMENT = FluentAnyArgument()
 ANY_ARGUMENTS = FluentAnyArguments()
 AT_LEAST_ONCE = 'AT-LEAST-ONCE'
-NEVER = 'NEVER'
+NEVER = NeverMatcher
 
 _configurators = {}
 _patch_entries = []
@@ -287,7 +287,8 @@ class Verifier(FluentTarget):
         FluentTarget.__init__(self, target)
 
         if times not in [NEVER, AT_LEAST_ONCE]:
-            error_message = 'Argument times can be "{never}" or "{once}".'.format(never=NEVER, once=AT_LEAST_ONCE)
+            error_message = 'Argument times can be "{never}" or "{once}".'.format(never=NEVER.__name__,
+                                                                                  once=AT_LEAST_ONCE)
             raise ValueError(error_message)
 
         self._times = times

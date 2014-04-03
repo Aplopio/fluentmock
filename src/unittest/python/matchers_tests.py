@@ -14,7 +14,12 @@
 #   limitations under the License.
 
 from fluentmock import UnitTests
-from fluentmock.matchers import ContainsMatcher, FluentAnyArgument, FluentAnyArguments, FluentMatcher, contains
+from fluentmock.matchers import (ContainsMatcher,
+                                 FluentAnyArgument,
+                                 FluentAnyArguments,
+                                 FluentMatcher,
+                                 NeverMatcher,
+                                 contains)
 from hamcrest import assert_that, equal_to, instance_of
 
 
@@ -139,3 +144,26 @@ class ContainsTests(UnitTests):
         matcher = contains('eggs')
 
         assert_that(str(matcher), equal_to('<< a string containing "eggs" >>'))
+
+
+class NeverTests(UnitTests):
+
+    def test_should_return_true_when_given_value_is_zero(self):
+
+        matcher = NeverMatcher()
+
+        assert_that(matcher.matches(0), equal_to(True))
+
+    def test_should_return_false_when_given_value_is_not_zero(self):
+
+        matcher = NeverMatcher()
+
+        assert_that(matcher.matches(1), equal_to(False))
+        assert_that(matcher.matches(2), equal_to(False))
+        assert_that(matcher.matches(3), equal_to(False))
+
+    def test_should_return_a_string_representation(self):
+
+        matcher = NeverMatcher()
+
+        assert_that(str(matcher)), equal_to('<< should never be called >>')

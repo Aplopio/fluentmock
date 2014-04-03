@@ -55,3 +55,15 @@ class ContainsMatcher(FluentMatcher):
 
 def contains(substring):
     return ContainsMatcher(substring)
+
+
+class NeverMatcher(FluentMatcher):
+
+    def matches(self, value):
+        if value == 0:
+            return True
+
+        return False
+
+    def __repr__(self):
+        return '<< should never be called >>'
