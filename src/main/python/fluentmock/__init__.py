@@ -54,7 +54,7 @@ LOGGER = getLogger(__name__)
 ANY_ARGUMENT = FluentAnyArgument()
 ANY_ARGUMENTS = FluentAnyArguments()
 AT_LEAST_ONCE = 'AT-LEAST-ONCE'
-NEVER = NeverMatcher
+NEVER = NeverMatcher()
 
 _configurators = {}
 _patch_entries = []
@@ -287,7 +287,7 @@ class Verifier(FluentTarget):
         FluentTarget.__init__(self, target)
 
         if times not in [NEVER, AT_LEAST_ONCE]:
-            error_message = 'Argument times can be "{never}" or "{once}".'.format(never=NEVER.__name__,
+            error_message = 'Argument times can be "{never}" or "{once}".'.format(never=NEVER.__class__.__name__,
                                                                                   once=AT_LEAST_ONCE)
             raise ValueError(error_message)
 
@@ -330,10 +330,9 @@ class Verifier(FluentTarget):
     def __call__(self, *arguments, **keyword_arguments):
         matching_call_entries = self._count_matching_call_entries(arguments, keyword_arguments)
 
-        if self._times == NEVER:
-            if matching_call_entries != 0:
-                expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
-                raise HasBeenCalledAtLeastOnceError(expected_call_entry)
+        if self._times is NEVER and not NEVER.matches(matching_call_entries):
+            expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
+            raise HasBeenCalledAtLeastOnceError(expected_call_entry)
 
         if self._times == AT_LEAST_ONCE:
             if matching_call_entries == 0:
