@@ -5,8 +5,7 @@ Fluent interface facade for Michael Foord's Mock.
 * Configuration and verification using matchers.
 
 A example test using _fluentmock_ and hamcrest:
-```python
-from fluentmock import UnitTests, when, verify
+<pre><code>from fluentmock import UnitTests, when, verify
 from hamcrest import assert_that, equal_to
 
 
@@ -19,8 +18,7 @@ class SeveralAnswersTests(UnitTests):
     assert_that(targetpackage.targetfunction(2), equal_to(2))
     assert_that(targetpackage.targetfunction(2), equal_to(3))
 
-    verify(targetpackage).targetfunction(2)
-```
+    verify(targetpackage).targetfunction(2)</code></pre>
 
 ## Documentation
 
