@@ -334,34 +334,33 @@ class Verifier(FluentTarget):
             expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
             raise HasBeenCalledAtLeastOnceError(expected_call_entry)
 
-        if self._times == AT_LEAST_ONCE:
-            if matching_call_entries == 0:
-                method_of_mock = getattr(self.object, self.attribute_name)
-                if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
-                    self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
+        if self._times is AT_LEAST_ONCE and not AT_LEAST_ONCE.matches(matching_call_entries):
+            method_of_mock = getattr(self.object, self.attribute_name)
+            if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
+                self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
 
-                    method_of_mock.assert_called_with(*arguments, **keyword_arguments)
-                else:
-                    expected_call_entry = FluentCallEntry(self.object, self.attribute_name,
-                                                          arguments, keyword_arguments)
-                    if not _call_entries:
-                        raise NoCallsStoredError(expected_call_entry)
+                method_of_mock.assert_called_with(*arguments, **keyword_arguments)
+            else:
+                expected_call_entry = FluentCallEntry(self.object, self.attribute_name,
+                                                      arguments, keyword_arguments)
+                if not _call_entries:
+                    raise NoCallsStoredError(expected_call_entry)
 
-                    found_calls = []
+                found_calls = []
 
-                    for call_entry in _call_entries:
-                        target = call_entry.target
-                        if target.is_equal_to(self.object, self.attribute_name):
-                            found_calls.append(call_entry)
+                for call_entry in _call_entries:
+                    target = call_entry.target
+                    if target.is_equal_to(self.object, self.attribute_name):
+                        found_calls.append(call_entry)
 
-                    if found_calls:
-                        if arguments and ANY_ARGUMENTS in arguments:
-                            if len(arguments) > 1:
-                                raise InvalidUseOfAnyArgumentsError()
-                            return
-                        raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
+                if found_calls:
+                    if arguments and ANY_ARGUMENTS in arguments:
+                        if len(arguments) > 1:
+                            raise InvalidUseOfAnyArgumentsError()
+                        return
+                    raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
-                    raise CouldNotVerifyCallError(expected_call_entry)
+                raise CouldNotVerifyCallError(expected_call_entry)
 
 
 def create_mock(*arguments, **keyword_arguments):
