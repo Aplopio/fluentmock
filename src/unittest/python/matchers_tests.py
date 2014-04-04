@@ -14,7 +14,8 @@
 #   limitations under the License.
 
 from fluentmock import UnitTests
-from fluentmock.matchers import (ContainsMatcher,
+from fluentmock.matchers import (AtLeastOnceMatcher,
+                                 ContainsMatcher,
                                  FluentAnyArgument,
                                  FluentAnyArguments,
                                  FluentMatcher,
@@ -167,3 +168,32 @@ class NeverTests(UnitTests):
         matcher = NeverMatcher()
 
         assert_that(str(matcher)), equal_to('<< should never be called >>')
+
+
+class AtLeastOnceMatcherTests(UnitTests):
+
+    def test_should_return_true_when_given_value_is_one(self):
+
+        matcher = AtLeastOnceMatcher()
+
+        assert_that(matcher.matches(1), equal_to(True))
+
+    def test_should_return_false_when_given_value_is_zero(self):
+
+        matcher = AtLeastOnceMatcher()
+
+        assert_that(matcher.matches(0), equal_to(False))
+
+    def test_should_return_true_when_any_value_greater_than_one_is_given(self):
+
+        matcher = AtLeastOnceMatcher()
+
+        assert_that(matcher.matches(2), equal_to(True))
+        assert_that(matcher.matches(3), equal_to(True))
+        assert_that(matcher.matches(4), equal_to(True))
+
+    def test_should_return_a_string_representation(self):
+
+        matcher = AtLeastOnceMatcher()
+
+        assert_that(str(matcher), equal_to("<< should be called at least once >>"))

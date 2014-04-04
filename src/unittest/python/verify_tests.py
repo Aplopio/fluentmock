@@ -181,7 +181,7 @@ Expected: call targetpackage.targetfunction(1, 2)
             verify(targetpackage, 17)
         except ValueError as error:
             exception_raised = True
-            self.assertEqual('Argument times can be "NeverMatcher" or "AT-LEAST-ONCE".', str(error))
+            self.assertEqual('Argument times can be "NeverMatcher" or "AtLeastOnceMatcher".', str(error))
 
         self.assertTrue(exception_raised, 'Expected a NotImplementedError when something else than 0 or 1 is given.')
 

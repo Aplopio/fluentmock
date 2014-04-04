@@ -67,3 +67,16 @@ class NeverMatcher(FluentMatcher):
 
     def __repr__(self):
         return '<< should never be called >>'
+
+
+class AtLeastOnceMatcher(FluentMatcher):
+
+    def matches(self, value):
+
+        if value == 0:
+            return False
+
+        return True
+
+    def __repr__(self):
+        return '<< should be called at least once >>'
