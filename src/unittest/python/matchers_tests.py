@@ -147,7 +147,7 @@ class ContainsTests(UnitTests):
         assert_that(str(matcher), equal_to('<< a string containing "eggs" >>'))
 
 
-class NeverTests(UnitTests):
+class NeverMatcherTests(UnitTests):
 
     def test_should_return_true_when_given_value_is_zero(self):
 
