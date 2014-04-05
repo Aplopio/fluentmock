@@ -300,7 +300,7 @@ class Verifier(FluentTarget):
             error_message = 'Argument times has to be a instance of {fluentmatcher}'.format(fluentmatcher=class_name)
             raise ValueError(error_message)
 
-        self._times = times
+        self._matcher = times
 
     def __getattr__(self, attribute_name):
         self.attribute_name = attribute_name
@@ -339,11 +339,11 @@ class Verifier(FluentTarget):
     def __call__(self, *arguments, **keyword_arguments):
         matching_call_entries = self._count_matching_call_entries(arguments, keyword_arguments)
 
-        if self._times is NEVER and not NEVER.matches(matching_call_entries):
+        if self._matcher is NEVER and not NEVER.matches(matching_call_entries):
             expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
             raise HasBeenCalledAtLeastOnceError(expected_call_entry)
 
-        if self._times is AT_LEAST_ONCE and not AT_LEAST_ONCE.matches(matching_call_entries):
+        if self._matcher is AT_LEAST_ONCE and not AT_LEAST_ONCE.matches(matching_call_entries):
             method_of_mock = getattr(self.object, self.attribute_name)
             if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
                 self._ensure_no_matchers_in_arguments(arguments, keyword_arguments)
@@ -371,10 +371,10 @@ class Verifier(FluentTarget):
 
                 raise CouldNotVerifyCallError(expected_call_entry)
 
-        if not self._times.matches(matching_call_entries):
+        if not self._matcher.matches(matching_call_entries):
             expected_call_entry = FluentCallEntry(self.object, self.attribute_name,
                                                   arguments, keyword_arguments)
-            raise VerificationError(expected_call_entry, self._times)
+            raise VerificationError(expected_call_entry, self._matcher)
 
 
 def create_mock(*arguments, **keyword_arguments):
