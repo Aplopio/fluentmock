@@ -32,24 +32,6 @@ Use ANY_ARGUMENT as a wildcard for single arguments."""
         super(InvalidUseOfAnyArgumentsError, self).__init__(self.MESSAGE_FORMAT)
 
 
-class HasBeenCalledWithUnexpectedArgumentsError(AssertionError):
-
-    MESSAGE_FORMAT = """
-Expected: {expected}
- but was: {actual}
-"""
-    ADDITIONAL_CALL_ENTRIES = ' ' * 10 + '{actual}\n'
-
-    def __init__(self, expected_call_entry, found_calls):
-
-        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry, actual=found_calls[0])
-        if len(found_calls) > 1:
-            for call_entry in found_calls[1:]:
-                error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
-
-        super(HasBeenCalledWithUnexpectedArgumentsError, self).__init__(error_message)
-
-
 class FoundMatcherInNativeVerificationError(AssertionError):
 
     MESSAGE_FORMAT = """
@@ -69,12 +51,20 @@ Please configure your mock in order to be able to use a matcher.
 
 class VerificationError(AssertionError):
 
-    MESSAGE_FORMAT = """Expected: {expected_call_entry} {matcher_string}"""
+    MESSAGE_FORMAT = "\nExpected: {expected_call_entry} {matcher_string}\n"
+    BUT_WAS_FORMAT = " but was: {actual}\n"
+    ADDITIONAL_CALL_ENTRIES = ' ' * 10 + '{actual}\n'
 
-    def __init__(self, expected_call_entry, matcher, reason=""):
+    def __init__(self, expected_call_entry, matcher, reason="", found_calls=None):
         error_message = self.MESSAGE_FORMAT.format(expected_call_entry=expected_call_entry, matcher_string=str(matcher))
 
         if reason:
-            error_message += "\n  Reason: " + reason + "\n"
+            error_message += "  Reason: " + reason + "\n"
+
+        if found_calls:
+            error_message += self.BUT_WAS_FORMAT.format(actual=found_calls[0])
+            if len(found_calls) > 1:
+                for call_entry in found_calls[1:]:
+                    error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
 
         super(VerificationError, self).__init__(error_message)

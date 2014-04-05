@@ -43,7 +43,6 @@ from types import ModuleType
 from fluentmock.exceptions import (FoundMatcherInNativeVerificationError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
-                                   HasBeenCalledWithUnexpectedArgumentsError,
                                    VerificationError)
 from fluentmock.matchers import (AtLeastOnceMatcher,
                                  FluentMatcher,
@@ -366,7 +365,7 @@ class Verifier(FluentTarget):
                         found_calls.append(call_entry)
 
                 if found_calls:
-                    raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
+                    raise VerificationError(expected_call_entry, self._matcher, found_calls=found_calls)
 
         if not self._matcher.matches(matching_call_entries):
             expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
