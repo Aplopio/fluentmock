@@ -336,6 +336,11 @@ class Verifier(FluentTarget):
         return matching_call_entries
 
     def __call__(self, *arguments, **keyword_arguments):
+        if arguments and ANY_ARGUMENTS in arguments:
+            if len(arguments) > 1:
+                raise InvalidUseOfAnyArgumentsError()
+            return
+
         matching_call_entries = self._count_matching_call_entries(arguments, keyword_arguments)
 
         if self._matcher is AT_LEAST_ONCE and not AT_LEAST_ONCE.matches(matching_call_entries):
@@ -356,10 +361,6 @@ class Verifier(FluentTarget):
                         found_calls.append(call_entry)
 
                 if found_calls:
-                    if arguments and ANY_ARGUMENTS in arguments:
-                        if len(arguments) > 1:
-                            raise InvalidUseOfAnyArgumentsError()
-                        return
                     raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
                 raise CouldNotVerifyCallError(expected_call_entry)
