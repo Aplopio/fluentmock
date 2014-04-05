@@ -78,10 +78,12 @@ Please configure your mock in order to be able to use a matcher.
 
 class VerificationError(AssertionError):
 
-    MESSAGE_FORMAT = """{expected_call_entry} {matcher_string}"""
+    MESSAGE_FORMAT = """Expected: {expected_call_entry} {matcher_string}"""
 
     def __init__(self, expected_call_entry, matcher, reason=""):
         error_message = self.MESSAGE_FORMAT.format(expected_call_entry=expected_call_entry, matcher_string=str(matcher))
+
         if reason:
-            error_message += "\nReason: " + reason + "\n"
+            error_message += "\n  Reason: " + reason + "\n"
+
         super(VerificationError, self).__init__(error_message)

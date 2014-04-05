@@ -333,7 +333,7 @@ class NativeMockVerificationTests(UnitTests):
             verify(test_object, NEVER).some_method()
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual(str(error), "call mock.Mock.some_method() << should never be called >>")
+            self.assertEqual(str(error), "Expected: call mock.Mock.some_method() << should never be called >>")
 
         assert_that(exception_raised)
 
@@ -348,7 +348,7 @@ class NativeMockVerificationTests(UnitTests):
             verify(test_object, NEVER).some_method(1, 2, 3)
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual(str(error), "call mock.Mock.some_method(1, 2, 3) << should never be called >>")
+            self.assertEqual(str(error), "Expected: call mock.Mock.some_method(1, 2, 3) << should never be called >>")
 
         assert_that(exception_raised)
 
@@ -364,7 +364,7 @@ class NativeMockVerificationTests(UnitTests):
         except VerificationError as error:
             exception_raised = True
             self.assertEqual(
-                str(error), "call mock.Mock.some_method(1, 2, 3, hello='world') << should never be called >>")
+                str(error), "Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be called >>")
 
         assert_that(exception_raised)
 
@@ -543,7 +543,7 @@ class VerifiyNeverTests(UnitTests):
             verify(targetpackage, NEVER).targetfunction(1, 2, 3, test=1)
         except VerificationError as error:
             exception_raised = True
-            error_message = "call targetpackage.targetfunction(1, 2, 3, test=1) << should never be called >>"
+            error_message = "Expected: call targetpackage.targetfunction(1, 2, 3, test=1) << should never be called >>"
             assert_that(str(error), equal_to(error_message))
 
         assert_that(exception_raised)
@@ -561,8 +561,8 @@ class NoCallsStoredTests(UnitTests):
             verify(targetpackage).targetfunction(1, 2, 3, hello='foobar')
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual("""call targetpackage.targetfunction(1, 2, 3, hello='foobar') << should be called at least once >>
-Reason: No patched function has been called.
+            self.assertEqual("""Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar') << should be called at least once >>
+  Reason: No patched function has been called.
 """, str(error))
 
         assert_that(exception_raised)
@@ -577,8 +577,8 @@ Reason: No patched function has been called.
             verify(targetpackage).targetfunction()
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual("""call targetpackage.targetfunction() << should be called at least once >>
-Reason: No patched function has been called.
+            self.assertEqual("""Expected: call targetpackage.targetfunction() << should be called at least once >>
+  Reason: No patched function has been called.
 """, str(error))
 
         assert_that(exception_raised)
@@ -592,8 +592,8 @@ Reason: No patched function has been called.
             verify(targetpackage).targetfunction()
         except VerificationError as error:
             exception_raised = True
-            assert_that(str(error), equal_to("""call targetpackage.targetfunction() << should be called at least once >>
-Reason: No patched function has been called.
+            assert_that(str(error), equal_to("""Expected: call targetpackage.targetfunction() << should be called at least once >>
+  Reason: No patched function has been called.
 """))
         assert_that(exception_raised)
 
@@ -671,7 +671,7 @@ class TimesVerificationTests(UnitTests):
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to(
-                "call targetpackage.targetfunction('abc') << should be called exactly 2 times >>"))
+                "Expected: call targetpackage.targetfunction('abc') << should be called exactly 2 times >>"))
 
         assert_that(exception_raised)
 
@@ -711,7 +711,8 @@ class TimesVerificationTests(UnitTests):
             verify(test_object, times=2).some_method(1, 2, 3)
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual(str(error), "call mock.Mock.some_method(1, 2, 3) << should be called exactly 2 times >>")
+            self.assertEqual(str(error),
+                             "Expected: call mock.Mock.some_method(1, 2, 3) << should be called exactly 2 times >>")
 
         assert_that(exception_raised)
 
@@ -726,7 +727,7 @@ class TimesVerificationTests(UnitTests):
             verify(targetpackage, times=2).targetfunction(ANY_ARGUMENTS)
         except VerificationError as error:
             exception_raised = True
-            assert_that(str(error), equal_to(
-                "call targetpackage.targetfunction(<< ANY_ARGUMENTS >>) << should be called exactly 2 times >>"))
+            assert_that(str(error), equal_to("Expected: call targetpackage.targetfunction(<< ANY_ARGUMENTS >>) "
+                                             "<< should be called exactly 2 times >>"))
 
         assert_that(exception_raised)
