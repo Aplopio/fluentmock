@@ -683,3 +683,43 @@ class TimesVerificationTests(UnitTests):
                 "call targetpackage.targetfunction('abc') << should be called exactly 2 times >>"))
 
         assert_that(exception_raised)
+
+    def test_should_verify_that_target_has_been_called_exactly_three_times(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+
+        targetpackage.targetfunction("abc")
+        targetpackage.targetfunction("abc")
+        targetpackage.targetfunction("abc")
+        targetpackage.targetfunction(1)
+        targetpackage.targetfunction(1)
+        targetpackage.targetfunction(1, 2, 3)
+
+        verify(targetpackage, times=3).targetfunction("abc")
+        verify(targetpackage, times=2).targetfunction(1)
+        verify(targetpackage, times=1).targetfunction(1, 2, 3)
+
+    def test_should_verify_that_mock_has_been_called_exactly_once(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        when(test_object).some_method(1).then_return(0)
+
+        assert_that(test_object.some_method(1), equal_to(0))
+
+        verify(test_object, times=1).some_method(1)
+
+    def test_should_raise_exception_when_called_a_field_of_a_mock_once_but_twice_expected(self):
+
+        test_object = Mock(targetpackage.TheClass())
+
+        test_object.some_method(1, 2, 3)
+
+        exception_raised = False
+        try:
+            verify(test_object, times=2).some_method(1, 2, 3)
+        except VerificationError as error:
+            exception_raised = True
+            self.assertEqual(str(error), "call mock.Mock.some_method(1, 2, 3) << should be called exactly 2 times >>")
+
+        assert_that(exception_raised)
