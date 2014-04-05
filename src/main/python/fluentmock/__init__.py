@@ -339,12 +339,12 @@ class Verifier(FluentTarget):
         matching_call_entries = self._count_matching_call_entries(arguments, keyword_arguments)
 
         if self._matcher is AT_LEAST_ONCE and not AT_LEAST_ONCE.matches(matching_call_entries):
+
             method_of_mock = getattr(self.object, self.attribute_name)
             if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
                 method_of_mock.assert_called_with(*arguments, **keyword_arguments)
             else:
-                expected_call_entry = FluentCallEntry(self.object, self.attribute_name,
-                                                      arguments, keyword_arguments)
+                expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
                 if not _call_entries:
                     raise NoCallsStoredError(expected_call_entry)
 
