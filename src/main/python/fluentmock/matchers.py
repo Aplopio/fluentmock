@@ -19,6 +19,9 @@ class FluentMatcher(object):
     def matches(self, value):
         raise NotImplementedError()
 
+    def _matcher_string(self, text):
+        return '<< {text} >>'.format(text=text)
+
     def __repr__(self):
         raise NotImplementedError()
 
@@ -29,7 +32,7 @@ class FluentAnyArguments(FluentMatcher):
         return True
 
     def __repr__(self):
-        return '<< ANY_ARGUMENTS >>'
+        return self._matcher_string('ANY_ARGUMENTS')
 
 
 class FluentAnyArgument(FluentMatcher):
@@ -38,7 +41,7 @@ class FluentAnyArgument(FluentMatcher):
         return True
 
     def __repr__(self):
-        return '<< ANY_ARGUMENT >>'
+        return self._matcher_string('ANY_ARGUMENT')
 
 
 class ContainsMatcher(FluentMatcher):
@@ -50,7 +53,8 @@ class ContainsMatcher(FluentMatcher):
         return value.find(self._substring) >= 0
 
     def __repr__(self):
-        return '<< a string containing "{substring}" >>'.format(substring=self._substring)
+        text = 'a string containing "{substring}"'.format(substring=self._substring)
+        return self._matcher_string(text)
 
 
 def contains(substring):
@@ -66,7 +70,7 @@ class NeverMatcher(FluentMatcher):
         return True
 
     def __repr__(self):
-        return '<< should never be called >>'
+        return self._matcher_string('should never be called')
 
 
 class AtLeastOnceMatcher(FluentMatcher):
@@ -79,7 +83,7 @@ class AtLeastOnceMatcher(FluentMatcher):
         return True
 
     def __repr__(self):
-        return '<< should be called at least once >>'
+        return self._matcher_string('should be called at least once')
 
 
 class TimesMatcher(FluentMatcher):
@@ -95,4 +99,5 @@ class TimesMatcher(FluentMatcher):
         return True
 
     def __repr__(self):
-        return '<< should be called exactly {expected} times >>'.format(expected=self._expected)
+        text = 'should be called exactly {expected} times'.format(expected=self._expected)
+        return self._matcher_string(text)
