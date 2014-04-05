@@ -197,7 +197,7 @@ class AtLeastOnceMatcherTests(UnitTests):
 
         matcher = AtLeastOnceMatcher()
 
-        assert_that(str(matcher), equal_to("<< should be called at least once >>"))
+        assert_that(str(matcher), equal_to("<< at least once >>"))
 
 
 class TimesMatcherTests(UnitTests):

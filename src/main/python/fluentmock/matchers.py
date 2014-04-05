@@ -83,7 +83,7 @@ class AtLeastOnceMatcher(FluentMatcher):
         return True
 
     def __repr__(self):
-        return self._matcher_string('should be called at least once')
+        return self._matcher_string('at least once')
 
 
 class TimesMatcher(FluentMatcher):

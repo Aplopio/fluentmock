@@ -83,7 +83,7 @@ class VerifyTests(UnitTests):
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(1) << should be called at least once >>
+Expected: call targetpackage.targetfunction(1) << at least once >>
  but was: call targetpackage.targetfunction(2)
 """))
 
@@ -109,7 +109,7 @@ Expected: call targetpackage.targetfunction(1) << should be called at least once
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(1, 2) << should be called at least once >>
+Expected: call targetpackage.targetfunction(1, 2) << at least once >>
  but was: call targetpackage.targetfunction(2, 1)
 """))
 
@@ -128,7 +128,7 @@ Expected: call targetpackage.targetfunction(1, 2) << should be called at least o
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(1, 2) << should be called at least once >>
+Expected: call targetpackage.targetfunction(1, 2) << at least once >>
  but was: call targetpackage.targetfunction('abc', 123, True)
           call targetpackage.targetfunction('spam', 2, 1, 'eggs', False)
 """))
@@ -150,7 +150,7 @@ Expected: call targetpackage.targetfunction(1, 2) << should be called at least o
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(1, 2) << should be called at least once >>
+Expected: call targetpackage.targetfunction(1, 2) << at least once >>
  but was: call targetpackage.targetfunction('abc', 123, True)
           call targetpackage.targetfunction('spam', 2, 1, 'eggs', False)
           call targetpackage.targetfunction('eggs', False)
@@ -189,7 +189,7 @@ Expected: call targetpackage.targetfunction(1, 2) << should be called at least o
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(test=1) << should be called at least once >>
+Expected: call targetpackage.targetfunction(test=1) << at least once >>
  but was: call targetpackage.targetfunction(test=2)
 """))
 
@@ -478,7 +478,7 @@ class CouldNotVerifyCallTests(UnitTests):
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.patch_test_1() << should be called at least once >>
+Expected: call targetpackage.patch_test_1() << at least once >>
 """))
 
         assert_that(exception_raised)
@@ -499,7 +499,7 @@ Expected: call targetpackage.patch_test_1() << should be called at least once >>
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.patch_test_1(1, 2, 3, hello='world') << should be called at least once >>
+Expected: call targetpackage.patch_test_1(1, 2, 3, hello='world') << at least once >>
 """))
 
         assert_that(exception_raised)
@@ -520,7 +520,7 @@ Expected: call targetpackage.patch_test_1(1, 2, 3, hello='world') << should be c
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.patch_test_1(1, 2, 3) << should be called at least once >>
+Expected: call targetpackage.patch_test_1(1, 2, 3) << at least once >>
 """))
 
         assert_that(exception_raised)
@@ -574,7 +574,7 @@ class NoCallsStoredTests(UnitTests):
         except VerificationError as error:
             exception_raised = True
             self.assertEqual("""
-Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar') << should be called at least once >>
+Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar') << at least once >>
   Reason: No patched function has been called.
 """, str(error))
 
@@ -591,7 +591,7 @@ Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar') << should b
         except VerificationError as error:
             exception_raised = True
             self.assertEqual("""
-Expected: call targetpackage.targetfunction() << should be called at least once >>
+Expected: call targetpackage.targetfunction() << at least once >>
   Reason: No patched function has been called.
 """, str(error))
 
@@ -607,7 +607,7 @@ Expected: call targetpackage.targetfunction() << should be called at least once 
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction() << should be called at least once >>
+Expected: call targetpackage.targetfunction() << at least once >>
   Reason: No patched function has been called.
 """))
         assert_that(exception_raised)
@@ -643,7 +643,7 @@ class VerifyAnyArgumentTests(UnitTests):
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(1, << ANY_ARGUMENT >>, 'c') << should be called at least once >>
+Expected: call targetpackage.targetfunction(1, << ANY_ARGUMENT >>, 'c') << at least once >>
  but was: call targetpackage.targetfunction(1, 2, 3)
 """))
         assert_that(exception_raised)
