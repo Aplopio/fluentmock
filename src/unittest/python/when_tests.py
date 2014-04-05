@@ -171,7 +171,7 @@ class WhenTests(UnitTests):
             exception_raised = True
             self.assertEqual('The target "targetpackage" has no attribute called "invalid_function".', str(error))
 
-        self.assertTrue(exception_raised, "Did not raise exception when trying to patch away an invalid function")
+        assert_that(exception_raised)
 
     def test_should_patch_away_method_of_mock(self):
 
@@ -222,7 +222,7 @@ class AnyArgumentsTest(UnitTests):
             exception_raised = True
             assert_that(str(exception), equal_to('foobar'))
 
-        self.assertTrue(exception_raised, 'Exception has not been raised even though the mock has been configured so.')
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_trying_to_configure_mock_with_any_arguments_with_other_arguments(self):
 
@@ -234,8 +234,7 @@ class AnyArgumentsTest(UnitTests):
             assert_that(str(exception), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
 Use ANY_ARGUMENT as a wildcard for single arguments."""))
 
-        self.assertTrue(exception_raised, """Exception has not been raised even though there was a bad configuration
-using ANY_ARGUMENTS""")
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_trying_to_configure_mock_with_any_arguments_as_second_argument(self):
 
@@ -247,8 +246,7 @@ using ANY_ARGUMENTS""")
             assert_that(str(exception), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
 Use ANY_ARGUMENT as a wildcard for single arguments."""))
 
-        self.assertTrue(exception_raised, """Exception has not been raised even though there was a bad configuration
-using ANY_ARGUMENTS""")
+        assert_that(exception_raised)
 
     def test_should_return_configured_answer_when_addressing_target_using_string(self):
 

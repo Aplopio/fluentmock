@@ -226,8 +226,7 @@ class AnyArgumentsVerificationTests(UnitTests):
             self.assertEqual(str(error), """Do not use ANY_ARGUMENTS together with other arguments!
 Use ANY_ARGUMENT as a wildcard for single arguments.""")
 
-        self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
-other arguments.""")
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_any_arguments_in_arguments_but_not_first(self):
 
@@ -245,8 +244,7 @@ other arguments.""")
             self.assertEqual(str(error), """Do not use ANY_ARGUMENTS together with other arguments!
 Use ANY_ARGUMENT as a wildcard for single arguments.""")
 
-        self.assertTrue(exception_raised, """Exception has not been raised even though ANY_ARGUMENTS has been used with
-other arguments.""")
+        assert_that(exception_raised)
 
 
 class MockVerificationTests(UnitTests):
@@ -340,7 +338,7 @@ class NativeMockVerificationTests(UnitTests):
             self.assertEqual(str(error), """call mock.Mock.some_method() should NEVER have been called,
 but has been called at least once.""")
 
-        self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_called_a_field_of_a_mock_with_arguments(self):
 
@@ -356,7 +354,7 @@ but has been called at least once.""")
             self.assertEqual(str(error), """call mock.Mock.some_method(1, 2, 3) should NEVER have been called,
 but has been called at least once.""")
 
-        self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_called_a_field_of_a_mock_with_keyword_arguments(self):
 
@@ -373,7 +371,7 @@ but has been called at least once.""")
                 str(error), """call mock.Mock.some_method(1, 2, 3, hello='world') should NEVER have been called,
 but has been called at least once.""")
 
-        self.assertTrue(exception_raised, 'Did not raise exception even though method has been called.')
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_trying_to_use_matcher_in_native_verification(self):
 
@@ -397,7 +395,7 @@ because Mock.assert_called_with does not support matchers.
 Please configure your mock in order to be able to use a matcher.
 """)
 
-        self.assertTrue(exception_raised, 'Did not raise exception even though matcher has been used')
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_trying_to_use_matcher_as_second_argument_in_native_verification(self):
 
@@ -421,7 +419,7 @@ because Mock.assert_called_with does not support matchers.
 Please configure your mock in order to be able to use a matcher.
 """)
 
-        self.assertTrue(exception_raised, 'Did not raise exception even though matcher has been used')
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_trying_to_use_matcher_as_keyword_argument_in_native_verification(self):
 
@@ -445,7 +443,7 @@ because Mock.assert_called_with does not support matchers.
 Please configure your mock in order to be able to use a matcher.
 """)
 
-        self.assertTrue(exception_raised, 'Did not raise exception even though matcher has been used')
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_trying_to_use_matcher_as_second_keyword_argument_in_native_verification(self):
 
@@ -460,7 +458,7 @@ Please configure your mock in order to be able to use a matcher.
             exception_raised = True
             self.assertTrue(str(error).startswith("""\nYou were trying to verify mock.Mock.some_method(1, 2, 3, """))
 
-        self.assertTrue(exception_raised, 'Did not raise exception even though matcher has been used')
+        assert_that(exception_raised)
 
 
 class CouldNotVerifyCallTests(UnitTests):
@@ -554,7 +552,7 @@ class VerfiyNeverTests(UnitTests):
 but has been called at least once."""
             assert_that(str(error), equal_to(error_message))
 
-        self.assertTrue(raised_error, 'No error raised even though function has been called.')
+        assert_that(raised_error)
 
 
 class NoCallsStoredTests(UnitTests):
@@ -642,7 +640,7 @@ class VerifyAnyArgumentTests(UnitTests):
 Expected: call targetpackage.targetfunction(<< ANY_ARGUMENT >>, << ANY_ARGUMENT >>, 'c')
  but was: call targetpackage.targetfunction(1, 2, 3)
 """))
-        self.assertTrue(raised_error, "Error has not been raised even though verification does not match")
+        assert_that(raised_error)
 
 
 class TimesVerificationTests(UnitTests):
