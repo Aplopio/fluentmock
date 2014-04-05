@@ -23,7 +23,6 @@ from fluentmock import (ANY_ARGUMENT,
                         verify)
 
 from fluentmock.exceptions import (CouldNotVerifyCallError,
-                                   HasBeenCalledAtLeastOnceError,
                                    FoundMatcherInNativeVerificationError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
@@ -333,10 +332,9 @@ class NativeMockVerificationTests(UnitTests):
         exception_raised = False
         try:
             verify(test_object, NEVER).some_method()
-        except HasBeenCalledAtLeastOnceError as error:
+        except VerificationError as error:
             exception_raised = True
-            self.assertEqual(str(error), """call mock.Mock.some_method() should NEVER have been called,
-but has been called at least once.""")
+            self.assertEqual(str(error), "call mock.Mock.some_method() << should never be called >>")
 
         assert_that(exception_raised)
 
@@ -349,10 +347,9 @@ but has been called at least once.""")
         exception_raised = False
         try:
             verify(test_object, NEVER).some_method(1, 2, 3)
-        except HasBeenCalledAtLeastOnceError as error:
+        except VerificationError as error:
             exception_raised = True
-            self.assertEqual(str(error), """call mock.Mock.some_method(1, 2, 3) should NEVER have been called,
-but has been called at least once.""")
+            self.assertEqual(str(error), "call mock.Mock.some_method(1, 2, 3) << should never be called >>")
 
         assert_that(exception_raised)
 
@@ -365,11 +362,10 @@ but has been called at least once.""")
         exception_raised = False
         try:
             verify(test_object, NEVER).some_method(1, 2, 3, hello='world')
-        except HasBeenCalledAtLeastOnceError as error:
+        except VerificationError as error:
             exception_raised = True
             self.assertEqual(
-                str(error), """call mock.Mock.some_method(1, 2, 3, hello='world') should NEVER have been called,
-but has been called at least once.""")
+                str(error), "call mock.Mock.some_method(1, 2, 3, hello='world') << should never be called >>")
 
         assert_that(exception_raised)
 
@@ -521,7 +517,7 @@ class CouldNotVerifyCallTests(UnitTests):
         assert_that(exception_raised)
 
 
-class VerfiyNeverTests(UnitTests):
+class VerifiyNeverTests(UnitTests):
 
     def test_should_verify_that_function_has_not_been_called_when_function_has_been_called_with_other_arguments(self):
 
@@ -546,10 +542,9 @@ class VerfiyNeverTests(UnitTests):
         exception_raised = False
         try:
             verify(targetpackage, NEVER).targetfunction(1, 2, 3, test=1)
-        except HasBeenCalledAtLeastOnceError as error:
+        except VerificationError as error:
             exception_raised = True
-            error_message = """call targetpackage.targetfunction(1, 2, 3, test=1) should NEVER have been called,
-but has been called at least once."""
+            error_message = "call targetpackage.targetfunction(1, 2, 3, test=1) << should never be called >>"
             assert_that(str(error), equal_to(error_message))
 
         assert_that(exception_raised)

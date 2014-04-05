@@ -41,16 +41,6 @@ Use ANY_ARGUMENT as a wildcard for single arguments."""
         super(InvalidUseOfAnyArgumentsError, self).__init__(self.MESSAGE_FORMAT)
 
 
-class HasBeenCalledAtLeastOnceError(AssertionError):
-
-    MESSAGE_FORMAT = """{call_entry} should NEVER have been called,
-but has been called at least once."""
-
-    def __init__(self, call_entry):
-        error_message = self.MESSAGE_FORMAT.format(call_entry=call_entry)
-        super(HasBeenCalledAtLeastOnceError, self).__init__(error_message)
-
-
 class HasBeenCalledWithUnexpectedArgumentsError(AssertionError):
 
     MESSAGE_FORMAT = """

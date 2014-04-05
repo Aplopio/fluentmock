@@ -42,7 +42,6 @@ from types import ModuleType
 
 from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    FoundMatcherInNativeVerificationError,
-                                   HasBeenCalledAtLeastOnceError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
                                    NoCallsStoredError,
@@ -338,10 +337,6 @@ class Verifier(FluentTarget):
 
     def __call__(self, *arguments, **keyword_arguments):
         matching_call_entries = self._count_matching_call_entries(arguments, keyword_arguments)
-
-        if self._matcher is NEVER and not NEVER.matches(matching_call_entries):
-            expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
-            raise HasBeenCalledAtLeastOnceError(expected_call_entry)
 
         if self._matcher is AT_LEAST_ONCE and not AT_LEAST_ONCE.matches(matching_call_entries):
             method_of_mock = getattr(self.object, self.attribute_name)
