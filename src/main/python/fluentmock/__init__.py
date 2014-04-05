@@ -339,7 +339,6 @@ class Verifier(FluentTarget):
         if arguments and ANY_ARGUMENTS in arguments:
             if len(arguments) > 1:
                 raise InvalidUseOfAnyArgumentsError()
-            return
 
         matching_call_entries = self._count_matching_call_entries(arguments, keyword_arguments)
 
@@ -361,6 +360,8 @@ class Verifier(FluentTarget):
                         found_calls.append(call_entry)
 
                 if found_calls:
+                    if arguments and ANY_ARGUMENTS in arguments:
+                        return
                     raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
                 raise CouldNotVerifyCallError(expected_call_entry)

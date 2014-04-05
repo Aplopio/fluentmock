@@ -718,3 +718,19 @@ class TimesVerificationTests(UnitTests):
             self.assertEqual(str(error), "call mock.Mock.some_method(1, 2, 3) << should be called exactly 2 times >>")
 
         assert_that(exception_raised)
+
+    def test_should_raise_exception_when_called_once_but_expected_twice_with_any_arguments(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+
+        targetpackage.targetfunction("abc")
+
+        exception_raised = False
+        try:
+            verify(targetpackage, times=2).targetfunction(ANY_ARGUMENTS)
+        except VerificationError as error:
+            exception_raised = True
+            assert_that(str(error), equal_to(
+                "call targetpackage.targetfunction(<< ANY_ARGUMENTS >>) << should be called exactly 2 times >>"))
+
+        assert_that(exception_raised)
