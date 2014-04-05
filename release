@@ -1,6 +1,9 @@
 #/usr/bin/bash
 set -e
 
-ci $1
-git tag $1
+ci v$1
+git tag v$1
 git push --tags
+cd target/dist/fluentmock-$1
+./setup.py sdist upload
+./setup.py bdist_wheel upload
