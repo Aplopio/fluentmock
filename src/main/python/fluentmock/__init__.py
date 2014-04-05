@@ -372,8 +372,7 @@ class Verifier(FluentTarget):
                 raise CouldNotVerifyCallError(expected_call_entry)
 
         if not self._matcher.matches(matching_call_entries):
-            expected_call_entry = FluentCallEntry(self.object, self.attribute_name,
-                                                  arguments, keyword_arguments)
+            expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
             raise VerificationError(expected_call_entry, self._matcher)
 
 
