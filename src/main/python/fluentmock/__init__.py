@@ -44,7 +44,6 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    FoundMatcherInNativeVerificationError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
-                                   NoCallsStoredError,
                                    HasBeenCalledWithUnexpectedArgumentsError,
                                    VerificationError)
 from fluentmock.matchers import (AtLeastOnceMatcher,
@@ -357,7 +356,7 @@ class Verifier(FluentTarget):
                 expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
 
                 if not _call_entries:
-                    raise NoCallsStoredError(expected_call_entry)
+                    raise VerificationError(expected_call_entry, self._matcher, 'No patched function has been called.')
 
                 found_calls = []
 

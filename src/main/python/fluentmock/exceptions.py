@@ -59,18 +59,6 @@ Expected: {expected}
         super(HasBeenCalledWithUnexpectedArgumentsError, self).__init__(error_message)
 
 
-class NoCallsStoredError(AssertionError):
-
-    MESSAGE_FORMAT = """
-Expected: {expected}
- but was: no patched function has been called.
-"""
-
-    def __init__(self, expected_call_entry):
-        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry)
-        super(NoCallsStoredError, self).__init__(error_message)
-
-
 class FoundMatcherInNativeVerificationError(AssertionError):
 
     MESSAGE_FORMAT = """
@@ -92,6 +80,8 @@ class VerificationError(AssertionError):
 
     MESSAGE_FORMAT = """{expected_call_entry} {matcher_string}"""
 
-    def __init__(self, expected_call_entry, matcher):
+    def __init__(self, expected_call_entry, matcher, reason=""):
         error_message = self.MESSAGE_FORMAT.format(expected_call_entry=expected_call_entry, matcher_string=str(matcher))
+        if reason:
+            error_message += "\nReason: " + reason + "\n"
         super(VerificationError, self).__init__(error_message)

@@ -26,7 +26,6 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    FoundMatcherInNativeVerificationError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
-                                   NoCallsStoredError,
                                    HasBeenCalledWithUnexpectedArgumentsError,
                                    VerificationError)
 
@@ -560,11 +559,10 @@ class NoCallsStoredTests(UnitTests):
 
         try:
             verify(targetpackage).targetfunction(1, 2, 3, hello='foobar')
-        except NoCallsStoredError as error:
+        except VerificationError as error:
             exception_raised = True
-            self.assertEqual("""
-Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar')
- but was: no patched function has been called.
+            self.assertEqual("""call targetpackage.targetfunction(1, 2, 3, hello='foobar') << should be called at least once >>
+Reason: No patched function has been called.
 """, str(error))
 
         assert_that(exception_raised)
@@ -577,11 +575,10 @@ Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar')
 
         try:
             verify(targetpackage).targetfunction()
-        except NoCallsStoredError as error:
+        except VerificationError as error:
             exception_raised = True
-            self.assertEqual("""
-Expected: call targetpackage.targetfunction()
- but was: no patched function has been called.
+            self.assertEqual("""call targetpackage.targetfunction() << should be called at least once >>
+Reason: No patched function has been called.
 """, str(error))
 
         assert_that(exception_raised)
@@ -593,11 +590,10 @@ Expected: call targetpackage.targetfunction()
         exception_raised = False
         try:
             verify(targetpackage).targetfunction()
-        except NoCallsStoredError as error:
+        except VerificationError as error:
             exception_raised = True
-            assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction()
- but was: no patched function has been called.
+            assert_that(str(error), equal_to("""call targetpackage.targetfunction() << should be called at least once >>
+Reason: No patched function has been called.
 """))
         assert_that(exception_raised)
 
