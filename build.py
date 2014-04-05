@@ -13,8 +13,6 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import pypandoc
-
 from pybuilder.core import Author, init, use_plugin
 
 use_plugin('python.core')
@@ -29,7 +27,7 @@ use_plugin('python.install_dependencies')
 use_plugin('python.unittest')
 
 url = 'https://github.com/aelgru/fluentmock'
-description = pypandoc.convert('README.md', 'rst')
+description = "Please visit {url}".format(url=url)
 
 authors = [Author('Michael Gruber', 'aelgru@gmail.com')]
 license = 'Apache License, Version 2.0'
