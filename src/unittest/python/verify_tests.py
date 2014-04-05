@@ -28,7 +28,8 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
                                    NoCallsStoredError,
-                                   HasBeenCalledWithUnexpectedArgumentsError)
+                                   HasBeenCalledWithUnexpectedArgumentsError,
+                                   VerificationError)
 
 import targetpackage
 
@@ -666,5 +667,21 @@ class TimesVerificationTests(UnitTests):
         except ValueError as error:
             raised_error = True
             assert_that(str(error), equal_to('Argument times has to be a instance of FluentMatcher'))
+
+        assert_that(raised_error)
+
+    def test_should_raise_exception_when_times_is_two_but_target_called_once(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+
+        targetpackage.targetfunction("abc")
+
+        raised_error = False
+        try:
+            verify(targetpackage, times=2).targetfunction('abc')
+        except VerificationError as error:
+            raised_error = True
+            assert_that(str(error), equal_to(
+                "call targetpackage.targetfunction('abc') << should be called exactly 2 times >>"))
 
         assert_that(raised_error)

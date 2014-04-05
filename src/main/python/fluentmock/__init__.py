@@ -46,7 +46,8 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
                                    NoCallsStoredError,
-                                   HasBeenCalledWithUnexpectedArgumentsError)
+                                   HasBeenCalledWithUnexpectedArgumentsError,
+                                   VerificationError)
 from fluentmock.matchers import (AtLeastOnceMatcher,
                                  FluentMatcher,
                                  FluentAnyArguments,
@@ -369,6 +370,11 @@ class Verifier(FluentTarget):
                     raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
                 raise CouldNotVerifyCallError(expected_call_entry)
+
+        if not self._times.matches(matching_call_entries):
+            expected_call_entry = FluentCallEntry(self.object, self.attribute_name,
+                                                  arguments, keyword_arguments)
+            raise VerificationError(expected_call_entry, self._times)
 
 
 def create_mock(*arguments, **keyword_arguments):
