@@ -60,6 +60,7 @@ def contains(substring):
 class NeverMatcher(FluentMatcher):
 
     def matches(self, value):
+
         if value == 0:
             return True
 
@@ -80,3 +81,19 @@ class AtLeastOnceMatcher(FluentMatcher):
 
     def __repr__(self):
         return '<< should be called at least once >>'
+
+
+class TimesMatcher(FluentMatcher):
+
+    def __init__(self, expected):
+        self._expected = expected
+
+    def matches(self, value):
+
+        if value != self._expected:
+            return False
+
+        return True
+
+    def __repr__(self):
+        return '<< should be called exactly {expected} times >>'.format(expected=self._expected)

@@ -20,6 +20,7 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
                                  FluentAnyArguments,
                                  FluentMatcher,
                                  NeverMatcher,
+                                 TimesMatcher,
                                  contains)
 from hamcrest import assert_that, equal_to, instance_of
 
@@ -197,3 +198,30 @@ class AtLeastOnceMatcherTests(UnitTests):
         matcher = AtLeastOnceMatcher()
 
         assert_that(str(matcher), equal_to("<< should be called at least once >>"))
+
+
+class TimesMatcherTests(UnitTests):
+
+    def test_should_return_true_when_one_expected_and_one_given(self):
+
+        matcher = TimesMatcher(1)
+
+        assert_that(matcher.matches(1), equal_to(True))
+
+    def test_should_return_false_when_one_expected_and_two_given(self):
+
+        matcher = TimesMatcher(1)
+
+        assert_that(matcher.matches(2), equal_to(False))
+
+    def test_should_return_true_when_two_expected_and_two_given(self):
+
+        matcher = TimesMatcher(2)
+
+        assert_that(matcher.matches(2), equal_to(True))
+
+    def test_should_return_string_representation(self):
+
+        matcher = TimesMatcher(5)
+
+        assert_that(str(matcher), equal_to('<< should be called exactly 5 times >>'))

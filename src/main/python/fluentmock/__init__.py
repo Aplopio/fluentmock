@@ -47,7 +47,12 @@ from fluentmock.exceptions import (CouldNotVerifyCallError,
                                    InvalidUseOfAnyArgumentsError,
                                    NoCallsStoredError,
                                    HasBeenCalledWithUnexpectedArgumentsError)
-from fluentmock.matchers import AtLeastOnceMatcher, FluentMatcher, FluentAnyArguments, FluentAnyArgument, NeverMatcher
+from fluentmock.matchers import (AtLeastOnceMatcher,
+                                 FluentMatcher,
+                                 FluentAnyArguments,
+                                 FluentAnyArgument,
+                                 NeverMatcher,
+                                 TimesMatcher)
 
 LOGGER = getLogger(__name__)
 
@@ -286,9 +291,12 @@ class Verifier(FluentTarget):
     def __init__(self, target, times):
         FluentTarget.__init__(self, target)
 
-        if times not in [NEVER, AT_LEAST_ONCE]:
-            error_message = 'Argument times can be "{never}" or "{once}".'.format(never=NEVER.__class__.__name__,
-                                                                                  once=AT_LEAST_ONCE.__class__.__name__)
+        if isinstance(times, int):
+            times = TimesMatcher(times)
+
+        if not isinstance(times, FluentMatcher):
+            class_name = FluentMatcher.__name__
+            error_message = 'Argument times has to be a instance of {fluentmatcher}'.format(fluentmatcher=class_name)
             raise ValueError(error_message)
 
         self._times = times

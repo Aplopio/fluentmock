@@ -172,19 +172,6 @@ Expected: call targetpackage.targetfunction(1, 2)
 
         verify(test_object).some_method(1, 2)
 
-    def test_should_raise_exception_when_trying_to_verify_something_other_than_never_or_once(self):
-
-        when(targetpackage).targetfunction().then_return('123')
-
-        exception_raised = False
-        try:
-            verify(targetpackage, 17)
-        except ValueError as error:
-            exception_raised = True
-            self.assertEqual('Argument times can be "NeverMatcher" or "AtLeastOnceMatcher".', str(error))
-
-        self.assertTrue(exception_raised, 'Expected a NotImplementedError when something else than 0 or 1 is given.')
-
     def test_should_verify_a_simple_call_using_a_keyword_argument(self):
 
         when(targetpackage).targetfunction(keyword_argument='foobar').then_return('123')
@@ -655,3 +642,29 @@ Expected: call targetpackage.targetfunction(<< ANY_ARGUMENT >>, << ANY_ARGUMENT 
  but was: call targetpackage.targetfunction(1, 2, 3)
 """))
         self.assertTrue(raised_error, "Error has not been raised even though verification does not match")
+
+
+class TimesVerificationTests(UnitTests):
+
+    def test_should_verify_that_target_has_been_called_exactly_once(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+
+        targetpackage.targetfunction("abc")
+
+        verify(targetpackage, times=1).targetfunction("abc")
+
+    def test_should_raise_exception_when_times_is_not_instance_of_fluentmatcher_or_integer(self):
+
+        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+
+        targetpackage.targetfunction("abc")
+
+        raised_error = False
+        try:
+            verify(targetpackage, times='123').targetfunction('abc')
+        except ValueError as error:
+            raised_error = True
+            assert_that(str(error), equal_to('Argument times has to be a instance of FluentMatcher'))
+
+        assert_that(raised_error)
