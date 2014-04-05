@@ -128,6 +128,9 @@ class FluentCallEntry(object):
         if self.arguments and self.arguments[0] is ANY_ARGUMENTS:
             return True
 
+        if arguments and arguments[0] is ANY_ARGUMENTS:
+            return True
+
         if self.arguments == arguments and self.keyword_arguments == keyword_arguments:
             return True
 
@@ -333,6 +336,7 @@ class Verifier(FluentTarget):
             for call_entry in _call_entries:
                 if call_entry.matches(self.object, self.attribute_name, arguments, keyword_arguments):
                     matching_call_entries += 1
+
         return matching_call_entries
 
     def _ensure_valid_usage_of_any_arguments(self, arguments):
@@ -351,6 +355,7 @@ class Verifier(FluentTarget):
                 method_of_mock.assert_called_with(*arguments, **keyword_arguments)
             else:
                 expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
+
                 if not _call_entries:
                     raise NoCallsStoredError(expected_call_entry)
 
@@ -362,8 +367,6 @@ class Verifier(FluentTarget):
                         found_calls.append(call_entry)
 
                 if found_calls:
-                    if arguments and arguments[0] is ANY_ARGUMENTS:
-                        return
                     raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
                 raise CouldNotVerifyCallError(expected_call_entry)
