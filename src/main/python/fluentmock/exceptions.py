@@ -14,15 +14,6 @@
 #   limitations under the License.
 
 
-class CouldNotVerifyCallError(AssertionError):
-
-    MESSAGE_FORMAT = 'Could not verify {expected}'
-
-    def __init__(self, expected_call_entry):
-        error_message = self.MESSAGE_FORMAT.format(expected=expected_call_entry)
-        super(CouldNotVerifyCallError, self).__init__(error_message)
-
-
 class InvalidAttributeError(Exception):
 
     MESSAGE_FORMAT = 'The target "{target_name}" has no attribute called "{attribute_name}".'

@@ -22,8 +22,7 @@ from fluentmock import (ANY_ARGUMENT,
                         when,
                         verify)
 
-from fluentmock.exceptions import (CouldNotVerifyCallError,
-                                   FoundMatcherInNativeVerificationError,
+from fluentmock.exceptions import (FoundMatcherInNativeVerificationError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
                                    HasBeenCalledWithUnexpectedArgumentsError,
@@ -471,9 +470,10 @@ class CouldNotVerifyCallTests(UnitTests):
 
         try:
             verify(targetpackage).patch_test_1()
-        except CouldNotVerifyCallError as error:
+        except VerificationError as error:
             exception_raised = True
-            self.assertEqual('Could not verify call targetpackage.patch_test_1()', str(error))
+            assert_that(str(error), equal_to('Expected: call targetpackage.patch_test_1() '
+                                             '<< should be called at least once >>'))
 
         assert_that(exception_raised)
 
@@ -490,9 +490,10 @@ class CouldNotVerifyCallTests(UnitTests):
 
         try:
             verify(targetpackage).patch_test_1(1, 2, 3, hello='world')
-        except CouldNotVerifyCallError as error:
+        except VerificationError as error:
             exception_raised = True
-            self.assertEqual("Could not verify call targetpackage.patch_test_1(1, 2, 3, hello='world')", str(error))
+            assert_that(str(error), equal_to("Expected: call targetpackage.patch_test_1(1, 2, 3, hello='world') "
+                                             "<< should be called at least once >>"))
 
         assert_that(exception_raised)
 
@@ -509,9 +510,10 @@ class CouldNotVerifyCallTests(UnitTests):
 
         try:
             verify(targetpackage).patch_test_1(1, 2, 3)
-        except CouldNotVerifyCallError as error:
+        except VerificationError as error:
             exception_raised = True
-            self.assertEqual('Could not verify call targetpackage.patch_test_1(1, 2, 3)', str(error))
+            assert_that(str(error), equal_to('Expected: call targetpackage.patch_test_1(1, 2, 3) '
+                                             '<< should be called at least once >>'))
 
         assert_that(exception_raised)
 

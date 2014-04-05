@@ -40,8 +40,7 @@ from logging import getLogger
 from unittest import TestCase
 from types import ModuleType
 
-from fluentmock.exceptions import (CouldNotVerifyCallError,
-                                   FoundMatcherInNativeVerificationError,
+from fluentmock.exceptions import (FoundMatcherInNativeVerificationError,
                                    InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
                                    HasBeenCalledWithUnexpectedArgumentsError,
@@ -368,8 +367,6 @@ class Verifier(FluentTarget):
 
                 if found_calls:
                     raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
-
-                raise CouldNotVerifyCallError(expected_call_entry)
 
         if not self._matcher.matches(matching_call_entries):
             expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
