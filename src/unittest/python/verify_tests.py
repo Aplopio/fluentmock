@@ -687,7 +687,7 @@ class TimesVerificationTests(UnitTests):
             exception_raised = True
             assert_that(str(error), equal_to(
                 """
-Expected: call targetpackage.targetfunction('abc') << should be called exactly 2 times >>
+Expected: call targetpackage.targetfunction('abc') << exactly 2 times >>
 """))
 
         assert_that(exception_raised)
@@ -729,7 +729,7 @@ Expected: call targetpackage.targetfunction('abc') << should be called exactly 2
         except VerificationError as error:
             exception_raised = True
             self.assertEqual(str(error), """
-Expected: call mock.Mock.some_method(1, 2, 3) << should be called exactly 2 times >>
+Expected: call mock.Mock.some_method(1, 2, 3) << exactly 2 times >>
 """)
 
         assert_that(exception_raised)
@@ -746,7 +746,7 @@ Expected: call mock.Mock.some_method(1, 2, 3) << should be called exactly 2 time
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(<< ANY_ARGUMENTS >>) << should be called exactly 2 times >>
+Expected: call targetpackage.targetfunction(<< ANY_ARGUMENTS >>) << exactly 2 times >>
 """))
 
         assert_that(exception_raised)

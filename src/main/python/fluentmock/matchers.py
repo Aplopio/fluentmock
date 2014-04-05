@@ -99,5 +99,5 @@ class TimesMatcher(FluentMatcher):
         return True
 
     def __repr__(self):
-        text = 'should be called exactly {expected} times'.format(expected=self._expected)
+        text = 'exactly {expected} times'.format(expected=self._expected)
         return self._matcher_string(text)

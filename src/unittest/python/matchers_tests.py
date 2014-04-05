@@ -224,4 +224,4 @@ class TimesMatcherTests(UnitTests):
 
         matcher = TimesMatcher(5)
 
-        assert_that(str(matcher), equal_to('<< should be called exactly 5 times >>'))
+        assert_that(str(matcher), equal_to('<< exactly 5 times >>'))
