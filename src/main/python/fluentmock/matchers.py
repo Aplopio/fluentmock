@@ -60,11 +60,10 @@ def contains(substring):
 class NeverMatcher(FluentMatcher):
 
     def matches(self, value):
+        if value != 0:
+            return False
 
-        if value == 0:
-            return True
-
-        return False
+        return True
 
     def __repr__(self):
         return '<< should never be called >>'
