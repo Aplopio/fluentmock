@@ -58,14 +58,14 @@ class VerifyTests(UnitTests):
 
         targetpackage.targetfunction()
 
-        raised_exception = False
+        exception_raised = False
         try:
             verify(targetpackage).spameggs
         except InvalidAttributeError as error:
-            raised_exception = True
+            exception_raised = True
             self.assertEqual('The target "targetpackage" has no attribute called "spameggs".', str(error))
 
-        assert_that(raised_exception, "Did not raise exception even though target does not have attribute.")
+        assert_that(exception_raised)
 
     def test_should_verify_a_simple_call_with_a_argument(self):
 
@@ -81,17 +81,17 @@ class VerifyTests(UnitTests):
 
         targetpackage.targetfunction(2)
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage).targetfunction(1)
         except HasBeenCalledWithUnexpectedArgumentsError as error:
-            raised_error = True
+            exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1)
  but was: call targetpackage.targetfunction(2)
 """))
 
-        assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+        assert_that(exception_raised)
 
     def test_should_verify_a_call_with_multiple_arguments(self):
 
@@ -107,17 +107,17 @@ Expected: call targetpackage.targetfunction(1)
 
         targetpackage.targetfunction(2, 1)
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage).targetfunction(1, 2)
         except HasBeenCalledWithUnexpectedArgumentsError as error:
-            raised_error = True
+            exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2)
  but was: call targetpackage.targetfunction(2, 1)
 """))
 
-        assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+        assert_that(exception_raised)
 
     def test_should_raise_error_when_function_not_called_with_expected_arguments_but_in_other_ways(self):
 
@@ -126,18 +126,18 @@ Expected: call targetpackage.targetfunction(1, 2)
         targetpackage.targetfunction('abc', 123, True)
         targetpackage.targetfunction('spam', 2, 1, 'eggs', False)
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage).targetfunction(1, 2)
         except HasBeenCalledWithUnexpectedArgumentsError as error:
-            raised_error = True
+            exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2)
  but was: call targetpackage.targetfunction('abc', 123, True)
           call targetpackage.targetfunction('spam', 2, 1, 'eggs', False)
 """))
 
-        assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+        assert_that(exception_raised)
 
     def test_should_raise_error_when_function_not_called_with_expected_arguments_but_in_many_other_ways(self):
 
@@ -148,11 +148,11 @@ Expected: call targetpackage.targetfunction(1, 2)
         targetpackage.targetfunction('eggs', False)
         targetpackage.targetfunction()
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage).targetfunction(1, 2)
         except HasBeenCalledWithUnexpectedArgumentsError as error:
-            raised_error = True
+            exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2)
  but was: call targetpackage.targetfunction('abc', 123, True)
@@ -161,7 +161,7 @@ Expected: call targetpackage.targetfunction(1, 2)
           call targetpackage.targetfunction()
 """))
 
-        assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+        assert_that(exception_raised)
 
     def test_should_verify_a_call_to_a_object_with_multiple_arguments(self):
 
@@ -187,17 +187,17 @@ Expected: call targetpackage.targetfunction(1, 2)
 
         targetpackage.targetfunction(test=2)
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage).targetfunction(test=1)
         except HasBeenCalledWithUnexpectedArgumentsError as error:
-            raised_error = True
+            exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(test=1)
  but was: call targetpackage.targetfunction(test=2)
 """))
 
-        assert_that(raised_error, "Did not raise error even though function has been called with other arguments.")
+        assert_that(exception_raised)
 
 
 class AnyArgumentsVerificationTests(UnitTests):
@@ -470,17 +470,17 @@ class CouldNotVerifyCallTests(UnitTests):
 
         targetpackage.targetfunction()
 
-        raised_error = False
+        exception_raised = False
 
         verify(targetpackage).targetfunction()
 
         try:
             verify(targetpackage).patch_test_1()
         except CouldNotVerifyCallError as error:
-            raised_error = True
+            exception_raised = True
             self.assertEqual('Could not verify call targetpackage.patch_test_1()', str(error))
 
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+        assert_that(exception_raised)
 
     def test_should_show_error_message_including_keyword_arguments_when_two_functions_patched_and_only_one_called(self):
 
@@ -489,17 +489,17 @@ class CouldNotVerifyCallTests(UnitTests):
 
         targetpackage.targetfunction()
 
-        raised_error = False
+        exception_raised = False
 
         verify(targetpackage).targetfunction()
 
         try:
             verify(targetpackage).patch_test_1(1, 2, 3, hello='world')
         except CouldNotVerifyCallError as error:
-            raised_error = True
+            exception_raised = True
             self.assertEqual("Could not verify call targetpackage.patch_test_1(1, 2, 3, hello='world')", str(error))
 
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+        assert_that(exception_raised)
 
     def test_should_raise_error_and_list_the_expected_arguments_when_function_not_called(self):
 
@@ -508,17 +508,17 @@ class CouldNotVerifyCallTests(UnitTests):
 
         targetpackage.targetfunction()
 
-        raised_error = False
+        exception_raised = False
 
         verify(targetpackage).targetfunction()
 
         try:
             verify(targetpackage).patch_test_1(1, 2, 3)
         except CouldNotVerifyCallError as error:
-            raised_error = True
+            exception_raised = True
             self.assertEqual('Could not verify call targetpackage.patch_test_1(1, 2, 3)', str(error))
 
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+        assert_that(exception_raised)
 
 
 class VerfiyNeverTests(UnitTests):
@@ -543,16 +543,16 @@ class VerfiyNeverTests(UnitTests):
 
         targetpackage.targetfunction(1, 2, 3, test=1)
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage, NEVER).targetfunction(1, 2, 3, test=1)
         except HasBeenCalledAtLeastOnceError as error:
-            raised_error = True
+            exception_raised = True
             error_message = """call targetpackage.targetfunction(1, 2, 3, test=1) should NEVER have been called,
 but has been called at least once."""
             assert_that(str(error), equal_to(error_message))
 
-        assert_that(raised_error)
+        assert_that(exception_raised)
 
 
 class NoCallsStoredTests(UnitTests):
@@ -561,50 +561,50 @@ class NoCallsStoredTests(UnitTests):
 
         when(targetpackage).targetfunction().then_return('123')
 
-        raised_error = False
+        exception_raised = False
 
         try:
             verify(targetpackage).targetfunction(1, 2, 3, hello='foobar')
         except NoCallsStoredError as error:
-            raised_error = True
+            exception_raised = True
             self.assertEqual("""
 Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar')
  but was: no patched function has been called.
 """, str(error))
 
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+        assert_that(exception_raised)
 
     def test_should_not_verify_a_simple_call_when_no_function_has_been_called(self):
 
         when(targetpackage).targetfunction().then_return('123')
 
-        raised_error = False
+        exception_raised = False
 
         try:
             verify(targetpackage).targetfunction()
         except NoCallsStoredError as error:
-            raised_error = True
+            exception_raised = True
             self.assertEqual("""
 Expected: call targetpackage.targetfunction()
  but was: no patched function has been called.
 """, str(error))
 
-        assert_that(raised_error, "Did not raise assertion error even though function has never been called.")
+        assert_that(exception_raised)
 
     def test_should_raise_error_with_a_detailed_message_when_function_patched_and_not_called(self):
 
         when(targetpackage).targetfunction().then_return('123')
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage).targetfunction()
         except NoCallsStoredError as error:
-            raised_error = True
+            exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction()
  but was: no patched function has been called.
 """))
-        assert_that(raised_error, "Did not raise error even though function has never been called.")
+        assert_that(exception_raised)
 
 
 class VerifyAnyArgumentTests(UnitTests):
@@ -631,16 +631,16 @@ class VerifyAnyArgumentTests(UnitTests):
 
         targetpackage.targetfunction(1, 2, 3)
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage).targetfunction(ANY_ARGUMENT, ANY_ARGUMENT, 'c')
         except HasBeenCalledWithUnexpectedArgumentsError as error:
-            raised_error = True
+            exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(<< ANY_ARGUMENT >>, << ANY_ARGUMENT >>, 'c')
  but was: call targetpackage.targetfunction(1, 2, 3)
 """))
-        assert_that(raised_error)
+        assert_that(exception_raised)
 
 
 class TimesVerificationTests(UnitTests):
@@ -659,14 +659,14 @@ class TimesVerificationTests(UnitTests):
 
         targetpackage.targetfunction("abc")
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage, times='123').targetfunction('abc')
         except ValueError as error:
-            raised_error = True
+            exception_raised = True
             assert_that(str(error), equal_to('Argument times has to be a instance of FluentMatcher'))
 
-        assert_that(raised_error)
+        assert_that(exception_raised)
 
     def test_should_raise_exception_when_times_is_two_but_target_called_once(self):
 
@@ -674,12 +674,12 @@ class TimesVerificationTests(UnitTests):
 
         targetpackage.targetfunction("abc")
 
-        raised_error = False
+        exception_raised = False
         try:
             verify(targetpackage, times=2).targetfunction('abc')
         except VerificationError as error:
-            raised_error = True
+            exception_raised = True
             assert_that(str(error), equal_to(
                 "call targetpackage.targetfunction('abc') << should be called exactly 2 times >>"))
 
-        assert_that(raised_error)
+        assert_that(exception_raised)
