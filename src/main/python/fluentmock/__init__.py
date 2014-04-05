@@ -360,7 +360,7 @@ class Verifier(FluentTarget):
                         found_calls.append(call_entry)
 
                 if found_calls:
-                    if arguments and ANY_ARGUMENTS in arguments:
+                    if arguments and arguments[0] is ANY_ARGUMENTS:
                         return
                     raise HasBeenCalledWithUnexpectedArgumentsError(expected_call_entry, found_calls)
 
