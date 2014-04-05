@@ -59,7 +59,7 @@ class VerifyTests(UnitTests):
             verify(targetpackage).spameggs
         except InvalidAttributeError as error:
             exception_raised = True
-            self.assertEqual('The target "targetpackage" has no attribute called "spameggs".', str(error))
+            assert_that(str(error), equal_to('The target "targetpackage" has no attribute called "spameggs".'))
 
         assert_that(exception_raised)
 
@@ -219,8 +219,8 @@ class AnyArgumentsVerificationTests(UnitTests):
 
         except InvalidUseOfAnyArgumentsError as error:
             exception_raised = True
-            self.assertEqual(str(error), """Do not use ANY_ARGUMENTS together with other arguments!
-Use ANY_ARGUMENT as a wildcard for single arguments.""")
+            assert_that(str(error), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
+Use ANY_ARGUMENT as a wildcard for single arguments."""))
 
         assert_that(exception_raised)
 
@@ -237,8 +237,8 @@ Use ANY_ARGUMENT as a wildcard for single arguments.""")
 
         except InvalidUseOfAnyArgumentsError as error:
             exception_raised = True
-            self.assertEqual(str(error), """Do not use ANY_ARGUMENTS together with other arguments!
-Use ANY_ARGUMENT as a wildcard for single arguments.""")
+            assert_that(str(error), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
+Use ANY_ARGUMENT as a wildcard for single arguments."""))
 
         assert_that(exception_raised)
 
@@ -331,9 +331,9 @@ class NativeMockVerificationTests(UnitTests):
             verify(test_object, NEVER).some_method()
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual(str(error), """
+            assert_that(str(error), equal_to("""
 Expected: call mock.Mock.some_method() << should never be called >>
-""")
+"""))
 
         assert_that(exception_raised)
 
@@ -348,9 +348,9 @@ Expected: call mock.Mock.some_method() << should never be called >>
             verify(test_object, NEVER).some_method(1, 2, 3)
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual(str(error), """
+            assert_that(str(error), equal_to("""
 Expected: call mock.Mock.some_method(1, 2, 3) << should never be called >>
-""")
+"""))
 
         assert_that(exception_raised)
 
@@ -365,10 +365,9 @@ Expected: call mock.Mock.some_method(1, 2, 3) << should never be called >>
             verify(test_object, NEVER).some_method(1, 2, 3, hello='world')
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual(
-                str(error), """
+            assert_that(str(error), equal_to("""
 Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be called >>
-""")
+"""))
 
         assert_that(exception_raised)
 
@@ -383,8 +382,7 @@ Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be 
             verify(test_object).some_method(ANY_ARGUMENT, 2, 3, hello='world')
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
-            self.assertEqual(
-                str(error), """
+            assert_that(str(error), equal_to("""
 You were trying to verify mock.Mock.some_method(<< ANY_ARGUMENT >>, 2, 3, hello='world')
 fluentmock.verify will call Mock.assert_called_with for verification
 when the Mock has not been configured using fluentmock.when
@@ -392,7 +390,7 @@ Therefore it is not possible to use matchers when verifying
 a Mock without configuring it with fluentmock.when,
 because Mock.assert_called_with does not support matchers.
 Please configure your mock in order to be able to use a matcher.
-""")
+"""))
 
         assert_that(exception_raised)
 
@@ -407,8 +405,7 @@ Please configure your mock in order to be able to use a matcher.
             verify(test_object).some_method(1, ANY_ARGUMENT, 3, hello='world')
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
-            self.assertEqual(
-                str(error), """
+            assert_that(str(error), equal_to("""
 You were trying to verify mock.Mock.some_method(1, << ANY_ARGUMENT >>, 3, hello='world')
 fluentmock.verify will call Mock.assert_called_with for verification
 when the Mock has not been configured using fluentmock.when
@@ -416,7 +413,7 @@ Therefore it is not possible to use matchers when verifying
 a Mock without configuring it with fluentmock.when,
 because Mock.assert_called_with does not support matchers.
 Please configure your mock in order to be able to use a matcher.
-""")
+"""))
 
         assert_that(exception_raised)
 
@@ -431,8 +428,7 @@ Please configure your mock in order to be able to use a matcher.
             verify(test_object).some_method(1, 2, 3, hello=ANY_ARGUMENT)
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
-            self.assertEqual(
-                str(error), """
+            assert_that(str(error), equal_to("""
 You were trying to verify mock.Mock.some_method(1, 2, 3, hello=<< ANY_ARGUMENT >>)
 fluentmock.verify will call Mock.assert_called_with for verification
 when the Mock has not been configured using fluentmock.when
@@ -440,7 +436,7 @@ Therefore it is not possible to use matchers when verifying
 a Mock without configuring it with fluentmock.when,
 because Mock.assert_called_with does not support matchers.
 Please configure your mock in order to be able to use a matcher.
-""")
+"""))
 
         assert_that(exception_raised)
 
@@ -553,10 +549,9 @@ class VerifiyNeverTests(UnitTests):
             verify(targetpackage, NEVER).targetfunction(1, 2, 3, test=1)
         except VerificationError as error:
             exception_raised = True
-            error_message = """
+            assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2, 3, test=1) << should never be called >>
-"""
-            assert_that(str(error), equal_to(error_message))
+"""))
 
         assert_that(exception_raised)
 
@@ -573,10 +568,10 @@ class NoCallsStoredTests(UnitTests):
             verify(targetpackage).targetfunction(1, 2, 3, hello='foobar')
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual("""
+            assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar') << at least once >>
   Reason: No patched function has been called.
-""", str(error))
+"""))
 
         assert_that(exception_raised)
 
@@ -590,10 +585,10 @@ Expected: call targetpackage.targetfunction(1, 2, 3, hello='foobar') << at least
             verify(targetpackage).targetfunction()
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual("""
+            assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction() << at least once >>
   Reason: No patched function has been called.
-""", str(error))
+"""))
 
         assert_that(exception_raised)
 
@@ -685,8 +680,7 @@ class TimesVerificationTests(UnitTests):
             verify(targetpackage, times=2).targetfunction('abc')
         except VerificationError as error:
             exception_raised = True
-            assert_that(str(error), equal_to(
-                """
+            assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction('abc') << exactly 2 times >>
 """))
 
@@ -728,9 +722,9 @@ Expected: call targetpackage.targetfunction('abc') << exactly 2 times >>
             verify(test_object, times=2).some_method(1, 2, 3)
         except VerificationError as error:
             exception_raised = True
-            self.assertEqual(str(error), """
+            assert_that(str(error), equal_to("""
 Expected: call mock.Mock.some_method(1, 2, 3) << exactly 2 times >>
-""")
+"""))
 
         assert_that(exception_raised)
 
