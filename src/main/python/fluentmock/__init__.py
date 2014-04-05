@@ -356,7 +356,8 @@ class Verifier(FluentTarget):
                 expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
 
                 if not _call_entries:
-                    raise VerificationError(expected_call_entry, self._matcher, 'No patched function has been called.')
+                    raise VerificationError(expected_call_entry, self._matcher,
+                                            reason='No patched function has been called.')
 
                 found_calls = []
 
