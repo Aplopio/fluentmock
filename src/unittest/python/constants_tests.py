@@ -64,7 +64,7 @@ class MatcherTests(UnitTests):
 
         when(targetpackage).targetfunction(ANY_LONG).then_return('Yes!')
 
-        assert_that(targetpackage.targetfunction(long(123)), equal_to('Yes!'))
+        assert_that(targetpackage.targetfunction(123L), equal_to('Yes!'))
 
     def test_should_match_any_float(self):
 
