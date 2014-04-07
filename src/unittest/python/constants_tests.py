@@ -25,6 +25,7 @@ from fluentmock import (ANY_BOOLEAN,
                         ANY_UNICODE,
                         ANY_VALUE,
                         ANY_VALUES,
+                        ANY_XRANGE,
                         UnitTests,
                         when)
 from hamcrest import assert_that, equal_to
@@ -107,3 +108,9 @@ class MatcherTests(UnitTests):
 
         from sys import stdout
         assert_that(targetpackage.targetfunction(stdout), equal_to('Yes!'))
+
+    def test_should_match_any_xrange(self):
+
+        when(targetpackage).targetfunction(ANY_XRANGE).then_return('Yes!')
+
+        assert_that(targetpackage.targetfunction(xrange(100)), equal_to('Yes!'))

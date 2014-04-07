@@ -66,6 +66,7 @@ ANY_TUPLE = AnyValueOfTypeMatcher(tuple)
 ANY_UNICODE = AnyValueOfTypeMatcher(unicode)
 ANY_VALUE = AnyValueMatcher()
 ANY_VALUES = AnyValuesMatcher()
+ANY_XRANGE = AnyValueOfTypeMatcher(xrange)
 
 AT_LEAST_ONCE = AtLeastOnceMatcher()
 NEVER = NeverMatcher()
