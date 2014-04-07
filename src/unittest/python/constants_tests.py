@@ -16,6 +16,7 @@
 from fluentmock import (ANY_BOOLEAN,
                         ANY_FLOAT,
                         ANY_INTEGER,
+                        ANY_LIST,
                         ANY_LONG,
                         ANY_STRING,
                         ANY_TUPLE,
@@ -85,3 +86,9 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_TUPLE).then_return('Yes!')
 
         assert_that(targetpackage.targetfunction((1, 2, 3, 4, 5)), equal_to('Yes!'))
+
+    def test_should_match_any_list(self):
+
+        when(targetpackage).targetfunction(ANY_LIST).then_return('Yes!')
+
+        assert_that(targetpackage.targetfunction(['a', 'b', 'c']), equal_to('Yes!'))
