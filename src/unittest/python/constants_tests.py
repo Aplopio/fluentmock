@@ -13,6 +13,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+from sys import stdout
+
 from fluentmock import (ANY_BOOLEAN,
                         ANY_DICTIONARY,
                         ANY_FILE,
@@ -107,7 +109,6 @@ class MatcherTests(UnitTests):
 
         when(targetpackage).targetfunction(ANY_FILE).then_return('Yes!')
 
-        from sys import stdout
         assert_that(targetpackage.targetfunction(stdout), equal_to('Yes!'))
 
     def test_should_match_any_xrange(self):
@@ -123,7 +124,6 @@ class MatcherTests(UnitTests):
         assert_that(targetpackage.targetfunction(slice(1, 10)), equal_to('Yes!'))
 
     def test_should_match_only_the_right_values(self):
-        from sys import stdout
 
         when(targetpackage).targetfunction(ANY_BOOLEAN).then_return('any boolean')
         when(targetpackage).targetfunction(ANY_DICTIONARY).then_return('any dictionary')
