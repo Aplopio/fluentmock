@@ -15,6 +15,7 @@
 
 from fluentmock import (ANY_BOOLEAN,
                         ANY_DICTIONARY,
+                        ANY_FILE,
                         ANY_FLOAT,
                         ANY_INTEGER,
                         ANY_LIST,
@@ -99,3 +100,10 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_DICTIONARY).then_return('Yes!')
 
         assert_that(targetpackage.targetfunction({'spam': 'eggs'}), equal_to('Yes!'))
+
+    def test_should_match_any_file(self):
+
+        when(targetpackage).targetfunction(ANY_FILE).then_return('Yes!')
+
+        from sys import stdout
+        assert_that(targetpackage.targetfunction(stdout), equal_to('Yes!'))
