@@ -231,8 +231,8 @@ class AnyArgumentsTest(UnitTests):
             when(targetpackage).targetfunction(ANY_VALUES, 1, 2, 3).then_raise(Exception('foobar'))
         except InvalidUseOfAnyArgumentsError as exception:
             exception_raised = True
-            assert_that(str(exception), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
-Use ANY_ARGUMENT as a wildcard for single arguments."""))
+            assert_that(str(exception), equal_to("""Do not use ANY_VALUES together with other arguments!
+Use ANY_VALUE as a wildcard for single arguments."""))
 
         assert_that(exception_raised)
 
@@ -243,8 +243,8 @@ Use ANY_ARGUMENT as a wildcard for single arguments."""))
             when(targetpackage).targetfunction(1, ANY_VALUES, 2, 3).then_raise(Exception('foobar'))
         except InvalidUseOfAnyArgumentsError as exception:
             exception_raised = True
-            assert_that(str(exception), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
-Use ANY_ARGUMENT as a wildcard for single arguments."""))
+            assert_that(str(exception), equal_to("""Do not use ANY_VALUES together with other arguments!
+Use ANY_VALUE as a wildcard for single arguments."""))
 
         assert_that(exception_raised)
 

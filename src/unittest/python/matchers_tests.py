@@ -71,7 +71,7 @@ class AnyArgumentMatcherTests(UnitTests):
 
         matcher = AnyValueMatcher()
 
-        assert_that(str(matcher), equal_to('<< ANY_ARGUMENT >>'))
+        assert_that(str(matcher), equal_to('<< ANY_VALUE >>'))
 
 
 class AnyArgumentsMatcherTests(UnitTests):
@@ -104,7 +104,7 @@ class AnyArgumentsMatcherTests(UnitTests):
 
         matcher = AnyValuesMatcher()
 
-        assert_that(str(matcher), equal_to('<< ANY_ARGUMENTS >>'))
+        assert_that(str(matcher), equal_to('<< ANY_VALUES >>'))
 
 
 class ContainsMatcherTests(UnitTests):

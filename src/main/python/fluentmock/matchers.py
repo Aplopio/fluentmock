@@ -32,7 +32,7 @@ class AnyValuesMatcher(FluentMatcher):
         return True
 
     def __repr__(self):
-        return self._matcher_string('ANY_ARGUMENTS')
+        return self._matcher_string('ANY_VALUES')
 
 
 class AnyValueMatcher(FluentMatcher):
@@ -41,7 +41,7 @@ class AnyValueMatcher(FluentMatcher):
         return True
 
     def __repr__(self):
-        return self._matcher_string('ANY_ARGUMENT')
+        return self._matcher_string('ANY_VALUE')
 
 
 class AnyValueOfTypeMatcher(FluentMatcher):

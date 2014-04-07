@@ -219,8 +219,8 @@ class AnyArgumentsVerificationTests(UnitTests):
 
         except InvalidUseOfAnyArgumentsError as error:
             exception_raised = True
-            assert_that(str(error), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
-Use ANY_ARGUMENT as a wildcard for single arguments."""))
+            assert_that(str(error), equal_to("""Do not use ANY_VALUES together with other arguments!
+Use ANY_VALUE as a wildcard for single arguments."""))
 
         assert_that(exception_raised)
 
@@ -237,8 +237,8 @@ Use ANY_ARGUMENT as a wildcard for single arguments."""))
 
         except InvalidUseOfAnyArgumentsError as error:
             exception_raised = True
-            assert_that(str(error), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
-Use ANY_ARGUMENT as a wildcard for single arguments."""))
+            assert_that(str(error), equal_to("""Do not use ANY_VALUES together with other arguments!
+Use ANY_VALUE as a wildcard for single arguments."""))
 
         assert_that(exception_raised)
 
@@ -383,7 +383,7 @@ Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be 
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-You were trying to verify mock.Mock.some_method(<< ANY_ARGUMENT >>, 2, 3, hello='world')
+You were trying to verify mock.Mock.some_method(<< ANY_VALUE >>, 2, 3, hello='world')
 fluentmock.verify will call Mock.assert_called_with for verification
 when the Mock has not been configured using fluentmock.when
 Therefore it is not possible to use matchers when verifying
@@ -406,7 +406,7 @@ Please configure your mock in order to be able to use a matcher.
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-You were trying to verify mock.Mock.some_method(1, << ANY_ARGUMENT >>, 3, hello='world')
+You were trying to verify mock.Mock.some_method(1, << ANY_VALUE >>, 3, hello='world')
 fluentmock.verify will call Mock.assert_called_with for verification
 when the Mock has not been configured using fluentmock.when
 Therefore it is not possible to use matchers when verifying
@@ -429,7 +429,7 @@ Please configure your mock in order to be able to use a matcher.
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-You were trying to verify mock.Mock.some_method(1, 2, 3, hello=<< ANY_ARGUMENT >>)
+You were trying to verify mock.Mock.some_method(1, 2, 3, hello=<< ANY_VALUE >>)
 fluentmock.verify will call Mock.assert_called_with for verification
 when the Mock has not been configured using fluentmock.when
 Therefore it is not possible to use matchers when verifying
@@ -639,7 +639,7 @@ class VerifyAnyArgumentTests(UnitTests):
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(1, << ANY_ARGUMENT >>, 'c') << at least once >>
+Expected: call targetpackage.targetfunction(1, << ANY_VALUE >>, 'c') << at least once >>
  but was: call targetpackage.targetfunction(1, 2, 3)
 """))
         assert_that(exception_raised)
@@ -742,7 +742,7 @@ Expected: call mock.Mock.some_method(1, 2, 3) << exactly 2 times >>
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-Expected: call targetpackage.targetfunction(<< ANY_ARGUMENTS >>) << exactly 2 times >>
+Expected: call targetpackage.targetfunction(<< ANY_VALUES >>) << exactly 2 times >>
  but was: call targetpackage.targetfunction('abc')
 """))
 

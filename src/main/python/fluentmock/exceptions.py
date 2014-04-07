@@ -25,8 +25,8 @@ class InvalidAttributeError(Exception):
 
 class InvalidUseOfAnyArgumentsError(AssertionError):
 
-    MESSAGE_FORMAT = """Do not use ANY_ARGUMENTS together with other arguments!
-Use ANY_ARGUMENT as a wildcard for single arguments."""
+    MESSAGE_FORMAT = """Do not use ANY_VALUES together with other arguments!
+Use ANY_VALUE as a wildcard for single arguments."""
 
     def __init__(self):
         super(InvalidUseOfAnyArgumentsError, self).__init__(self.MESSAGE_FORMAT)
