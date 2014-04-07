@@ -14,6 +14,7 @@
 #   limitations under the License.
 
 from fluentmock import (ANY_BOOLEAN,
+                        ANY_DICTIONARY,
                         ANY_FLOAT,
                         ANY_INTEGER,
                         ANY_LIST,
@@ -92,3 +93,9 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_LIST).then_return('Yes!')
 
         assert_that(targetpackage.targetfunction(['a', 'b', 'c']), equal_to('Yes!'))
+
+    def test_should_match_any_dictionary(self):
+
+        when(targetpackage).targetfunction(ANY_DICTIONARY).then_return('Yes!')
+
+        assert_that(targetpackage.targetfunction({'spam': 'eggs'}), equal_to('Yes!'))
