@@ -76,3 +76,32 @@ class SeveralAnswersTests(UnitTests):
         assert_that(targetpackage.targetfunction(2), equal_to(5))
 
         verify(targetpackage).targetfunction(2)
+
+
+from fluentmock.matchers import any_value_of_type, contains
+
+
+class ConvenienceFunctionsTests(UnitTests):
+
+    def test_matching_any_value_of_a_given_type(self):
+
+        when(targetpackage).targetfunction(any_value_of_type(int)).then_return('argument was an integer')
+        when(targetpackage).targetfunction(any_value_of_type(str)).then_return('argument was a string')
+
+        assert_that(targetpackage.targetfunction(1), equal_to('argument was an integer'))
+        assert_that(targetpackage.targetfunction(2), equal_to('argument was an integer'))
+        assert_that(targetpackage.targetfunction(3), equal_to('argument was an integer'))
+
+        assert_that(targetpackage.targetfunction('Hello'), equal_to('argument was a string'))
+        assert_that(targetpackage.targetfunction('spam'),  equal_to('argument was a string'))
+        assert_that(targetpackage.targetfunction('eggs'),  equal_to('argument was a string'))
+
+    def test_matching_any_string_that_contains_a_given_substring(self):
+
+        when(targetpackage).targetfunction(contains('foo')).then_return('string contained "foo"')
+
+        assert_that(targetpackage.targetfunction('foo bar'), equal_to('string contained "foo"'))
+        assert_that(targetpackage.targetfunction('spam foo bar'), equal_to('string contained "foo"'))
+        assert_that(targetpackage.targetfunction('superfoo'), equal_to('string contained "foo"'))
+        assert_that(targetpackage.targetfunction('Hello'), equal_to(None))
+        assert_that(targetpackage.targetfunction('World'), equal_to(None))
