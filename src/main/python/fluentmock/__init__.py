@@ -55,6 +55,7 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
 LOGGER = getLogger(__name__)
 
 ANY_BOOLEAN = AnyValueOfTypeMatcher(bool)
+ANY_FLOAT = AnyValueOfTypeMatcher(float)
 ANY_INTEGER = AnyValueOfTypeMatcher(int)
 ANY_LONG = AnyValueOfTypeMatcher(long)
 ANY_VALUE = AnyValueMatcher()

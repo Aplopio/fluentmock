@@ -14,6 +14,7 @@
 #   limitations under the License.
 
 from fluentmock import (ANY_BOOLEAN,
+                        ANY_FLOAT,
                         ANY_INTEGER,
                         ANY_LONG,
                         ANY_STRING,
@@ -64,3 +65,9 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_LONG).then_return('Yes!')
 
         assert_that(targetpackage.targetfunction(long(123)), equal_to('Yes!'))
+
+    def test_should_match_any_float(self):
+
+        when(targetpackage).targetfunction(ANY_FLOAT).then_return('Yes!')
+
+        assert_that(targetpackage.targetfunction(1.23), equal_to('Yes!'))
