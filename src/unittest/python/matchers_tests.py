@@ -15,9 +15,10 @@
 
 from fluentmock import UnitTests
 from fluentmock.matchers import (AtLeastOnceMatcher,
-                                 ContainsMatcher,
                                  AnyArgumentMatcher,
                                  AnyArgumentsMatcher,
+                                 AnyValueOfTypeMatcher,
+                                 ContainsMatcher,
                                  FluentMatcher,
                                  NeverMatcher,
                                  TimesMatcher,
@@ -225,3 +226,36 @@ class TimesMatcherTests(UnitTests):
         matcher = TimesMatcher(5)
 
         assert_that(str(matcher), equal_to('<< exactly 5 times >>'))
+
+
+class AnyValueOfTypeMatcherTests(UnitTests):
+
+    def test_should_return_true_when_asking_for_int_and_int_is_given(self):
+
+        matcher = AnyValueOfTypeMatcher(int)
+
+        assert_that(matcher.matches(1), equal_to(True))
+
+    def test_should_return_false_when_asking_for_int_and_string_is_given(self):
+
+        matcher = AnyValueOfTypeMatcher(int)
+
+        assert_that(matcher.matches("Hello world"), equal_to(False))
+
+    def test_should_return_true_when_asking_for_string_and_string_is_given(self):
+
+        matcher = AnyValueOfTypeMatcher(str)
+
+        assert_that(matcher.matches("Hello world!"), equal_to(True))
+
+    def test_should_return_false_when_asking_for_string_and_int_is_given(self):
+
+        matcher = AnyValueOfTypeMatcher(str)
+
+        assert_that(matcher.matches(1), equal_to(False))
+
+    def test_should_return_string_representation(self):
+
+        matcher = AnyValueOfTypeMatcher(bool)
+
+        assert_that(str(matcher), equal_to('<< Any value of type "bool" >>'))

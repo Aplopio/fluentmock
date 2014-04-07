@@ -44,6 +44,25 @@ class AnyArgumentMatcher(FluentMatcher):
         return self._matcher_string('ANY_ARGUMENT')
 
 
+class AnyValueOfTypeMatcher(FluentMatcher):
+
+    def __init__(self, expected_type):
+
+        self._expected_type = expected_type
+
+    def matches(self, value):
+
+        if isinstance(value, self._expected_type):
+            return True
+
+        return False
+
+    def __repr__(self):
+        type_name = self._expected_type.__name__
+        text = 'Any value of type "{type_name}"'.format(type_name=type_name)
+        return self._matcher_string(text)
+
+
 class ContainsMatcher(FluentMatcher):
 
     def __init__(self, substring):
