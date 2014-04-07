@@ -16,7 +16,7 @@
 from hamcrest import assert_that, equal_to, instance_of
 from mock import Mock
 
-from fluentmock import ANY_VALUE, ANY_ARGUMENTS, FluentAnswer, FluentMockConfigurator, UnitTests, when
+from fluentmock import ANY_VALUE, ANY_VALUES, FluentAnswer, FluentMockConfigurator, UnitTests, when
 from fluentmock.exceptions import InvalidAttributeError, InvalidUseOfAnyArgumentsError
 
 import targetpackage
@@ -204,7 +204,7 @@ class AnyArgumentsTest(UnitTests):
 
     def test_should_always_return_the_same_answer_for_any_argument(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return('foobar')
+        when(targetpackage).targetfunction(ANY_VALUES).then_return('foobar')
 
         assert_that(targetpackage.targetfunction(0), equal_to('foobar'))
         assert_that(targetpackage.targetfunction(1, 2, 3), equal_to('foobar'))
@@ -213,7 +213,7 @@ class AnyArgumentsTest(UnitTests):
 
     def test_should_raise_exception_when_configured_to_raise_exception(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_raise(Exception('foobar'))
+        when(targetpackage).targetfunction(ANY_VALUES).then_raise(Exception('foobar'))
 
         exception_raised = False
         try:
@@ -228,7 +228,7 @@ class AnyArgumentsTest(UnitTests):
 
         exception_raised = False
         try:
-            when(targetpackage).targetfunction(ANY_ARGUMENTS, 1, 2, 3).then_raise(Exception('foobar'))
+            when(targetpackage).targetfunction(ANY_VALUES, 1, 2, 3).then_raise(Exception('foobar'))
         except InvalidUseOfAnyArgumentsError as exception:
             exception_raised = True
             assert_that(str(exception), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
@@ -240,7 +240,7 @@ Use ANY_ARGUMENT as a wildcard for single arguments."""))
 
         exception_raised = False
         try:
-            when(targetpackage).targetfunction(1, ANY_ARGUMENTS, 2, 3).then_raise(Exception('foobar'))
+            when(targetpackage).targetfunction(1, ANY_VALUES, 2, 3).then_raise(Exception('foobar'))
         except InvalidUseOfAnyArgumentsError as exception:
             exception_raised = True
             assert_that(str(exception), equal_to("""Do not use ANY_ARGUMENTS together with other arguments!
@@ -250,7 +250,7 @@ Use ANY_ARGUMENT as a wildcard for single arguments."""))
 
     def test_should_return_configured_answer_when_addressing_target_using_string(self):
 
-        when('targetpackage').targetfunction(ANY_ARGUMENTS).then_return('foobar')
+        when('targetpackage').targetfunction(ANY_VALUES).then_return('foobar')
 
         assert_that(targetpackage.targetfunction(keyword_argument='abc'), equal_to('foobar'))
 

@@ -17,7 +17,7 @@ __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
 __all__ = ['ANY_VALUE',
-           'ANY_ARGUMENTS',
+           'ANY_VALUES',
            'AT_LEAST_ONCE',
            'NEVER',
            'UnitTests',
@@ -54,7 +54,7 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
 LOGGER = getLogger(__name__)
 
 ANY_VALUE = AnyValueMatcher()
-ANY_ARGUMENTS = AnyValuesMatcher()
+ANY_VALUES = AnyValuesMatcher()
 AT_LEAST_ONCE = AtLeastOnceMatcher()
 NEVER = NeverMatcher()
 
@@ -122,10 +122,10 @@ class FluentCallEntry(object):
         if not self.target.is_equal_to(target, attribute_name):
             return False
 
-        if self.arguments and self.arguments[0] is ANY_ARGUMENTS:
+        if self.arguments and self.arguments[0] is ANY_VALUES:
             return True
 
-        if arguments and arguments[0] is ANY_ARGUMENTS:
+        if arguments and arguments[0] is ANY_VALUES:
             return True
 
         if self.arguments == arguments and self.keyword_arguments == keyword_arguments:
@@ -259,7 +259,7 @@ class FluentMockConfigurator(object):
         self._fluent_mock = fluent_mock
 
     def __call__(self, *arguments, **keyword_arguments):
-        if len(arguments) > 1 and ANY_ARGUMENTS in arguments:
+        if len(arguments) > 1 and ANY_VALUES in arguments:
             raise InvalidUseOfAnyArgumentsError()
 
         answer = FluentAnswer(self._fluent_mock.object, self._fluent_mock.attribute_name, arguments, keyword_arguments)
@@ -337,7 +337,7 @@ class Verifier(FluentTarget):
         return matching_call_entries
 
     def _ensure_valid_usage_of_any_arguments(self, arguments):
-        if arguments and ANY_ARGUMENTS in arguments:
+        if arguments and ANY_VALUES in arguments:
             if len(arguments) > 1:
                 raise InvalidUseOfAnyArgumentsError()
 

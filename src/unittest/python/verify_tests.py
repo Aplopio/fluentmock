@@ -16,7 +16,7 @@
 from mock import Mock
 from hamcrest import assert_that, equal_to
 from fluentmock import (ANY_VALUE,
-                        ANY_ARGUMENTS,
+                        ANY_VALUES,
                         NEVER,
                         UnitTests,
                         when,
@@ -204,7 +204,7 @@ class AnyArgumentsVerificationTests(UnitTests):
 
         targetpackage.targetfunction(1)
 
-        verify(targetpackage).targetfunction(ANY_ARGUMENTS)
+        verify(targetpackage).targetfunction(ANY_VALUES)
 
     def test_should_raise_exception_when_trying_to_use_any_arguments_with_(self):
 
@@ -215,7 +215,7 @@ class AnyArgumentsVerificationTests(UnitTests):
         exception_raised = False
 
         try:
-            verify(targetpackage).targetfunction(ANY_ARGUMENTS, 123)
+            verify(targetpackage).targetfunction(ANY_VALUES, 123)
 
         except InvalidUseOfAnyArgumentsError as error:
             exception_raised = True
@@ -233,7 +233,7 @@ Use ANY_ARGUMENT as a wildcard for single arguments."""))
         exception_raised = False
 
         try:
-            verify(targetpackage).targetfunction(1, 2, 3, ANY_ARGUMENTS)
+            verify(targetpackage).targetfunction(1, 2, 3, ANY_VALUES)
 
         except InvalidUseOfAnyArgumentsError as error:
             exception_raised = True
@@ -269,7 +269,7 @@ class MockVerificationTests(UnitTests):
 
         test_object = Mock(targetpackage.TheClass())
 
-        when(test_object).some_method(ANY_ARGUMENTS).then_return(0)
+        when(test_object).some_method(ANY_VALUES).then_return(0)
 
         assert_that(test_object.some_method(1, 2, 3), equal_to(0))
 
@@ -279,11 +279,11 @@ class MockVerificationTests(UnitTests):
 
         test_object = Mock(targetpackage.TheClass())
 
-        when(test_object).some_method(ANY_ARGUMENTS).then_return(0)
+        when(test_object).some_method(ANY_VALUES).then_return(0)
 
         assert_that(test_object.some_method(1, 2, 3), equal_to(0))
 
-        verify(test_object).some_method(ANY_ARGUMENTS)
+        verify(test_object).some_method(ANY_VALUES)
 
 
 class NativeMockVerificationTests(UnitTests):
@@ -621,7 +621,7 @@ class VerifyAnyArgumentTests(UnitTests):
 
     def test_should_verify_any_argument_twice(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(1)
+        when(targetpackage).targetfunction(ANY_VALUES).then_return(1)
 
         targetpackage.targetfunction(2, 'abc')
 
@@ -629,7 +629,7 @@ class VerifyAnyArgumentTests(UnitTests):
 
     def test_should_raise_error_with_a_detailed_message_when_any_argument_does_not_match(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return('123')
+        when(targetpackage).targetfunction(ANY_VALUES).then_return('123')
 
         targetpackage.targetfunction(1, 2, 3)
 
@@ -649,7 +649,7 @@ class TimesVerificationTests(UnitTests):
 
     def test_should_verify_that_target_has_been_called_exactly_once(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+        when(targetpackage).targetfunction(ANY_VALUES).then_return(123)
 
         targetpackage.targetfunction("abc")
 
@@ -657,7 +657,7 @@ class TimesVerificationTests(UnitTests):
 
     def test_should_raise_exception_when_times_is_not_instance_of_fluentmatcher_or_integer(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+        when(targetpackage).targetfunction(ANY_VALUES).then_return(123)
 
         targetpackage.targetfunction("abc")
 
@@ -672,7 +672,7 @@ class TimesVerificationTests(UnitTests):
 
     def test_should_raise_exception_when_times_is_two_but_target_called_once(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+        when(targetpackage).targetfunction(ANY_VALUES).then_return(123)
 
         targetpackage.targetfunction("abc")
 
@@ -690,7 +690,7 @@ Expected: call targetpackage.targetfunction('abc') << exactly 2 times >>
 
     def test_should_verify_that_target_has_been_called_exactly_three_times(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+        when(targetpackage).targetfunction(ANY_VALUES).then_return(123)
 
         targetpackage.targetfunction("abc")
         targetpackage.targetfunction("abc")
@@ -732,13 +732,13 @@ Expected: call mock.Mock.some_method(1, 2, 3) << exactly 2 times >>
 
     def test_should_raise_exception_when_called_once_but_expected_twice_with_any_arguments(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENTS).then_return(123)
+        when(targetpackage).targetfunction(ANY_VALUES).then_return(123)
 
         targetpackage.targetfunction("abc")
 
         exception_raised = False
         try:
-            verify(targetpackage, times=2).targetfunction(ANY_ARGUMENTS)
+            verify(targetpackage, times=2).targetfunction(ANY_VALUES)
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
