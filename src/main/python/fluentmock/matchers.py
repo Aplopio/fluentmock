@@ -57,10 +57,6 @@ class ContainsMatcher(FluentMatcher):
         return self._matcher_string(text)
 
 
-def contains(substring):
-    return ContainsMatcher(substring)
-
-
 class NeverMatcher(FluentMatcher):
 
     def matches(self, value):
@@ -101,3 +97,7 @@ class TimesMatcher(FluentMatcher):
     def __repr__(self):
         text = 'exactly {expected} times'.format(expected=self._expected)
         return self._matcher_string(text)
+
+
+def contains(substring):
+    return ContainsMatcher(substring)
