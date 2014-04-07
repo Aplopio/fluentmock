@@ -120,3 +120,7 @@ class TimesMatcher(FluentMatcher):
 
 def contains(substring):
     return ContainsMatcher(substring)
+
+
+def any_value_of_type(the_type):
+    return AnyValueOfTypeMatcher(the_type)

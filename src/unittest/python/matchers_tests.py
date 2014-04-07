@@ -22,6 +22,7 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
                                  FluentMatcher,
                                  NeverMatcher,
                                  TimesMatcher,
+                                 any_value_of_type,
                                  contains)
 from hamcrest import assert_that, equal_to, instance_of
 
@@ -257,5 +258,38 @@ class AnyValueOfTypeMatcherTests(UnitTests):
     def test_should_return_string_representation(self):
 
         matcher = AnyValueOfTypeMatcher(bool)
+
+        assert_that(str(matcher), equal_to('<< Any value of type "bool" >>'))
+
+
+class AnyValueOfTypeTests(UnitTests):
+
+    def test_should_return_true_when_asking_for_int_and_int_is_given(self):
+
+        matcher = any_value_of_type(int)
+
+        assert_that(matcher.matches(1), equal_to(True))
+
+    def test_should_return_false_when_asking_for_int_and_string_is_given(self):
+
+        matcher = any_value_of_type(int)
+
+        assert_that(matcher.matches("Hello world"), equal_to(False))
+
+    def test_should_return_true_when_asking_for_string_and_string_is_given(self):
+
+        matcher = any_value_of_type(str)
+
+        assert_that(matcher.matches("Hello world!"), equal_to(True))
+
+    def test_should_return_false_when_asking_for_string_and_int_is_given(self):
+
+        matcher = any_value_of_type(str)
+
+        assert_that(matcher.matches(1), equal_to(False))
+
+    def test_should_return_string_representation(self):
+
+        matcher = any_value_of_type(bool)
 
         assert_that(str(matcher), equal_to('<< Any value of type "bool" >>'))
