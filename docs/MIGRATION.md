@@ -52,12 +52,12 @@ class Tests(UnitTests):
         pass
 ```
 
-## mockito.any → fluentmock.ANY_ARGUMENT or fluentmock.ANY_ARGUMENTS
+## mockito.any → fluentmock.ANY_VALUE or fluentmock.ANY_VALUES
 
-Replace the call to `any()` with the Matcher `ANY_ARGUMENTS`
+Replace the call to `any()` with the Matcher `ANY_VALUES`
 when you want to make sure the target has been called with any argument(s).
-But use the matcher `ANY_ARGUMENT` if you want to match the
-`ANY_ARGUMENT` works here like a wildcard (think *) for a argument.
+But use the matcher `ANY_VALUE` if you want to match the
+`ANY_VALUE` works here like a wildcard (think *) for a argument.
 
 ## thenReturn → then_return
 

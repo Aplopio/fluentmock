@@ -41,16 +41,16 @@ class FluentmockStyleTest(UnitTests):
 But fluentmock gives you even more options for verification.
 You can verify that `targetfunction` has been called at all.
 ```python
-        verify(targetpackage).targetfunction(ANY_ARGUMENTS)
+        verify(targetpackage).targetfunction(ANY_VALUES)
 ```
 
 ... or you can be more specific and verify that `targetfunction`
 has been called with exactly ONE argument (but ignoring the value)
 ```python
-        verify(targetpackage).targetfunction(ANY_ARGUMENT)
+        verify(targetpackage).targetfunction(ANY_VALUE)
 ```
 
-To be able to use `ANY_ARGUMENT` and `ANY_ARGUMENTS` you have to
+To be able to use `ANY_VALUE` and `ANY_VALUES` you have to
 configure the target with `when`.
 
 ## Native verification
