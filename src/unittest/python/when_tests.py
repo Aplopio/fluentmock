@@ -16,7 +16,7 @@
 from hamcrest import assert_that, equal_to, instance_of
 from mock import Mock
 
-from fluentmock import ANY_ARGUMENT, ANY_ARGUMENTS, FluentAnswer, FluentMockConfigurator, UnitTests, when
+from fluentmock import ANY_VALUE, ANY_ARGUMENTS, FluentAnswer, FluentMockConfigurator, UnitTests, when
 from fluentmock.exceptions import InvalidAttributeError, InvalidUseOfAnyArgumentsError
 
 import targetpackage
@@ -259,7 +259,7 @@ class AnyArgumentTests(UnitTests):
 
     def test_should_match_argument_when_using_any_argument(self):
 
-        when(targetpackage.subpackage).subtargetfunction(ANY_ARGUMENT).then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(ANY_VALUE).then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1), equal_to('specific'))
         assert_that(targetpackage.subpackage.subtargetfunction(2), equal_to('specific'))
@@ -267,72 +267,72 @@ class AnyArgumentTests(UnitTests):
 
     def test_should_match_number_of_arguments_when_using_any_argument(self):
 
-        when(targetpackage.subpackage).subtargetfunction(ANY_ARGUMENT).then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(ANY_VALUE).then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(0, 1), equal_to(None))
 
     def test_should_match_number_of_keyword_arguments_when_using_any_argument(self):
 
-        when(targetpackage.subpackage).subtargetfunction(ANY_ARGUMENT).then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(ANY_VALUE).then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(0, hello='world'), equal_to(None))
 
     def test_should_match_second_argument_when_using_any_argument_on_second_argument(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT).then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_VALUE).then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, 2), equal_to('specific'))
 
     def test_should_not_match_when_using_any_argument_on_second_argument_and_first_argument_different(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT).then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_VALUE).then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(0, 2), equal_to(None))
 
     def test_should_match_when_using_any_argument_on_second_argument_and_third_argument_is_keyword_argument(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT, foo='spam').then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_VALUE, foo='spam').then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, 2, foo='spam'), equal_to('specific'))
 
     def test_should_not_match_when_using_any_argument_on_second_argument_and_keyword_argument_does_not_match(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT, foo='spam').then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_VALUE, foo='spam').then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, 2, foo='eggs'), equal_to(None))
 
     def test_should_not_match_when_using_any_argument_on_second_argument_and_keyword_arguments_do_not_match(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT, foo='bar', spam='egg').then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_VALUE, foo='bar', spam='egg').then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, 2, foo='bar', spam='blabla'), equal_to(None))
 
     def test_should_match_when_using_any_argument_on_second_argument_and_two_keyword_arguments_match(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT, foo='bar', spam='egg').then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_VALUE, foo='bar', spam='egg').then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, 2, foo='bar', spam='egg'), equal_to('specific'))
 
     def test_should_match_when_using_any_argument_on_second_argument_and_three_keyword_arguments_match(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT, a='1', b='2', c='3').then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_VALUE, a='1', b='2', c='3').then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, 2, a='1', b='2', c='3'), equal_to('specific'))
 
     def test_should_match_when_using_any_argument_on_keyword_argument(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, a='1', b=ANY_ARGUMENT, c='3').then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, a='1', b=ANY_VALUE, c='3').then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, a='1', b='hello world', c='3'), equal_to('specific'))
 
     def test_should_not_match_when_using_any_argument_but_equal_number_of_keyword_arguments(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT, foo='bar', spam='egg').then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_VALUE, foo='bar', spam='egg').then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, 2, foo='bar', blam='blabla'), equal_to(None))
 
     def test_should_not_match_when_using_any_argument_but_equal_number_of_keyword_arguments_but_not_equal_keys(self):
 
-        when(targetpackage.subpackage).subtargetfunction(1, ANY_ARGUMENT, foo='bar', spam='egg').then_return('specific')
+        when(targetpackage.subpackage).subtargetfunction(1, ANY_VALUE, foo='bar', spam='egg').then_return('specific')
 
         assert_that(targetpackage.subpackage.subtargetfunction(1, 2, zap='bran', spam='blabla'), equal_to(None))

@@ -16,7 +16,7 @@
 __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
-__all__ = ['ANY_ARGUMENT',
+__all__ = ['ANY_VALUE',
            'ANY_ARGUMENTS',
            'AT_LEAST_ONCE',
            'NEVER',
@@ -53,7 +53,7 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
 
 LOGGER = getLogger(__name__)
 
-ANY_ARGUMENT = AnyValueMatcher()
+ANY_VALUE = AnyValueMatcher()
 ANY_ARGUMENTS = AnyValuesMatcher()
 AT_LEAST_ONCE = AtLeastOnceMatcher()
 NEVER = NeverMatcher()

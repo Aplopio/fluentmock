@@ -15,7 +15,7 @@
 
 from mock import Mock
 from hamcrest import assert_that, equal_to
-from fluentmock import (ANY_ARGUMENT,
+from fluentmock import (ANY_VALUE,
                         ANY_ARGUMENTS,
                         NEVER,
                         UnitTests,
@@ -263,7 +263,7 @@ class MockVerificationTests(UnitTests):
 
         assert_that(test_object.some_method(1), equal_to(0))
 
-        verify(test_object).some_method(ANY_ARGUMENT)
+        verify(test_object).some_method(ANY_VALUE)
 
     def test_should_verify_a_call_to_a_field_of_a_mock_with_some_arguments_and_any_argument(self):
 
@@ -273,7 +273,7 @@ class MockVerificationTests(UnitTests):
 
         assert_that(test_object.some_method(1, 2, 3), equal_to(0))
 
-        verify(test_object).some_method(1, ANY_ARGUMENT, 3)
+        verify(test_object).some_method(1, ANY_VALUE, 3)
 
     def test_should_verify_a_call_to_a_field_of_a_mock_with_any_arguments(self):
 
@@ -379,7 +379,7 @@ Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be 
 
         exception_raised = False
         try:
-            verify(test_object).some_method(ANY_ARGUMENT, 2, 3, hello='world')
+            verify(test_object).some_method(ANY_VALUE, 2, 3, hello='world')
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
@@ -402,7 +402,7 @@ Please configure your mock in order to be able to use a matcher.
 
         exception_raised = False
         try:
-            verify(test_object).some_method(1, ANY_ARGUMENT, 3, hello='world')
+            verify(test_object).some_method(1, ANY_VALUE, 3, hello='world')
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
@@ -425,7 +425,7 @@ Please configure your mock in order to be able to use a matcher.
 
         exception_raised = False
         try:
-            verify(test_object).some_method(1, 2, 3, hello=ANY_ARGUMENT)
+            verify(test_object).some_method(1, 2, 3, hello=ANY_VALUE)
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
@@ -448,7 +448,7 @@ Please configure your mock in order to be able to use a matcher.
 
         exception_raised = False
         try:
-            verify(test_object).some_method(1, 2, 3, hello='world', world=ANY_ARGUMENT)
+            verify(test_object).some_method(1, 2, 3, hello='world', world=ANY_VALUE)
         except FoundMatcherInNativeVerificationError as error:
             exception_raised = True
             self.assertTrue(str(error).startswith("""\nYou were trying to verify mock.Mock.some_method(1, 2, 3, """))
@@ -613,11 +613,11 @@ class VerifyAnyArgumentTests(UnitTests):
 
     def test_should_verify_any_argument(self):
 
-        when(targetpackage).targetfunction(ANY_ARGUMENT).then_return(1)
+        when(targetpackage).targetfunction(ANY_VALUE).then_return(1)
 
         targetpackage.targetfunction(2)
 
-        verify(targetpackage).targetfunction(ANY_ARGUMENT)
+        verify(targetpackage).targetfunction(ANY_VALUE)
 
     def test_should_verify_any_argument_twice(self):
 
@@ -625,7 +625,7 @@ class VerifyAnyArgumentTests(UnitTests):
 
         targetpackage.targetfunction(2, 'abc')
 
-        verify(targetpackage).targetfunction(ANY_ARGUMENT, ANY_ARGUMENT)
+        verify(targetpackage).targetfunction(ANY_VALUE, ANY_VALUE)
 
     def test_should_raise_error_with_a_detailed_message_when_any_argument_does_not_match(self):
 
@@ -635,7 +635,7 @@ class VerifyAnyArgumentTests(UnitTests):
 
         exception_raised = False
         try:
-            verify(targetpackage).targetfunction(1, ANY_ARGUMENT, 'c')
+            verify(targetpackage).targetfunction(1, ANY_VALUE, 'c')
         except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
