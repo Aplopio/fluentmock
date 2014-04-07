@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from subprocess import PIPE, check_call
+from subprocess import check_call
 from sys import argv
 
 version = argv[1]
