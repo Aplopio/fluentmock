@@ -56,6 +56,7 @@ LOGGER = getLogger(__name__)
 
 ANY_BOOLEAN = AnyValueOfTypeMatcher(bool)
 ANY_INTEGER = AnyValueOfTypeMatcher(int)
+ANY_LONG = AnyValueOfTypeMatcher(long)
 ANY_VALUE = AnyValueMatcher()
 ANY_VALUES = AnyValuesMatcher()
 ANY_STRING = AnyValueOfTypeMatcher(str)

@@ -15,6 +15,7 @@
 
 from fluentmock import (ANY_BOOLEAN,
                         ANY_INTEGER,
+                        ANY_LONG,
                         ANY_STRING,
                         ANY_VALUE,
                         ANY_VALUES,
@@ -57,3 +58,9 @@ class MatcherTests(UnitTests):
 
         assert_that(targetpackage.targetfunction(True), equal_to('Yes!'))
         assert_that(targetpackage.targetfunction(False), equal_to('Yes!'))
+
+    def test_should_match_any_long(self):
+
+        when(targetpackage).targetfunction(ANY_LONG).then_return('Yes!')
+
+        assert_that(targetpackage.targetfunction(long(123)), equal_to('Yes!'))
