@@ -17,7 +17,7 @@ from fluentmock import UnitTests
 from fluentmock.matchers import (AtLeastOnceMatcher,
                                  ContainsMatcher,
                                  FluentAnyArgument,
-                                 FluentAnyArguments,
+                                 AnyArgumentsMatcher,
                                  FluentMatcher,
                                  NeverMatcher,
                                  TimesMatcher,
@@ -73,11 +73,11 @@ class FluentAnyArgumentTests(UnitTests):
         assert_that(str(matcher), equal_to('<< ANY_ARGUMENT >>'))
 
 
-class FluentAnyArgumentsTests(UnitTests):
+class AnyArgumentsMatcherTests(UnitTests):
 
     def test_should_return_true_when_string_is_given(self):
 
-        matcher = FluentAnyArguments()
+        matcher = AnyArgumentsMatcher()
 
         actual = matcher.matches('hello world')
 
@@ -85,7 +85,7 @@ class FluentAnyArgumentsTests(UnitTests):
 
     def test_should_return_true_when_integer_is_given(self):
 
-        matcher = FluentAnyArguments()
+        matcher = AnyArgumentsMatcher()
 
         actual = matcher.matches(1)
 
@@ -93,7 +93,7 @@ class FluentAnyArgumentsTests(UnitTests):
 
     def test_should_return_true_when_none_is_given(self):
 
-        matcher = FluentAnyArguments()
+        matcher = AnyArgumentsMatcher()
 
         actual = matcher.matches(None)
 
@@ -101,7 +101,7 @@ class FluentAnyArgumentsTests(UnitTests):
 
     def test_should_return_readable_string_representation(self):
 
-        matcher = FluentAnyArguments()
+        matcher = AnyArgumentsMatcher()
 
         assert_that(str(matcher), equal_to('<< ANY_ARGUMENTS >>'))
 

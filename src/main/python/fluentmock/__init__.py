@@ -46,7 +46,7 @@ from fluentmock.exceptions import (FoundMatcherInNativeVerificationError,
                                    VerificationError)
 from fluentmock.matchers import (AtLeastOnceMatcher,
                                  FluentMatcher,
-                                 FluentAnyArguments,
+                                 AnyArgumentsMatcher,
                                  FluentAnyArgument,
                                  NeverMatcher,
                                  TimesMatcher)
@@ -54,7 +54,7 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
 LOGGER = getLogger(__name__)
 
 ANY_ARGUMENT = FluentAnyArgument()
-ANY_ARGUMENTS = FluentAnyArguments()
+ANY_ARGUMENTS = AnyArgumentsMatcher()
 AT_LEAST_ONCE = AtLeastOnceMatcher()
 NEVER = NeverMatcher()
 

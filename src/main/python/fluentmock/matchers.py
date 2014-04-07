@@ -26,7 +26,7 @@ class FluentMatcher(object):
         raise NotImplementedError()
 
 
-class FluentAnyArguments(FluentMatcher):
+class AnyArgumentsMatcher(FluentMatcher):
 
     def matches(self, value):
         return True
