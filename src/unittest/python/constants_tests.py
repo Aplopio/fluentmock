@@ -20,6 +20,7 @@ from fluentmock import (ANY_BOOLEAN,
                         ANY_INTEGER,
                         ANY_LIST,
                         ANY_LONG,
+                        ANY_SLICE,
                         ANY_STRING,
                         ANY_TUPLE,
                         ANY_UNICODE,
@@ -114,3 +115,9 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_XRANGE).then_return('Yes!')
 
         assert_that(targetpackage.targetfunction(xrange(100)), equal_to('Yes!'))
+
+    def test_should_match_any_slice(self):
+
+        when(targetpackage).targetfunction(ANY_SLICE).then_return('Yes!')
+
+        assert_that(targetpackage.targetfunction(slice(1, 10)), equal_to('Yes!'))

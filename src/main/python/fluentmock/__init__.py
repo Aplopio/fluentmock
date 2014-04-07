@@ -18,6 +18,7 @@ __version__ = '${version}'
 
 __all__ = ['ANY_VALUE',
            'ANY_VALUES',
+           'ANY_SLICE'
            'AT_LEAST_ONCE',
            'NEVER',
            'UnitTests',
@@ -61,6 +62,7 @@ ANY_FLOAT = AnyValueOfTypeMatcher(float)
 ANY_INTEGER = AnyValueOfTypeMatcher(int)
 ANY_LIST = AnyValueOfTypeMatcher(list)
 ANY_LONG = AnyValueOfTypeMatcher(long)
+ANY_SLICE = AnyValueOfTypeMatcher(slice)
 ANY_STRING = AnyValueOfTypeMatcher(str)
 ANY_TUPLE = AnyValueOfTypeMatcher(tuple)
 ANY_UNICODE = AnyValueOfTypeMatcher(unicode)
