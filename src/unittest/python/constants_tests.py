@@ -18,6 +18,7 @@ from fluentmock import (ANY_BOOLEAN,
                         ANY_INTEGER,
                         ANY_LONG,
                         ANY_STRING,
+                        ANY_TUPLE,
                         ANY_UNICODE,
                         ANY_VALUE,
                         ANY_VALUES,
@@ -78,3 +79,9 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_UNICODE).then_return('Yes!')
 
         assert_that(targetpackage.targetfunction(u'spam eggs'), equal_to('Yes!'))
+
+    def test_should_match_any_tuple(self):
+
+        when(targetpackage).targetfunction(ANY_TUPLE).then_return('Yes!')
+
+        assert_that(targetpackage.targetfunction((1, 2, 3, 4, 5)), equal_to('Yes!'))
