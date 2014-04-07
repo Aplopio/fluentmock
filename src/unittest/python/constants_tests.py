@@ -13,7 +13,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from fluentmock import (ANY_INTEGER,
+from fluentmock import (ANY_BOOLEAN,
+                        ANY_INTEGER,
                         ANY_STRING,
                         ANY_VALUE,
                         ANY_VALUES,
@@ -49,3 +50,10 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_STRING).then_return('Yes!')
 
         assert_that(targetpackage.targetfunction('Hello world'), equal_to('Yes!'))
+
+    def test_should_match_any_boolean(self):
+
+        when(targetpackage).targetfunction(ANY_BOOLEAN).then_return('Yes!')
+
+        assert_that(targetpackage.targetfunction(True), equal_to('Yes!'))
+        assert_that(targetpackage.targetfunction(False), equal_to('Yes!'))
