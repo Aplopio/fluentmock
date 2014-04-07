@@ -57,6 +57,7 @@ LOGGER = getLogger(__name__)
 ANY_VALUE = AnyValueMatcher()
 ANY_VALUES = AnyValuesMatcher()
 ANY_INTEGER = AnyValueOfTypeMatcher(int)
+ANY_STRING = AnyValueOfTypeMatcher(str)
 
 AT_LEAST_ONCE = AtLeastOnceMatcher()
 NEVER = NeverMatcher()

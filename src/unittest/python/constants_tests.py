@@ -13,7 +13,12 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from fluentmock import ANY_INTEGER, ANY_VALUE, ANY_VALUES, UnitTests, when
+from fluentmock import (ANY_INTEGER,
+                        ANY_STRING,
+                        ANY_VALUE,
+                        ANY_VALUES,
+                        UnitTests,
+                        when)
 from hamcrest import assert_that, equal_to
 
 import targetpackage
@@ -38,3 +43,9 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_INTEGER).then_return('Yes!')
 
         assert_that(targetpackage.targetfunction(2), equal_to('Yes!'))
+
+    def test_should_match_any_string(self):
+
+        when(targetpackage).targetfunction(ANY_STRING).then_return('Yes!')
+
+        assert_that(targetpackage.targetfunction('Hello world'), equal_to('Yes!'))
