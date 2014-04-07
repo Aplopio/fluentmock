@@ -48,6 +48,7 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
                                  FluentMatcher,
                                  AnyValuesMatcher,
                                  AnyValueMatcher,
+                                 AnyValueOfTypeMatcher,
                                  NeverMatcher,
                                  TimesMatcher)
 
@@ -55,6 +56,8 @@ LOGGER = getLogger(__name__)
 
 ANY_VALUE = AnyValueMatcher()
 ANY_VALUES = AnyValuesMatcher()
+ANY_INTEGER = AnyValueOfTypeMatcher(int)
+
 AT_LEAST_ONCE = AtLeastOnceMatcher()
 NEVER = NeverMatcher()
 
