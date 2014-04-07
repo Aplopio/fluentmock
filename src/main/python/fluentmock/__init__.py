@@ -350,26 +350,24 @@ class Verifier(FluentTarget):
             method_of_mock = getattr(self.object, self.attribute_name)
             if isinstance(self.object, Mock) and isinstance(method_of_mock, Mock):
                 method_of_mock.assert_called_with(*arguments, **keyword_arguments)
-            else:
-                expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
-
-                if not _call_entries:
-                    raise VerificationError(expected_call_entry, self._matcher,
-                                            reason='No patched function has been called.')
-
-                found_calls = []
-
-                for call_entry in _call_entries:
-                    target = call_entry.target
-                    if target.is_equal_to(self.object, self.attribute_name):
-                        found_calls.append(call_entry)
-
-                if found_calls:
-                    raise VerificationError(expected_call_entry, self._matcher, found_calls=found_calls)
 
         if not self._matcher.matches(count_of_matching_calls):
             expected_call_entry = FluentCallEntry(self.object, self.attribute_name, arguments, keyword_arguments)
-            raise VerificationError(expected_call_entry, self._matcher)
+
+            method_of_mock = getattr(self.object, self.attribute_name)
+            is_a_mock_method = isinstance(self.object, Mock) and isinstance(method_of_mock, Mock)
+            if not is_a_mock_method and len(_call_entries) == 0:
+                raise VerificationError(expected_call_entry, self._matcher,
+                                        reason='No patched function has been called.')
+
+            found_calls = []
+
+            for call_entry in _call_entries:
+                target = call_entry.target
+                if target.is_equal_to(self.object, self.attribute_name):
+                    found_calls.append(call_entry)
+
+            raise VerificationError(expected_call_entry, self._matcher, found_calls=found_calls)
 
 
 def create_mock(*arguments, **keyword_arguments):

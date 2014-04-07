@@ -551,6 +551,7 @@ class VerifiyNeverTests(UnitTests):
             exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(1, 2, 3, test=1) << should never be called >>
+ but was: call targetpackage.targetfunction(1, 2, 3, test=1)
 """))
 
         assert_that(exception_raised)
@@ -682,6 +683,7 @@ class TimesVerificationTests(UnitTests):
             exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction('abc') << exactly 2 times >>
+ but was: call targetpackage.targetfunction('abc')
 """))
 
         assert_that(exception_raised)
@@ -741,6 +743,7 @@ Expected: call mock.Mock.some_method(1, 2, 3) << exactly 2 times >>
             exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(<< ANY_ARGUMENTS >>) << exactly 2 times >>
+ but was: call targetpackage.targetfunction('abc')
 """))
 
         assert_that(exception_raised)
