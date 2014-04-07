@@ -47,13 +47,13 @@ from fluentmock.exceptions import (FoundMatcherInNativeVerificationError,
 from fluentmock.matchers import (AtLeastOnceMatcher,
                                  FluentMatcher,
                                  AnyArgumentsMatcher,
-                                 AnyArgumentMatcher,
+                                 AnyValueMatcher,
                                  NeverMatcher,
                                  TimesMatcher)
 
 LOGGER = getLogger(__name__)
 
-ANY_ARGUMENT = AnyArgumentMatcher()
+ANY_ARGUMENT = AnyValueMatcher()
 ANY_ARGUMENTS = AnyArgumentsMatcher()
 AT_LEAST_ONCE = AtLeastOnceMatcher()
 NEVER = NeverMatcher()

@@ -35,7 +35,7 @@ class AnyArgumentsMatcher(FluentMatcher):
         return self._matcher_string('ANY_ARGUMENTS')
 
 
-class AnyArgumentMatcher(FluentMatcher):
+class AnyValueMatcher(FluentMatcher):
 
     def matches(self, value):
         return True
