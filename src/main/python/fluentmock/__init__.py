@@ -16,9 +16,21 @@
 __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
-__all__ = ['ANY_VALUE',
+__all__ = ['ANY_BOOLEAN',
+           'ANY_DICTIONARY',
+           'ANY_FILE',
+           'ANY_FLOAT',
+           'ANY_INTEGER',
+           'ANY_LIST',
+           'ANY_LONG',
+           'ANY_SLICE',
+           'ANY_STRING',
+           'ANY_TUPLE',
+           'ANY_UNICODE',
+           'ANY_VALUE',
            'ANY_VALUES',
-           'ANY_SLICE'
+           'ANY_XRANGE',
+           'ANY_VALUE',
            'AT_LEAST_ONCE',
            'NEVER',
            'UnitTests',
