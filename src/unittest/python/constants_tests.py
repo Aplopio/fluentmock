@@ -13,11 +13,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from sys import stdout
-
 from fluentmock import (ANY_BOOLEAN,
                         ANY_DICTIONARY,
-                        ANY_FILE,
                         ANY_FLOAT,
                         ANY_INTEGER,
                         ANY_LIST,
@@ -98,12 +95,6 @@ class MatcherTests(UnitTests):
 
         assert_that(targetpackage.targetfunction({'spam': 'eggs'}), equal_to('Yes!'))
 
-    def test_should_match_any_file(self):
-
-        when(targetpackage).targetfunction(ANY_FILE).then_return('Yes!')
-
-        assert_that(targetpackage.targetfunction(stdout), equal_to('Yes!'))
-
     def test_should_match_any_xrange(self):
 
         when(targetpackage).targetfunction(ANY_XRANGE).then_return('Yes!')
@@ -120,7 +111,6 @@ class MatcherTests(UnitTests):
 
         when(targetpackage).targetfunction(ANY_BOOLEAN).then_return('any boolean')
         when(targetpackage).targetfunction(ANY_DICTIONARY).then_return('any dictionary')
-        when(targetpackage).targetfunction(ANY_FILE).then_return('any file')
         when(targetpackage).targetfunction(ANY_FLOAT).then_return('any float')
         when(targetpackage).targetfunction(ANY_INTEGER).then_return('any integer')
         when(targetpackage).targetfunction(ANY_LIST).then_return('any list')
@@ -143,6 +133,5 @@ class MatcherTests(UnitTests):
         assert_that(targetpackage.targetfunction((5, 4, 3, 2, 1)), equal_to('any tuple'))
         assert_that(targetpackage.targetfunction(['a', 'b', 'c']), equal_to('any list'))
         assert_that(targetpackage.targetfunction({'spam': 'eggs'}), equal_to('any dictionary'))
-        assert_that(targetpackage.targetfunction(stdout), equal_to('any file'))
         assert_that(targetpackage.targetfunction(xrange(100)), equal_to('any xrange'))
         assert_that(targetpackage.targetfunction(slice(1, 10)), equal_to('any slice'))

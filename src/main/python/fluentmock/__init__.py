@@ -18,7 +18,6 @@ __version__ = '${version}'
 
 __all__ = ['ANY_BOOLEAN',
            'ANY_DICTIONARY',
-           'ANY_FILE',
            'ANY_FLOAT',
            'ANY_INTEGER',
            'ANY_LIST',
@@ -46,11 +45,6 @@ except ImportError as import_error:
     print('')
     print('Please install importlib using "pip install importlib".')
 
-try:
-    from io.IOBase import file
-except ImportError:
-    pass
-
 from mock import Mock, call, patch
 from logging import getLogger
 from unittest import TestCase
@@ -72,7 +66,6 @@ LOGGER = getLogger(__name__)
 
 ANY_BOOLEAN = AnyValueOfTypeMatcher(bool)
 ANY_DICTIONARY = AnyValueOfTypeMatcher(dict)
-ANY_FILE = AnyValueOfTypeMatcher(file)
 ANY_FLOAT = AnyValueOfTypeMatcher(float)
 ANY_INTEGER = AnyValueOfTypeMatcher(int)
 ANY_LIST = AnyValueOfTypeMatcher(list)
