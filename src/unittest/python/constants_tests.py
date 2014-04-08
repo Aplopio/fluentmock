@@ -23,7 +23,6 @@ from fluentmock import (ANY_BOOLEAN,
                         ANY_TUPLE,
                         ANY_VALUE,
                         ANY_VALUES,
-                        ANY_XRANGE,
                         UnitTests,
                         when)
 from hamcrest import assert_that, equal_to
@@ -88,12 +87,6 @@ class MatcherTests(UnitTests):
 
         assert_that(targetpackage.targetfunction({'spam': 'eggs'}), equal_to('Yes!'))
 
-    def test_should_match_any_xrange(self):
-
-        when(targetpackage).targetfunction(ANY_XRANGE).then_return('Yes!')
-
-        assert_that(targetpackage.targetfunction(xrange(100)), equal_to('Yes!'))
-
     def test_should_match_any_slice(self):
 
         when(targetpackage).targetfunction(ANY_SLICE).then_return('Yes!')
@@ -110,7 +103,6 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_STRING).then_return('any string')
         when(targetpackage).targetfunction(ANY_SLICE).then_return('any slice')
         when(targetpackage).targetfunction(ANY_TUPLE).then_return('any tuple')
-        when(targetpackage).targetfunction(ANY_XRANGE).then_return('any xrange')
         when(targetpackage).targetfunction(ANY_VALUE, ANY_VALUE).then_return('any value')
         when(targetpackage).targetfunction(ANY_VALUES).then_return('any values')
 
@@ -124,5 +116,4 @@ class MatcherTests(UnitTests):
         assert_that(targetpackage.targetfunction((5, 4, 3, 2, 1)), equal_to('any tuple'))
         assert_that(targetpackage.targetfunction(['a', 'b', 'c']), equal_to('any list'))
         assert_that(targetpackage.targetfunction({'spam': 'eggs'}), equal_to('any dictionary'))
-        assert_that(targetpackage.targetfunction(xrange(100)), equal_to('any xrange'))
         assert_that(targetpackage.targetfunction(slice(1, 10)), equal_to('any slice'))

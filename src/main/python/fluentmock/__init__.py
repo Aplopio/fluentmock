@@ -26,7 +26,6 @@ __all__ = ['ANY_BOOLEAN',
            'ANY_TUPLE',
            'ANY_VALUE',
            'ANY_VALUES',
-           'ANY_XRANGE',
            'AT_LEAST_ONCE',
            'NEVER',
            'UnitTests',
@@ -73,7 +72,6 @@ ANY_STRING = AnyValueOfTypeMatcher(str)
 ANY_TUPLE = AnyValueOfTypeMatcher(tuple)
 ANY_VALUE = AnyValueMatcher()
 ANY_VALUES = AnyValuesMatcher()
-ANY_XRANGE = AnyValueOfTypeMatcher(xrange)
 
 AT_LEAST_ONCE = AtLeastOnceMatcher()
 NEVER = NeverMatcher()
