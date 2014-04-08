@@ -21,7 +21,6 @@ from fluentmock import (ANY_BOOLEAN,
                         ANY_SLICE,
                         ANY_STRING,
                         ANY_TUPLE,
-                        ANY_UNICODE,
                         ANY_VALUE,
                         ANY_VALUES,
                         ANY_XRANGE,
@@ -71,12 +70,6 @@ class MatcherTests(UnitTests):
 
         assert_that(targetpackage.targetfunction(1.23), equal_to('Yes!'))
 
-    def test_should_match_any_unicode(self):
-
-        when(targetpackage).targetfunction(ANY_UNICODE).then_return('Yes!')
-
-        assert_that(targetpackage.targetfunction(u'spam eggs'), equal_to('Yes!'))
-
     def test_should_match_any_tuple(self):
 
         when(targetpackage).targetfunction(ANY_TUPLE).then_return('Yes!')
@@ -117,7 +110,6 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_STRING).then_return('any string')
         when(targetpackage).targetfunction(ANY_SLICE).then_return('any slice')
         when(targetpackage).targetfunction(ANY_TUPLE).then_return('any tuple')
-        when(targetpackage).targetfunction(ANY_UNICODE).then_return('any unicode')
         when(targetpackage).targetfunction(ANY_XRANGE).then_return('any xrange')
         when(targetpackage).targetfunction(ANY_VALUE, ANY_VALUE).then_return('any value')
         when(targetpackage).targetfunction(ANY_VALUES).then_return('any values')
@@ -129,7 +121,6 @@ class MatcherTests(UnitTests):
         assert_that(targetpackage.targetfunction(True), equal_to('any boolean'))
         assert_that(targetpackage.targetfunction(False), equal_to('any boolean'))
         assert_that(targetpackage.targetfunction(1.23), equal_to('any float'))
-        assert_that(targetpackage.targetfunction(u'hello world'), equal_to('any unicode'))
         assert_that(targetpackage.targetfunction((5, 4, 3, 2, 1)), equal_to('any tuple'))
         assert_that(targetpackage.targetfunction(['a', 'b', 'c']), equal_to('any list'))
         assert_that(targetpackage.targetfunction({'spam': 'eggs'}), equal_to('any dictionary'))

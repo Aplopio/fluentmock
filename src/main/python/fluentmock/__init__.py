@@ -24,7 +24,6 @@ __all__ = ['ANY_BOOLEAN',
            'ANY_SLICE',
            'ANY_STRING',
            'ANY_TUPLE',
-           'ANY_UNICODE',
            'ANY_VALUE',
            'ANY_VALUES',
            'ANY_XRANGE',
@@ -72,7 +71,6 @@ ANY_LIST = AnyValueOfTypeMatcher(list)
 ANY_SLICE = AnyValueOfTypeMatcher(slice)
 ANY_STRING = AnyValueOfTypeMatcher(str)
 ANY_TUPLE = AnyValueOfTypeMatcher(tuple)
-ANY_UNICODE = AnyValueOfTypeMatcher(unicode)
 ANY_VALUE = AnyValueMatcher()
 ANY_VALUES = AnyValuesMatcher()
 ANY_XRANGE = AnyValueOfTypeMatcher(xrange)
