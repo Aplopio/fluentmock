@@ -22,7 +22,6 @@ __all__ = ['ANY_BOOLEAN',
            'ANY_FLOAT',
            'ANY_INTEGER',
            'ANY_LIST',
-           'ANY_LONG',
            'ANY_SLICE',
            'ANY_STRING',
            'ANY_TUPLE',
@@ -72,7 +71,6 @@ ANY_FILE = AnyValueOfTypeMatcher(file)
 ANY_FLOAT = AnyValueOfTypeMatcher(float)
 ANY_INTEGER = AnyValueOfTypeMatcher(int)
 ANY_LIST = AnyValueOfTypeMatcher(list)
-ANY_LONG = AnyValueOfTypeMatcher(long)
 ANY_SLICE = AnyValueOfTypeMatcher(slice)
 ANY_STRING = AnyValueOfTypeMatcher(str)
 ANY_TUPLE = AnyValueOfTypeMatcher(tuple)

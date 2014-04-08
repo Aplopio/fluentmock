@@ -21,7 +21,6 @@ from fluentmock import (ANY_BOOLEAN,
                         ANY_FLOAT,
                         ANY_INTEGER,
                         ANY_LIST,
-                        ANY_LONG,
                         ANY_SLICE,
                         ANY_STRING,
                         ANY_TUPLE,
@@ -68,12 +67,6 @@ class MatcherTests(UnitTests):
 
         assert_that(targetpackage.targetfunction(True), equal_to('Yes!'))
         assert_that(targetpackage.targetfunction(False), equal_to('Yes!'))
-
-    def test_should_match_any_long(self):
-
-        when(targetpackage).targetfunction(ANY_LONG).then_return('Yes!')
-
-        assert_that(targetpackage.targetfunction(123L), equal_to('Yes!'))
 
     def test_should_match_any_float(self):
 
@@ -131,7 +124,6 @@ class MatcherTests(UnitTests):
         when(targetpackage).targetfunction(ANY_FLOAT).then_return('any float')
         when(targetpackage).targetfunction(ANY_INTEGER).then_return('any integer')
         when(targetpackage).targetfunction(ANY_LIST).then_return('any list')
-        when(targetpackage).targetfunction(ANY_LONG).then_return('any long')
         when(targetpackage).targetfunction(ANY_STRING).then_return('any string')
         when(targetpackage).targetfunction(ANY_SLICE).then_return('any slice')
         when(targetpackage).targetfunction(ANY_TUPLE).then_return('any tuple')
@@ -146,7 +138,6 @@ class MatcherTests(UnitTests):
         assert_that(targetpackage.targetfunction('Hello world'), equal_to('any string'))
         assert_that(targetpackage.targetfunction(True), equal_to('any boolean'))
         assert_that(targetpackage.targetfunction(False), equal_to('any boolean'))
-        assert_that(targetpackage.targetfunction(12322L), equal_to('any long'))
         assert_that(targetpackage.targetfunction(1.23), equal_to('any float'))
         assert_that(targetpackage.targetfunction(u'hello world'), equal_to('any unicode'))
         assert_that(targetpackage.targetfunction((5, 4, 3, 2, 1)), equal_to('any tuple'))
