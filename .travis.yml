@@ -7,8 +7,6 @@ python:
   - "pypy"
 
 install:
-  - sudo apt-get install pandoc
-  - pip install pypandoc
   - pip install pybuilder
 
 script:
