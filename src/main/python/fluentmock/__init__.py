@@ -46,6 +46,11 @@ except ImportError as import_error:
     print('')
     print('Please install importlib using "pip install importlib".')
 
+try:
+    from io.IOBase import file
+except ImportError:
+    pass
+
 from mock import Mock, call, patch
 from logging import getLogger
 from unittest import TestCase
