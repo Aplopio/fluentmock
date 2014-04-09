@@ -22,8 +22,7 @@ from fluentmock import (ANY_VALUE,
                         when,
                         verify)
 
-from fluentmock.exceptions import (FoundMatcherInNativeVerificationError,
-                                   InvalidAttributeError,
+from fluentmock.exceptions import (InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
                                    VerificationError)
 
@@ -380,16 +379,20 @@ Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be 
         exception_raised = False
         try:
             verify(test_object).some_method(ANY_VALUE, 2, 3, hello='world')
-        except FoundMatcherInNativeVerificationError as error:
+        except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-You were trying to verify mock.Mock.some_method(<< ANY_VALUE >>, 2, 3, hello='world')
-fluentmock.verify will call Mock.assert_called_with for verification
-when the Mock has not been configured using fluentmock.when
-Therefore it is not possible to use matchers when verifying
-a Mock without configuring it with fluentmock.when,
-because Mock.assert_called_with does not support matchers.
-Please configure your mock in order to be able to use a matcher.
+Expected: mock.Mock.some_method(<< ANY_VALUE >>, 2, 3, hello='world') << at least once >>
+  Reason: fluentmock.verify will look up the call_args_list of the
+          given mock for verification when the Mock has not been
+          configured using fluentmock.when! Therefore it is not
+          possible to use matchers when verifying a Mock without
+          configuring it with fluentmock.when, because Mock itself
+          does not support matchers.
+
+          Please configure your mock using fluentmock.when in order
+          to be able to use matchers!
+
 """))
 
         assert_that(exception_raised)
@@ -403,16 +406,20 @@ Please configure your mock in order to be able to use a matcher.
         exception_raised = False
         try:
             verify(test_object).some_method(1, ANY_VALUE, 3, hello='world')
-        except FoundMatcherInNativeVerificationError as error:
+        except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-You were trying to verify mock.Mock.some_method(1, << ANY_VALUE >>, 3, hello='world')
-fluentmock.verify will call Mock.assert_called_with for verification
-when the Mock has not been configured using fluentmock.when
-Therefore it is not possible to use matchers when verifying
-a Mock without configuring it with fluentmock.when,
-because Mock.assert_called_with does not support matchers.
-Please configure your mock in order to be able to use a matcher.
+Expected: mock.Mock.some_method(1, << ANY_VALUE >>, 3, hello='world') << at least once >>
+  Reason: fluentmock.verify will look up the call_args_list of the
+          given mock for verification when the Mock has not been
+          configured using fluentmock.when! Therefore it is not
+          possible to use matchers when verifying a Mock without
+          configuring it with fluentmock.when, because Mock itself
+          does not support matchers.
+
+          Please configure your mock using fluentmock.when in order
+          to be able to use matchers!
+
 """))
 
         assert_that(exception_raised)
@@ -426,16 +433,20 @@ Please configure your mock in order to be able to use a matcher.
         exception_raised = False
         try:
             verify(test_object).some_method(1, 2, 3, hello=ANY_VALUE)
-        except FoundMatcherInNativeVerificationError as error:
+        except VerificationError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""
-You were trying to verify mock.Mock.some_method(1, 2, 3, hello=<< ANY_VALUE >>)
-fluentmock.verify will call Mock.assert_called_with for verification
-when the Mock has not been configured using fluentmock.when
-Therefore it is not possible to use matchers when verifying
-a Mock without configuring it with fluentmock.when,
-because Mock.assert_called_with does not support matchers.
-Please configure your mock in order to be able to use a matcher.
+Expected: mock.Mock.some_method(1, 2, 3, hello=<< ANY_VALUE >>) << at least once >>
+  Reason: fluentmock.verify will look up the call_args_list of the
+          given mock for verification when the Mock has not been
+          configured using fluentmock.when! Therefore it is not
+          possible to use matchers when verifying a Mock without
+          configuring it with fluentmock.when, because Mock itself
+          does not support matchers.
+
+          Please configure your mock using fluentmock.when in order
+          to be able to use matchers!
+
 """))
 
         assert_that(exception_raised)
@@ -449,9 +460,21 @@ Please configure your mock in order to be able to use a matcher.
         exception_raised = False
         try:
             verify(test_object).some_method(1, 2, 3, hello='world', world=ANY_VALUE)
-        except FoundMatcherInNativeVerificationError as error:
+        except VerificationError as error:
             exception_raised = True
-            self.assertTrue(str(error).startswith("""\nYou were trying to verify mock.Mock.some_method(1, 2, 3, """))
+            assert_that(str(error), equal_to("""
+Expected: mock.Mock.some_method(1, 2, 3, world=<< ANY_VALUE >>, hello='world') << at least once >>
+  Reason: fluentmock.verify will look up the call_args_list of the
+          given mock for verification when the Mock has not been
+          configured using fluentmock.when! Therefore it is not
+          possible to use matchers when verifying a Mock without
+          configuring it with fluentmock.when, because Mock itself
+          does not support matchers.
+
+          Please configure your mock using fluentmock.when in order
+          to be able to use matchers!
+
+"""))
 
         assert_that(exception_raised)
 

@@ -48,8 +48,7 @@ from logging import getLogger
 from unittest import TestCase
 from types import ModuleType
 
-from fluentmock.exceptions import (FoundMatcherInNativeVerificationError,
-                                   InvalidAttributeError,
+from fluentmock.exceptions import (InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
                                    VerificationError)
 from fluentmock.matchers import (AtLeastOnceMatcher,
@@ -75,6 +74,17 @@ ANY_VALUES = AnyValuesMatcher()
 
 AT_LEAST_ONCE = AtLeastOnceMatcher()
 NEVER = NeverMatcher()
+
+NO_MATCHERS_IN_PURE_MOCK = """fluentmock.verify will look up the call_args_list of the
+          given mock for verification when the Mock has not been
+          configured using fluentmock.when! Therefore it is not
+          possible to use matchers when verifying a Mock without
+          configuring it with fluentmock.when, because Mock itself
+          does not support matchers.
+
+          Please configure your mock using fluentmock.when in order
+          to be able to use matchers!
+"""
 
 _configurators = {}
 _patch_entries = []
@@ -333,10 +343,10 @@ class Verifier(FluentTarget):
 
         for argument in arguments:
             if isinstance(argument, FluentMatcher):
-                raise FoundMatcherInNativeVerificationError(call_entry_string)
+                raise VerificationError(call_entry_string, self._matcher, reason=NO_MATCHERS_IN_PURE_MOCK)
         for key in keyword_arguments:
             if isinstance(keyword_arguments[key], FluentMatcher):
-                raise FoundMatcherInNativeVerificationError(call_entry_string)
+                raise VerificationError(call_entry_string, self._matcher, reason=NO_MATCHERS_IN_PURE_MOCK)
 
     def _count_matching_call_entries(self, arguments, keyword_arguments):
         matching_call_entries = 0
