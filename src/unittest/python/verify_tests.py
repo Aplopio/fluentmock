@@ -14,7 +14,7 @@
 #   limitations under the License.
 
 from mock import Mock
-from hamcrest import assert_that, equal_to
+from hamcrest import assert_that, equal_to, ends_with
 from fluentmock import (ANY_VALUE,
                         ANY_VALUES,
                         NEVER,
@@ -381,15 +381,7 @@ Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be 
             verify(test_object).some_method(ANY_VALUE, 2, 3, hello='world')
         except VerificationError as error:
             exception_raised = True
-            assert_that(str(error), equal_to("""
-Expected: mock.Mock.some_method(<< ANY_VALUE >>, 2, 3, hello='world') << at least once >>
-  Reason: fluentmock.verify will look up the call_args_list of the
-          given mock for verification when the Mock has not been
-          configured using fluentmock.when! Therefore it is not
-          possible to use matchers when verifying a Mock without
-          configuring it with fluentmock.when, because Mock itself
-          does not support matchers.
-
+            assert_that(str(error), ends_with("""
           Please configure your mock using fluentmock.when in order
           to be able to use matchers!
 
@@ -408,15 +400,7 @@ Expected: mock.Mock.some_method(<< ANY_VALUE >>, 2, 3, hello='world') << at leas
             verify(test_object).some_method(1, ANY_VALUE, 3, hello='world')
         except VerificationError as error:
             exception_raised = True
-            assert_that(str(error), equal_to("""
-Expected: mock.Mock.some_method(1, << ANY_VALUE >>, 3, hello='world') << at least once >>
-  Reason: fluentmock.verify will look up the call_args_list of the
-          given mock for verification when the Mock has not been
-          configured using fluentmock.when! Therefore it is not
-          possible to use matchers when verifying a Mock without
-          configuring it with fluentmock.when, because Mock itself
-          does not support matchers.
-
+            assert_that(str(error), ends_with("""
           Please configure your mock using fluentmock.when in order
           to be able to use matchers!
 
@@ -435,15 +419,7 @@ Expected: mock.Mock.some_method(1, << ANY_VALUE >>, 3, hello='world') << at leas
             verify(test_object).some_method(1, 2, 3, hello=ANY_VALUE)
         except VerificationError as error:
             exception_raised = True
-            assert_that(str(error), equal_to("""
-Expected: mock.Mock.some_method(1, 2, 3, hello=<< ANY_VALUE >>) << at least once >>
-  Reason: fluentmock.verify will look up the call_args_list of the
-          given mock for verification when the Mock has not been
-          configured using fluentmock.when! Therefore it is not
-          possible to use matchers when verifying a Mock without
-          configuring it with fluentmock.when, because Mock itself
-          does not support matchers.
-
+            assert_that(str(error), ends_with("""
           Please configure your mock using fluentmock.when in order
           to be able to use matchers!
 
