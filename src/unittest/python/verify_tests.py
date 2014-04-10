@@ -438,15 +438,7 @@ Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be 
             verify(test_object).some_method(1, 2, 3, hello='world', world=ANY_VALUE)
         except VerificationError as error:
             exception_raised = True
-            assert_that(str(error), equal_to("""
-Expected: mock.Mock.some_method(1, 2, 3, world=<< ANY_VALUE >>, hello='world') << at least once >>
-  Reason: fluentmock.verify will look up the call_args_list of the
-          given mock for verification when the Mock has not been
-          configured using fluentmock.when! Therefore it is not
-          possible to use matchers when verifying a Mock without
-          configuring it with fluentmock.when, because Mock itself
-          does not support matchers.
-
+            assert_that(str(error), ends_with("""
           Please configure your mock using fluentmock.when in order
           to be able to use matchers!
 
