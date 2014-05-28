@@ -21,7 +21,7 @@ from fluentmock import when, undo_patches, get_patches
 import targetpackage
 
 
-class UnstubTests(TestCase):
+class UndoPatchesTests(TestCase):
 
     def test_should_undo_patching_of_function(self):
 
