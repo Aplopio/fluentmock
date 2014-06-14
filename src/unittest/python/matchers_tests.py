@@ -23,7 +23,9 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
                                  NeverMatcher,
                                  TimesMatcher,
                                  any_value_of_type,
+                                 any_of,
                                  contains)
+from fluentmock.exceptions import MatcherException
 from hamcrest import assert_that, equal_to, instance_of
 
 
@@ -293,3 +295,40 @@ class AnyValueOfTypeTests(UnitTests):
         matcher = any_value_of_type(bool)
 
         assert_that(str(matcher), equal_to('<< Any value of type "bool" >>'))
+
+
+class AnyOfMatcherTests(UnitTests):
+
+    def test_should_raise_exception_when_no_argument_provided(self):
+
+        self.assertRaises(MatcherException, any_of)
+
+    def test_should_return_true_when_matching_one_element_and_one_element_is_given(self):
+
+        matcher = any_of(1)
+
+        assert_that(matcher.matches(1), equal_to(True))
+
+    def tests_should_return_false_when_matching_one_element_but_list_has_another_element(self):
+
+        matcher = any_of('a')
+
+        assert_that(matcher.matches(1), equal_to(False))
+
+    def test_should_return_true_when_two_elemens_given_and_matchin_one_of_them(self):
+
+        matcher = any_of(1, 2)
+
+        assert_that(matcher.matches(2), equal_to(True))
+
+    def test_should_return_true_when_three_elemens_given_and_matchin_one_of_them(self):
+
+        matcher = any_of('a', 1, 'b', 2)
+
+        assert_that(matcher.matches('b'), equal_to(True))
+
+    def test_should_return_string_representation(self):
+
+        matcher = any_of(1, 2, 3)
+
+        assert_that(str(matcher), equal_to('<< Any value in [1, 2, 3] >>'))

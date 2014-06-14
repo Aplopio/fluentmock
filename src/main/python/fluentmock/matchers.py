@@ -13,6 +13,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+from fluentmock.exceptions import MatcherException
+
 
 class FluentMatcher(object):
 
@@ -61,6 +63,24 @@ class AnyValueOfTypeMatcher(FluentMatcher):
         type_name = self._expected_type.__name__
         text = 'Any value of type "{type_name}"'.format(type_name=type_name)
         return self._matcher_string(text)
+
+
+class AnyOfMatcher(FluentMatcher):
+
+    def __init__(self, *list_elements):
+        if not list_elements:
+            raise MatcherException("Please provide at least one element!")
+
+        self.elements = list(list_elements)
+
+    def matches(self, value):
+        if value in self.elements:
+            return True
+
+        return False
+
+    def __repr__(self):
+        return self._matcher_string('Any value in {elements}'.format(elements=self.elements))
 
 
 class ContainsMatcher(FluentMatcher):
@@ -124,3 +144,7 @@ def contains(substring):
 
 def any_value_of_type(the_type):
     return AnyValueOfTypeMatcher(the_type)
+
+
+def any_of(*list_elements):
+    return AnyOfMatcher(*list_elements)

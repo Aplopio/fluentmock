@@ -51,3 +51,7 @@ class VerificationError(AssertionError):
                     error_message += self.ADDITIONAL_CALL_ENTRIES.format(actual=call_entry)
 
         super(VerificationError, self).__init__(error_message)
+
+
+class MatcherException(Exception):
+    pass
