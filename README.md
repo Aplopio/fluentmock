@@ -1,8 +1,8 @@
 # fluentmock [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
 
 Fluent interface facade for Michael Foord's Mock.
-* Easy and readable configuration of mock side effects.
-* Configuration and verification using matchers.
+- [X] Easy and readable configuration of mock side effects.
+- [X] Configuration and verification using matchers.
 
 A example test using _fluentmock_ and hamcrest:
 ```python
@@ -27,6 +27,3 @@ class SeveralAnswersTests(UnitTests):
 * [Comparing Mock and Fluentmock](https://github.com/aelgru/fluentmock/blob/master/docs/COMPARISON.md)
 * [Migrating from Mockito to Fluentmock](https://github.com/aelgru/fluentmock/blob/master/docs/MIGRATION.md)
 
-## Motivation
-
-... was to replace mockito with something that is as powerful as Mock.
