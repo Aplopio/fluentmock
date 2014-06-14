@@ -1,4 +1,4 @@
-# Comparing Mock with Fluentmock
+# Comparing the interface of Mock with Fluentmock
 
 Here is a simple test example which configures a mock with a "side effect" in such a way it returns 3 when 2 is given
 as a argument.
