@@ -16,22 +16,24 @@
 __author__ = 'Michael Gruber'
 __version__ = '${version}'
 
-__all__ = ['ANY_BOOLEAN',
-           'ANY_DICTIONARY',
-           'ANY_FLOAT',
-           'ANY_INTEGER',
-           'ANY_LIST',
-           'ANY_SLICE',
-           'ANY_STRING',
-           'ANY_TUPLE',
-           'ANY_VALUE',
-           'ANY_VALUES',
-           'AT_LEAST_ONCE',
-           'NEVER',
-           'UnitTests',
-           'create_mock',
-           'verify',
-           'when']
+__all__ = [
+    'ANY_BOOLEAN',
+    'ANY_DICTIONARY',
+    'ANY_FLOAT',
+    'ANY_INTEGER',
+    'ANY_LIST',
+    'ANY_SLICE',
+    'ANY_STRING',
+    'ANY_TUPLE',
+    'ANY_VALUE',
+    'ANY_VALUES',
+    'AT_LEAST_ONCE',
+    'NEVER',
+    'UnitTests',
+    'create_mock',
+    'verify',
+    'when'
+]
 
 try:
     from importlib import import_module
