@@ -34,7 +34,7 @@ description = "Please visit {url}".format(url=url)
 authors = [Author('Michael Gruber', 'aelgru@gmail.com')]
 license = 'Apache License, Version 2.0'
 summary = "Fluent interface facade for Michael Foord's mock."
-version = '0.2.12'
+version = '0.2.13'
 
 default_task = ['analyze', 'publish']
 
