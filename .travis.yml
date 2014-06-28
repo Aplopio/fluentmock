@@ -9,7 +9,8 @@ python:
 
 install:
   - pip install pybuilder
+  - pyb install_dependencies analyze publish --verbose
 
 script:
-  - pyb install_dependencies analyze publish --verbose
+  - pyb --verbose
 
