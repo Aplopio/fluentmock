@@ -26,6 +26,8 @@ use_plugin('python.flake8')
 use_plugin('python.install_dependencies')
 use_plugin('python.unittest')
 
+use_plugin('pypi:pybuilder_release_plugin')
+
 url = 'https://github.com/aelgru/fluentmock'
 description = "Please visit {url}".format(url=url)
 
