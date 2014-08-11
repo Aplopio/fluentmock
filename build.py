@@ -45,6 +45,7 @@ def set_properties(project):
     project.build_depends_on('PyHamcrest')
     project.build_depends_on('wheel')
 
+    project.depends_on('importlib')
     project.depends_on('mock')
 
     project.set_property('coverage_break_build', True)
