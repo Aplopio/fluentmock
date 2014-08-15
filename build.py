@@ -51,8 +51,7 @@ def set_properties(project):
     if python_version == (2, 6):
         project.depends_on('importlib')
 
-    if python_version < (3, 3):
-        project.depends_on('mock')
+    project.depends_on('mock')
 
     project.set_property('coverage_break_build', True)
 
