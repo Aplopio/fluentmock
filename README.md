@@ -22,6 +22,20 @@ class SeveralAnswersTests(UnitTests):
     verify(targetpackage).targetfunction(2)
 ```
 
+## Requirements
+
+If you are working on Python 2.6 please install Brett Cannon's [importlib](http://pypi.python.org/pypi/importlib):
+
+```bash
+easy_install importlib
+```
+
+or
+
+```bash
+pip install importlib
+```
+
 ## Documentation
 
 * [Comparing Mock and Fluentmock](https://github.com/aelgru/fluentmock/blob/master/docs/COMPARISON.md)

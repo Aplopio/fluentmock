@@ -13,6 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+import sys
 from pybuilder.core import Author, init, use_plugin
 
 use_plugin('python.core')
@@ -45,7 +46,9 @@ def set_properties(project):
     project.build_depends_on('PyHamcrest')
     project.build_depends_on('wheel')
 
-    project.depends_on('importlib')
+    if sys.version[0:3] == '2.6':
+        project.depends_on('importlib')
+
     project.depends_on('mock')
 
     project.set_property('coverage_break_build', True)
