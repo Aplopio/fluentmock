@@ -46,10 +46,13 @@ def set_properties(project):
     project.build_depends_on('PyHamcrest')
     project.build_depends_on('wheel')
 
-    if sys.version[0:3] == '2.6':
+    python_version = sys.version_info[0:2]
+
+    if python_version == (2, 6):
         project.depends_on('importlib')
 
-    project.depends_on('mock')
+    if python_version < (3, 3):
+        project.depends_on('mock')
 
     project.set_property('coverage_break_build', True)
 

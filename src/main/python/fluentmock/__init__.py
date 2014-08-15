@@ -45,7 +45,11 @@ except ImportError as import_error:
     print('')
     print('Please install importlib using "pip install importlib".')
 
-from mock import Mock, call, patch
+try:
+    from unittest.mock import Mock, call, patch
+except ImportError:
+    from mock import Mock, call, patch
+
 from logging import getLogger
 from unittest import TestCase
 from types import ModuleType
