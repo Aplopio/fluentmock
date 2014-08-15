@@ -22,6 +22,37 @@ class SeveralAnswersTests(UnitTests):
     verify(targetpackage).targetfunction(2)
 ```
 
+## Matchers
+
+_fluentmock_ offers a lot of matchers. You can use then in mock configuration or in verification.
+```python
+    def test_matching_any_integer_value(self):
+
+        when(targetpackage).targetfunction(any_value_of_type(int)).then_return('argument was an integer')
+        assert_that(targetpackage.targetfunction(13), equal_to('argument was an integer'))
+        assert_that(targetpackage.targetfunction(42), equal_to('argument was an integer'))
+
+    def test_matching_any_string_value(self):
+
+        when(targetpackage).targetfunction(any_value_of_type(str)).then_return('argument was a string')
+        assert_that(targetpackage.targetfunction('Hello'), equal_to('argument was a string'))
+        assert_that(targetpackage.targetfunction('World'), equal_to('argument was a string'))
+```
+
+If you prefer to use constants instead of convenience functions _fluentmock_ comes with these constants for matching:
+```python
+ANY_BOOLEAN
+ANY_DICTIONARY
+ANY_FLOAT
+ANY_INTEGER
+ANY_LIST
+ANY_SLICE
+ANY_STRING
+ANY_TUPLE
+ANY_VALUE
+ANY_VALUES
+```
+
 ## Requirements
 
 If you are working on Python 2.6 please install Brett Cannon's [importlib](http://pypi.python.org/pypi/importlib):
