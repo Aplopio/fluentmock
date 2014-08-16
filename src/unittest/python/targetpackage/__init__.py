@@ -14,7 +14,7 @@
 #   limitations under the License.
 
 import sys
-from subprocess import STDOUT, check_output
+from subprocess import STDOUT, call
 
 
 def targetfunction():
@@ -36,4 +36,4 @@ class TheClass(object):
 
 
 def call_a_subprocess():
-    check_output(['pip'], stderr=STDOUT)
+    call(['pip'], stderr=STDOUT)

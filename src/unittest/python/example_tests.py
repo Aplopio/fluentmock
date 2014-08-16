@@ -115,8 +115,8 @@ class MatcherInKeywordArgument(UnitTests):
 
     def test_matching_a_keyword_argument(self):
 
-        when(targetpackage).check_output(ANY_LIST, ANY_VALUE).then_return(None)
+        when(targetpackage).call(ANY_LIST, ANY_VALUE).then_return(None)
 
         call_a_subprocess()
 
-        verify(targetpackage).check_output(['pip'], stderr=ANY_VALUE)
+        verify(targetpackage).call(['pip'], stderr=ANY_VALUE)
