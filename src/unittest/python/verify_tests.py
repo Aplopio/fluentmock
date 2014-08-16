@@ -15,7 +15,9 @@
 
 from mock import Mock
 from hamcrest import assert_that, equal_to, ends_with
-from fluentmock import (ANY_VALUE,
+from fluentmock import (ANY_BOOLEAN,
+                        ANY_LIST,
+                        ANY_VALUE,
                         ANY_VALUES,
                         NEVER,
                         UnitTests,
@@ -26,6 +28,7 @@ from fluentmock.exceptions import (InvalidAttributeError,
                                    InvalidUseOfAnyArgumentsError,
                                    VerificationError)
 
+from targetpackage import call_a_subprocess
 import targetpackage
 
 
@@ -735,6 +738,32 @@ Expected: call mock.Mock.some_method(1, 2, 3) << exactly 2 times >>
             assert_that(str(error), equal_to("""
 Expected: call targetpackage.targetfunction(<< ANY_VALUES >>) << exactly 2 times >>
  but was: call targetpackage.targetfunction('abc')
+"""))
+
+        assert_that(exception_raised)
+
+    def test_should_allow_matcher_in_keyword_argument_of_patched_function(self):
+
+        when(targetpackage).check_output(ANY_LIST, ANY_VALUE).then_return('Hello world')
+
+        call_a_subprocess()
+
+        verify(targetpackage).check_output(['pip'], stderr=ANY_VALUE)
+
+    def test_should_still_fail_if_the_argument_does_not_match(self):
+
+        when(targetpackage).check_output(ANY_LIST, ANY_VALUE).then_return('Hello world')
+
+        call_a_subprocess()
+
+        exception_raised = False
+        try:
+            verify(targetpackage).check_output(['pip'], stderr=ANY_BOOLEAN)
+        except VerificationError as error:
+            exception_raised = True
+            assert_that(str(error), equal_to("""
+Expected: call targetpackage.check_output(['pip'], stderr=<< Any value of type "bool" >>) << at least once >>
+ but was: call targetpackage.check_output(['pip'], stderr=-2)
 """))
 
         assert_that(exception_raised)

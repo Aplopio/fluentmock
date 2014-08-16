@@ -188,6 +188,9 @@ class FluentCallEntry(object):
                 if isinstance(self.keyword_arguments[key], FluentMatcher):
                     if not self.keyword_arguments[key].matches(keyword_arguments[key]):
                         return False
+                elif isinstance(keyword_arguments[key], FluentMatcher):
+                    if not keyword_arguments[key].matches(self.keyword_arguments[key]):
+                        return False
                 elif self.keyword_arguments[key] != keyword_arguments[key]:
                     return False
 

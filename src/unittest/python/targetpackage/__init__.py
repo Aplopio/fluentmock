@@ -14,6 +14,7 @@
 #   limitations under the License.
 
 import sys
+from subprocess import STDOUT, check_output
 
 
 def targetfunction():
@@ -32,3 +33,7 @@ class TheClass(object):
 
     def some_method(self):
         sys.stdout.write("WARNING! Actual method has been called.\n")
+
+
+def call_a_subprocess():
+    check_output(['pip'], stderr=STDOUT)

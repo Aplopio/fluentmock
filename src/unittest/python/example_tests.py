@@ -105,3 +105,18 @@ class ConvenienceFunctionsTests(UnitTests):
         assert_that(targetpackage.targetfunction('superfoo'), equal_to('string contained "foo"'))
         assert_that(targetpackage.targetfunction('Hello'), equal_to(None))
         assert_that(targetpackage.targetfunction('World'), equal_to(None))
+
+
+from fluentmock import ANY_LIST, ANY_VALUE
+from targetpackage import call_a_subprocess
+
+
+class MatcherInKeywordArgument(UnitTests):
+
+    def test_matching_a_keyword_argument(self):
+
+        when(targetpackage).check_output(ANY_LIST, ANY_VALUE).then_return(None)
+
+        call_a_subprocess()
+
+        verify(targetpackage).check_output(['pip'], stderr=ANY_VALUE)
