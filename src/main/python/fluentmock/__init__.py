@@ -52,7 +52,7 @@ from unittest import TestCase
 from types import ModuleType
 
 from fluentmock.exceptions import (InvalidAttributeError,
-                                   InvalidUseOfAnyArgumentsError,
+                                   InvalidUseOfAnyValuesError,
                                    VerificationError)
 from fluentmock.matchers import (AtLeastOnceMatcher,
                                  FluentMatcher,
@@ -294,7 +294,7 @@ class FluentMockConfigurator(object):
 
     def __call__(self, *arguments, **keyword_arguments):
         if len(arguments) > 1 and ANY_VALUES in arguments:
-            raise InvalidUseOfAnyArgumentsError()
+            raise InvalidUseOfAnyValuesError()
 
         answer = FluentAnswer(self._fluent_mock.object, self._fluent_mock.attribute_name, arguments, keyword_arguments)
         self._fluent_mock.append_new_answer(answer)
@@ -373,7 +373,7 @@ class Verifier(FluentTarget):
     def _ensure_valid_usage_of_any_arguments(self, arguments):
         if arguments and ANY_VALUES in arguments:
             if len(arguments) > 1:
-                raise InvalidUseOfAnyArgumentsError()
+                raise InvalidUseOfAnyValuesError()
 
     def __call__(self, *arguments, **keyword_arguments):
         self._ensure_valid_usage_of_any_arguments(arguments)

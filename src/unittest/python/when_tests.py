@@ -17,7 +17,7 @@ from hamcrest import assert_that, equal_to, instance_of
 from mock import Mock
 
 from fluentmock import ANY_VALUE, ANY_VALUES, FluentAnswer, FluentMockConfigurator, UnitTests, when
-from fluentmock.exceptions import InvalidAttributeError, InvalidUseOfAnyArgumentsError
+from fluentmock.exceptions import InvalidAttributeError, InvalidUseOfAnyValuesError
 
 import targetpackage
 import targetpackage.subpackage
@@ -229,7 +229,7 @@ class AnyArgumentsTest(UnitTests):
         exception_raised = False
         try:
             when(targetpackage).targetfunction(ANY_VALUES, 1, 2, 3).then_raise(Exception('foobar'))
-        except InvalidUseOfAnyArgumentsError as exception:
+        except InvalidUseOfAnyValuesError as exception:
             exception_raised = True
             assert_that(str(exception), equal_to("""Do not use ANY_VALUES together with other arguments!
 Use ANY_VALUE as a wildcard for single arguments."""))
@@ -241,7 +241,7 @@ Use ANY_VALUE as a wildcard for single arguments."""))
         exception_raised = False
         try:
             when(targetpackage).targetfunction(1, ANY_VALUES, 2, 3).then_raise(Exception('foobar'))
-        except InvalidUseOfAnyArgumentsError as exception:
+        except InvalidUseOfAnyValuesError as exception:
             exception_raised = True
             assert_that(str(exception), equal_to("""Do not use ANY_VALUES together with other arguments!
 Use ANY_VALUE as a wildcard for single arguments."""))

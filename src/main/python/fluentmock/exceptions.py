@@ -23,13 +23,13 @@ class InvalidAttributeError(Exception):
         super(InvalidAttributeError, self).__init__(error_message)
 
 
-class InvalidUseOfAnyArgumentsError(AssertionError):
+class InvalidUseOfAnyValuesError(AssertionError):
 
     MESSAGE_FORMAT = """Do not use ANY_VALUES together with other arguments!
 Use ANY_VALUE as a wildcard for single arguments."""
 
     def __init__(self):
-        super(InvalidUseOfAnyArgumentsError, self).__init__(self.MESSAGE_FORMAT)
+        super(InvalidUseOfAnyValuesError, self).__init__(self.MESSAGE_FORMAT)
 
 
 class VerificationError(AssertionError):

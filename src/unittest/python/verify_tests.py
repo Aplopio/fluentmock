@@ -25,7 +25,7 @@ from fluentmock import (ANY_BOOLEAN,
                         verify)
 
 from fluentmock.exceptions import (InvalidAttributeError,
-                                   InvalidUseOfAnyArgumentsError,
+                                   InvalidUseOfAnyValuesError,
                                    VerificationError)
 
 from targetpackage import call_a_subprocess
@@ -219,7 +219,7 @@ class AnyArgumentsVerificationTests(UnitTests):
         try:
             verify(targetpackage).targetfunction(ANY_VALUES, 123)
 
-        except InvalidUseOfAnyArgumentsError as error:
+        except InvalidUseOfAnyValuesError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""Do not use ANY_VALUES together with other arguments!
 Use ANY_VALUE as a wildcard for single arguments."""))
@@ -237,7 +237,7 @@ Use ANY_VALUE as a wildcard for single arguments."""))
         try:
             verify(targetpackage).targetfunction(1, 2, 3, ANY_VALUES)
 
-        except InvalidUseOfAnyArgumentsError as error:
+        except InvalidUseOfAnyValuesError as error:
             exception_raised = True
             assert_that(str(error), equal_to("""Do not use ANY_VALUES together with other arguments!
 Use ANY_VALUE as a wildcard for single arguments."""))
