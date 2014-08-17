@@ -283,8 +283,13 @@ class FluentMock(FluentTarget):
 
         return None
 
-    def append_new_answer(self, answer):
-        self._answers.append(answer)
+    def append_new_answer(self, new_answer):
+
+        for answer in self._answers:
+            if answer.arguments == new_answer.arguments:
+                self._answers.remove(answer)
+
+        self._answers.append(new_answer)
 
 
 class FluentMockConfigurator(object):

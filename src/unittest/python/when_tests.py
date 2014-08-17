@@ -199,6 +199,33 @@ class WhenTests(UnitTests):
 
         assert_that(targetpackage.targetfunction(keyword_argument='abc'), equal_to('foobar'))
 
+    def test_should_remove_predefined_answer_when_new_answer_given(self):
+
+        when(targetpackage).targetfunction(1).then_return('Nope!')
+        when(targetpackage).targetfunction(1).then_return('Yes.')
+
+        assert_that(targetpackage.targetfunction(1), equal_to('Yes.'))
+
+    def test_should_remove_predefined_answer_when_multiple_new_answers_given(self):
+
+        when(targetpackage).targetfunction(1).then_return('Nope!')
+        when(targetpackage).targetfunction(1).then_return('Yes.').then_return('Maybe!').then_return('No.')
+
+        assert_that(targetpackage.targetfunction(1), equal_to('Yes.'))
+        assert_that(targetpackage.targetfunction(1), equal_to('Maybe!'))
+        assert_that(targetpackage.targetfunction(1), equal_to('No.'))
+
+    def test_should_remove_predefined_answers_when_multiple_new_answers_given(self):
+
+        when(targetpackage).targetfunction(1).then_return('Nope!').then_return('Never.').then_return('Ever.')
+        when(targetpackage).targetfunction(1).then_return('Yes.').then_return('Maybe!').then_return('No.')
+
+        assert_that(targetpackage.targetfunction(1), equal_to('Yes.'))
+        assert_that(targetpackage.targetfunction(1), equal_to('Maybe!'))
+        assert_that(targetpackage.targetfunction(1), equal_to('No.'))
+        assert_that(targetpackage.targetfunction(1), equal_to('No.'))
+        assert_that(targetpackage.targetfunction(1), equal_to('No.'))
+
 
 class AnyArgumentsTest(UnitTests):
 
