@@ -226,6 +226,17 @@ class WhenTests(UnitTests):
         assert_that(targetpackage.targetfunction(1), equal_to('No.'))
         assert_that(targetpackage.targetfunction(1), equal_to('No.'))
 
+    def test_should_always_remove_predefined_answers_when_multiple_new_answers_given(self):
+
+        when(targetpackage).targetfunction(1).then_return('Nope!')
+        when(targetpackage).targetfunction(1).then_return('Never!')
+        when(targetpackage).targetfunction(1).then_return('Ever!')
+        when(targetpackage).targetfunction(1).then_return('Yes.')
+
+        assert_that(targetpackage.targetfunction(1), equal_to('Yes.'))
+        assert_that(targetpackage.targetfunction(1), equal_to('Yes.'))
+        assert_that(targetpackage.targetfunction(1), equal_to('Yes.'))
+
 
 class AnyArgumentsTest(UnitTests):
 
