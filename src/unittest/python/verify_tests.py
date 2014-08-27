@@ -287,6 +287,30 @@ class MockVerificationTests(UnitTests):
 
         verify(test_object).some_method(ANY_VALUES)
 
+    def test_should_raise_error_when_function_patched_and_not_called_without_arguments(self):
+
+        mock_object = Mock()
+
+        when(mock_object).warn(1, 2).then_return('123')
+
+        mock_object.warn('spam', 2, 1, 'eggs', False)
+        mock_object.warn('abc', 123, True)
+        mock_object.warn('eggs', False)
+
+        exception_raised = False
+        try:
+            verify(mock_object).warn()
+        except VerificationError as error:
+            exception_raised = True
+            assert_that(str(error), equal_to("""
+Expected: call mock.Mock.warn() << at least once >>
+ but was: call mock.Mock.warn('spam', 2, 1, 'eggs', False)
+          call mock.Mock.warn('abc', 123, True)
+          call mock.Mock.warn('eggs', False)
+"""))
+
+        assert_that(exception_raised)
+
 
 class NativeMockVerificationTests(UnitTests):
 
