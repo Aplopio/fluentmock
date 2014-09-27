@@ -400,6 +400,12 @@ class Verifier(FluentTarget):
                 if target.is_equal_to(self.object, self.attribute_name):
                     found_calls.append(call_entry)
 
+            if isinstance(self.object, Mock):
+                for method_call in self.object.method_calls:
+                    actual_call_address = 'call ' + self.name
+                    method_call_as_string = str(method_call).replace('call', actual_call_address)
+                    found_calls.append(method_call_as_string)
+
             raise VerificationError(expected_call_entry, self._matcher, found_calls=found_calls)
 
 

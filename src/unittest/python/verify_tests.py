@@ -359,6 +359,7 @@ class NativeMockVerificationTests(UnitTests):
             exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call mock.Mock.some_method() << should never be called >>
+ but was: call mock.Mock.some_method()
 """))
 
         assert_that(exception_raised)
@@ -376,6 +377,7 @@ Expected: call mock.Mock.some_method() << should never be called >>
             exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call mock.Mock.some_method(1, 2, 3) << should never be called >>
+ but was: call mock.Mock.some_method(1, 2, 3)
 """))
 
         assert_that(exception_raised)
@@ -393,6 +395,7 @@ Expected: call mock.Mock.some_method(1, 2, 3) << should never be called >>
             exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be called >>
+ but was: call mock.Mock.some_method(1, 2, 3, hello='world')
 """))
 
         assert_that(exception_raised)
@@ -471,6 +474,60 @@ Expected: call mock.Mock.some_method(1, 2, 3, hello='world') << should never be 
 
 """))
 
+        assert_that(exception_raised)
+
+    def test_should_list_actual_calls(self):
+        mock_object = Mock()
+
+        mock_object.warn('hello world')
+
+        exception_raised = False
+        try:
+            verify(mock_object).warn()
+        except VerificationError as error:
+            exception_raised = True
+            assert_that(str(error), equal_to("""
+Expected: call mock.Mock.warn() << at least once >>
+ but was: call mock.Mock.warn('hello world')
+"""))
+        assert_that(exception_raised)
+
+    def test_should_list_two_actual_calls(self):
+        mock_object = Mock()
+
+        mock_object.warn('hello world')
+        mock_object.info('foo bar')
+
+        exception_raised = False
+        try:
+            verify(mock_object).warn()
+        except VerificationError as error:
+            exception_raised = True
+            assert_that(str(error), equal_to("""
+Expected: call mock.Mock.warn() << at least once >>
+ but was: call mock.Mock.warn('hello world')
+          call mock.Mock.info('foo bar')
+"""))
+        assert_that(exception_raised)
+
+    def test_should_list_three_actual_calls(self):
+        mock_object = Mock()
+
+        mock_object.error('spam eggs')
+        mock_object.warn('hello world')
+        mock_object.info('foo bar')
+
+        exception_raised = False
+        try:
+            verify(mock_object).warn()
+        except VerificationError as error:
+            exception_raised = True
+            assert_that(str(error), equal_to("""
+Expected: call mock.Mock.warn() << at least once >>
+ but was: call mock.Mock.error('spam eggs')
+          call mock.Mock.warn('hello world')
+          call mock.Mock.info('foo bar')
+"""))
         assert_that(exception_raised)
 
 
@@ -744,6 +801,7 @@ Expected: call targetpackage.targetfunction('abc') << exactly 2 times >>
             exception_raised = True
             assert_that(str(error), equal_to("""
 Expected: call mock.Mock.some_method(1, 2, 3) << exactly 2 times >>
+ but was: call mock.Mock.some_method(1, 2, 3)
 """))
 
         assert_that(exception_raised)
