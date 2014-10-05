@@ -342,7 +342,7 @@ class ListContainsTests(UnitTests):
 
         matcher = ListContainsMatcher('foo')
 
-        self.assertRaises(MatcherException, matcher.matches, {1, 2, 3})
+        self.assertRaises(MatcherException, matcher.matches, set([1, 2, 3]))
 
     def test_should_return_false_when_list_does_not_contain_element(self):
 
