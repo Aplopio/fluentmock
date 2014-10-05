@@ -20,6 +20,7 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
                                  AnyValueOfTypeMatcher,
                                  ContainsMatcher,
                                  FluentMatcher,
+                                 ListContainsMatcher,
                                  NeverMatcher,
                                  TimesMatcher,
                                  any_value_of_type,
@@ -332,3 +333,36 @@ class AnyOfMatcherTests(UnitTests):
         matcher = any_of(1, 2, 3)
 
         assert_that(str(matcher), equal_to('<< Any value in [1, 2, 3] >>'))
+
+
+class ListContainsTests(UnitTests):
+
+    def test_should_raise_exception_when_no_list_given(self):
+
+        matcher = ListContainsMatcher('foo')
+
+        self.assertRaises(MatcherException, matcher.matches, {1, 2, 3})
+
+    def test_should_return_false_when_list_does_not_contain_element(self):
+
+        matcher = ListContainsMatcher('foo')
+
+        assert_that(matcher.matches([1, 2, 3]), equal_to(False))
+
+    def test_should_return_true_when_list_is_expected_element(self):
+
+        matcher = ListContainsMatcher('foo')
+
+        assert_that(matcher.matches(['foo']), equal_to(True))
+
+    def test_should_return_true_when_list_contains_expected_element(self):
+
+        matcher = ListContainsMatcher('foo')
+
+        assert_that(matcher.matches(['spam', 'foo']), equal_to(True))
+
+    def test_should_return_string_representation(self):
+
+        matcher = ListContainsMatcher('foo')
+
+        assert_that(str(matcher), equal_to("<< a list containing element 'foo' >>"))

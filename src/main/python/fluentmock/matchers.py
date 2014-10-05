@@ -96,6 +96,26 @@ class ContainsMatcher(FluentMatcher):
         return self._matcher_string(text)
 
 
+class ListContainsMatcher(FluentMatcher):
+
+    def __init__(self, element):
+        self._element = element
+
+    def matches(self, value):
+        if not isinstance(value, list):
+            type_name = type(value).__name__
+            raise MatcherException('Value is of type "%s".' % type_name)
+
+        if self._element not in value:
+            return False
+        return True
+
+    def __repr__(self):
+        string_representation = repr(self._element)
+        text = 'a list containing element {element}'.format(element=string_representation)
+        return self._matcher_string(text)
+
+
 class NeverMatcher(FluentMatcher):
 
     def matches(self, value):
