@@ -23,6 +23,7 @@ from fluentmock.matchers import (AtLeastOnceMatcher,
                                  ListContainsMatcher,
                                  NeverMatcher,
                                  TimesMatcher,
+                                 a_list_containing,
                                  any_value_of_type,
                                  any_of,
                                  contains)
@@ -366,3 +367,24 @@ class ListContainsTests(UnitTests):
         matcher = ListContainsMatcher('foo')
 
         assert_that(str(matcher), equal_to("<< a list containing element 'foo' >>"))
+
+
+class AListContainingTests(UnitTests):
+
+    def test_should_return_list_contains_matcher(self):
+
+        matcher = a_list_containing('spam')
+
+        assert_that(matcher, instance_of(ListContainsMatcher))
+
+    def test_should_return_true_when_list_contains_element(self):
+
+        matcher = a_list_containing('spam')
+
+        assert_that(matcher.matches(['foo', 'spam']), equal_to(True))
+
+    def test_should_return_false_when_list_does_not_contain_element(self):
+
+        matcher = a_list_containing('bar')
+
+        assert_that(matcher.matches(['foo', 'spam']), equal_to(False))

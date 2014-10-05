@@ -158,8 +158,8 @@ class TimesMatcher(FluentMatcher):
         return self._matcher_string(text)
 
 
-def contains(substring):
-    return ContainsMatcher(substring)
+def a_list_containing(element):
+    return ListContainsMatcher(element)
 
 
 def any_value_of_type(the_type):
@@ -168,3 +168,7 @@ def any_value_of_type(the_type):
 
 def any_of(*list_elements):
     return AnyOfMatcher(*list_elements)
+
+
+def contains(substring):
+    return ContainsMatcher(substring)
