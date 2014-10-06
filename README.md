@@ -1,4 +1,4 @@
-# fluentmock [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock)
+# fluentmock [![Build Status](https://travis-ci.org/aelgru/fluentmock.png?branch=master)](https://travis-ci.org/aelgru/fluentmock) [![](https://pypip.in/v/fluentmock/badge.png)](http://pypi.python.org/pypi/fluentmock) [![](https://pypip.in/d/fluentmock/badge.png)](http://pypi.python.org/pypi/fluentmock) [![](https://pypip.in/license/fluentmock/badge.png)](http://pypi.python.org/pypi/fluentmock)
 
 Fluent interface facade for Michael Foord's Mock.
 - [X] Easy and readable configuration of mock side effects.
