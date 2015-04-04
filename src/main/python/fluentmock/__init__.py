@@ -249,8 +249,7 @@ class FluentAnswer(FluentCallEntry):
     def __eq__(self, other):
         if not isinstance(other, FluentAnswer):
             return False
-        return self.arguments == other.arguments \
-               and self.keyword_arguments == other.keyword_arguments
+        return self.arguments == other.arguments and self.keyword_arguments == other.keyword_arguments
 
 
 class FluentPatchEntry(object):
