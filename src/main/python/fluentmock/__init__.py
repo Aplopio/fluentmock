@@ -115,10 +115,10 @@ class UnitTests(TestCase):
 class FluentTarget(object):
 
     def __init__(self, target, attribute_name=None):
-        class_types = {type,
+        class_types = (type,
                        getattr(types, 'ClassType')
                        if hasattr(types, 'ClassType')
-                       else type}
+                       else type)
         if isinstance(target, str):
             self.name = target
             self.object = import_module(self.name)
