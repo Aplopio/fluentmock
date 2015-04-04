@@ -39,5 +39,15 @@ class TheClass(object):
         sys.stdout.write("WARNING! Actual method has been called.\n")
 
 
+class TheOldStyleClass:
+
+    def some_method(self):
+        sys.stdout.write("WARNING! Actual method has been called.\n")
+
+    @classmethod
+    def some_class_method(self):
+        sys.stdout.write("WARNING! Actual method has been called.\n")
+
+
 def call_a_subprocess():
     call(['pip'], stderr=STDOUT)

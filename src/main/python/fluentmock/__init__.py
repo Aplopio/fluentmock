@@ -49,7 +49,7 @@ from mock import Mock, call, patch
 
 from logging import getLogger
 from unittest import TestCase
-from types import ModuleType
+import types
 
 from fluentmock.exceptions import (InvalidAttributeError,
                                    InvalidUseOfAnyValuesError,
@@ -115,13 +115,17 @@ class UnitTests(TestCase):
 class FluentTarget(object):
 
     def __init__(self, target, attribute_name=None):
+        class_types = {type,
+                       getattr(types, 'ClassType')
+                       if hasattr(types, 'ClassType')
+                       else type}
         if isinstance(target, str):
             self.name = target
             self.object = import_module(self.name)
-        elif isinstance(target, ModuleType):
+        elif isinstance(target, types.ModuleType):
             self.name = target.__name__
             self.object = import_module(self.name)
-        elif isinstance(target, type):
+        elif type(target) in class_types:
             self.name = target.__module__ + '.' + target.__name__
             self.object = target
         else:

@@ -178,13 +178,21 @@ class WhenTests(UnitTests):
 
         assert_that(test_object.some_method(1), equal_to(0))
 
-    def test_should_patch_away_class_method(self):
+    def test_should_patch_away_class_method_for_new_style_classes(self):
 
         when(targetpackage.TheClass).some_class_method(1).then_return(10)
         when(targetpackage.TheClass).some_class_method(2).then_return(11)
 
         assert_that(targetpackage.TheClass.some_class_method(1), equal_to(10))
         assert_that(targetpackage.TheClass.some_class_method(2), equal_to(11))
+
+    def test_should_patch_away_class_method_for_old_style_classes(self):
+
+        when(targetpackage.TheOldStyleClass).some_class_method(1).then_return(10)
+        when(targetpackage.TheOldStyleClass).some_class_method(2).then_return(11)
+
+        assert_that(targetpackage.TheOldStyleClass.some_class_method(1), equal_to(10))
+        assert_that(targetpackage.TheOldStyleClass.some_class_method(2), equal_to(11))
 
     def test_should_give_useful_feedback_if_target_does_not_have_attribute(self):
 
