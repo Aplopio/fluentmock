@@ -246,6 +246,12 @@ class FluentAnswer(FluentCallEntry):
         self._answers.append(answer)
         return self
 
+    def __eq__(self, other):
+        if not isinstance(other, FluentAnswer):
+            return False
+        return self.arguments == other.arguments \
+               and self.keyword_arguments == other.keyword_arguments
+
 
 class FluentPatchEntry(object):
 
@@ -286,7 +292,7 @@ class FluentMock(FluentTarget):
     def append_new_answer(self, new_answer):
 
         for answer in self._answers:
-            if answer.arguments == new_answer.arguments:
+            if answer == new_answer:
                 self._answers.remove(answer)
 
         self._answers.append(new_answer)

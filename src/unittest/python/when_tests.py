@@ -154,6 +154,22 @@ class WhenTests(UnitTests):
         assert_that(targetpackage.targetfunction(2), equal_to(2))
         assert_that(targetpackage.targetfunction(0), equal_to(None))
 
+    def test_should_return_specific_values_with_same_args_and_diff_kwargs(self):
+
+        when(targetpackage).targetfunction(1, foo='bar').then_return('bar')
+        when(targetpackage).targetfunction(1, foo='baz').then_return('baz')
+
+        assert_that(targetpackage.targetfunction(1, foo='bar'), equal_to('bar'))
+        assert_that(targetpackage.targetfunction(1, foo='baz'), equal_to('baz'))
+
+    def test_should_return_specific_values_with_diff_args_and_same_kwargs(self):
+
+        when(targetpackage).targetfunction(1, foo='bar').then_return('boo')
+        when(targetpackage).targetfunction(2, foo='bar').then_return('zoo')
+
+        assert_that(targetpackage.targetfunction(1, foo='bar'), equal_to('boo'))
+        assert_that(targetpackage.targetfunction(2, foo='bar'), equal_to('zoo'))
+
     def test_should_patch_away_method_of_object(self):
 
         test_object = targetpackage.TheClass()
